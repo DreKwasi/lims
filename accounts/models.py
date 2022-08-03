@@ -29,19 +29,18 @@ class MyAccountManager(BaseUserManager):
         last_name,
         email,
         username,
-        phone_number,
-        department,
         password=None,
     ):
         """
         Creates and saves a superuser with the given email, date of
         birth and password.
         """
-        user = self.model(
+        user = self.create_user(
             email=self.normalize_email(email),
+            username=username,
             first_name=first_name,
             last_name=last_name,
-            username=username,
+            password=password,
         )
         user.is_admin = True
         user.is_staff = True
@@ -59,7 +58,7 @@ class Account(AbstractBaseUser):
     email = models.EmailField(
         max_length=100, unique=True, verbose_name="email address"
     )
-    phone_number = models.IntegerField()
+    phone_number = models.CharField(max_length=50, null=True, blank=True)
     department = models.CharField(max_length=100, blank=True, null=True)
 
     # required
@@ -71,11 +70,7 @@ class Account(AbstractBaseUser):
     is_superadmin = models.BooleanField(default=False)
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = [
-        "first_name",
-        "last_name",
-        "department",
-    ]
+    REQUIRED_FIELDS = ["first_name", "last_name", "username"]
 
     objects = MyAccountManager()
 

@@ -14,11 +14,7 @@ class AccountAdmin(UserAdmin):
         "date_joined",
         "is_active",
     )
-    list_display_links = (
-        "email",
-        "first_name",
-        "last_name",
-    )
+    list_display_links = ("email", "first_name", "username")
     readonly_fields = (
         "last_login",
         "date_joined",

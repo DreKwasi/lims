@@ -45,7 +45,7 @@ class MyAccountManager(BaseUserManager):
         user.is_admin = True
         user.is_staff = True
         user.is_active = True
-        user.is_superuser = True
+        user.is_superadmin = True
         user.save(using=self._db)
         return user
 
@@ -81,6 +81,6 @@ class Account(AbstractBaseUser):
         "Does a User Have A specific Permission?"
         return self.is_admin
 
-    def has_model_perm(add_label):
+    def has_module_perms(self, add_label):
         "Does the user have permissions to view the app `app_label`?"
         return True

@@ -1,10 +1,54 @@
-from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.db import models
 
 
 # Custom Account to define create user commands
 class MyAccountManager(BaseUserManager):
-    pass
+    def create_user(
+        self, first_name, last_name, email, username, password=None
+    ):
+        """
+        Creates a new user and assign the expected variables to them
+        """
+        if not email:
+            raise ValueError("Users must have a valid email address")
+
+        user = self.model(
+            email=self.normalize_email(email),
+            first_name=first_name,
+            last_name=last_name,
+            username=username,
+        )
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(
+        self,
+        first_name,
+        last_name,
+        email,
+        username,
+        phone_number,
+        department,
+        password=None,
+    ):
+        """
+        Creates and saves a superuser with the given email, date of
+        birth and password.
+        """
+        user = self.model(
+            email=self.normalize_email(email),
+            first_name=first_name,
+            last_name=last_name,
+            username=username,
+        )
+        user.is_admin = True
+        user.is_staff = True
+        user.is_active = True
+        user.is_superuser = True
+        user.save(using=self._db)
+        return user
 
 
 # Custom User Model Inheriting from the AbstractBaseUser
@@ -12,8 +56,10 @@ class Account(AbstractBaseUser):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     username = models.CharField(max_length=50, unique=True)
-    email = models.EmailField(max_length=100, unique=True)
-    phone_number = models.IntegerField(max_length=20)
+    email = models.EmailField(
+        max_length=100, unique=True, verbose_name="email address"
+    )
+    phone_number = models.IntegerField()
     department = models.CharField(max_length=100, blank=True, null=True)
 
     # required
@@ -28,17 +74,18 @@ class Account(AbstractBaseUser):
     REQUIRED_FIELDS = [
         "first_name",
         "last_name",
-        "email",
         "department",
     ]
 
     objects = MyAccountManager()
 
     def __str__(self):
-        return self.username
+        return self.email
 
     def has_perm(self, perm, obj=None):
+        "Does a User Have A specific Permission?"
         return self.is_admin
 
-    def has_model_perm(self, add_label):
+    def has_model_perm(add_label):
+        "Does the user have permissions to view the app `app_label`?"
         return True

@@ -46,6 +46,9 @@ class Category(models.Model):
     slug = models.SlugField(max_length=100, unique=True)
     description = models.TextField(max_length=225, blank=True)
 
+    def __str__(self):
+        return self.category_name
+
 
 class Product_List(models.Model):
     product_id = models.CharField(max_length=100, unique=True)
@@ -53,21 +56,27 @@ class Product_List(models.Model):
     product_category = models.ForeignKey(
         Category, null=True, on_delete=models.SET_NULL
     )
+
     product_brand = models.ForeignKey(
         Brand, null=True, on_delete=models.SET_NULL
     )
+
     product_form = models.ForeignKey(
         Form, null=True, on_delete=models.SET_NULL
     )
+
     product_generic_name = models.ForeignKey(
         Generic_Attr, null=True, on_delete=models.SET_NULL
     )
+
     product_manufacturer = models.ForeignKey(
         Manufacturer, null=True, on_delete=models.SET_NULL
     )
+
     product_tier = models.ForeignKey(
         Tier, null=True, on_delete=models.SET_NULL
     )
+
     unit_of_measure = models.IntegerField(verbose_name="pack_size")
     created_date = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(

@@ -39,6 +39,10 @@ class Inventory(models.Model):
     expiration_date = models.DateTimeField()
     created_date = models.DateField(auto_now_add=True)
 
+    class Meta:
+        verbose_name = "Inventory"
+        verbose_name_plural = "Inventory"
+
     def __str__(self):
         return self.product.product_name
 

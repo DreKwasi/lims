@@ -5,7 +5,24 @@ from django.db import models
 from formulary.models import Product_List
 
 
-class Inventory_Data(models.Model):
+class Site(models.Model):
+    site_id = models.CharField(max_length=100, unique=True)
+    site_name = models.ForeignKey(Facility, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.site_id
+
+
+class LogisticArea(models.Model):
+    area_name = models.CharField(max_length=100, unique=True)
+    area_description = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.area_name
+
+
+class Inventory(models.Model):
+
     stock_type_choices = (
         ("Warehouse", "Warehouse"),
         ("In-Transit", "In-Transit"),
@@ -13,20 +30,17 @@ class Inventory_Data(models.Model):
     )
 
     stock_type = models.CharField(max_length=100, choices=stock_type_choices)
-
-
-class Site(models.Model):
-    site_id = models.CharField(max_length=100)
-    site_name = models.ForeignKey(Facility, on_delete=models.CASCADE)
-
-
-class Inventory(models.Model):
     product = models.ForeignKey(Product_List, on_delete=models.CASCADE)
-    inventory_type = models.ForeignKey(
-        Inventory_Data, on_delete=models.CASCADE
-    )
     pack_quantity = models.IntegerField(verbose_name="Number of packs")
     site_id = models.ForeignKey(Site, null=True, on_delete=models.SET_NULL)
+    warehouse_location = models.ForeignKey(
+        LogisticArea, null=True, on_delete=models.SET_NULL
+    )
+    expiration_date = models.DateTimeField()
+    created_date = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.product.product_name
 
     @property
     def unit_quantity(self):

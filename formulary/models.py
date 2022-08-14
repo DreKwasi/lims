@@ -1,6 +1,5 @@
 from django.db import models
 
-
 # Developing table classes for Formulary
 
 
@@ -50,16 +49,24 @@ class Category(models.Model):
 class Product_List(models.Model):
     product_id = models.CharField(max_length=100, unique=True)
     product_name = models.CharField(max_length=225, unique=True)
-    product_category = models.ForeignKey(Category, on_delete=models.SET_NULL)
-    product_brand = models.ForeignKey(Brand, on_delete=models.SET_NULL)
-    product_form = models.ForeignKey(Form, on_delete=models.SET_NULL)
+    product_category = models.ForeignKey(
+        Category, null=True, on_delete=models.SET_NULL
+    )
+    product_brand = models.ForeignKey(
+        Brand, null=True, on_delete=models.SET_NULL
+    )
+    product_form = models.ForeignKey(
+        Form, null=True, on_delete=models.SET_NULL
+    )
     product_generic_name = models.ForeignKey(
-        Generic_Attr, on_delete=models.SET_NULL
+        Generic_Attr, null=True, on_delete=models.SET_NULL
     )
     product_manufacturer = models.ForeignKey(
-        Manufacturer, on_delete=models.SET_NULL
+        Manufacturer, null=True, on_delete=models.SET_NULL
     )
-    product_tier = models.ForeignKey(Tier, on_delete=models.SET_NULL)
+    product_tier = models.ForeignKey(
+        Tier, null=True, on_delete=models.SET_NULL
+    )
 
     def __str__(self):
         return self.product_name

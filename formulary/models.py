@@ -68,6 +68,7 @@ class Product_List(models.Model):
     product_tier = models.ForeignKey(
         Tier, null=True, on_delete=models.SET_NULL
     )
+    unit_of_measure = models.IntegerField(verbose_name="pack_size")
     created_date = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
         Account, null=True, on_delete=models.SET_NULL

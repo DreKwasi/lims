@@ -84,3 +84,8 @@ class Account(AbstractBaseUser):
     def has_module_perms(self, add_label):
         "Does the user have permissions to view the app `app_label`?"
         return True
+
+
+class Facility(models.Model):
+    facility_name = models.CharField(max_length=100, unique=True, null=True)
+    facility_location = models.CharField(max_length=100, null=True, blank=True)

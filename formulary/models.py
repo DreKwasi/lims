@@ -1,5 +1,4 @@
 from django.db import models
-from accounts.models import Account
 
 # Developing table classes for Formulary
 
@@ -84,7 +83,7 @@ class Product_List(models.Model):
     unit_of_measure = models.IntegerField(verbose_name="pack_size")
     created_date = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
-        Account, null=True, on_delete=models.SET_NULL
+        "accounts.Account", null=True, on_delete=models.SET_NULL
     )
 
     def __str__(self):

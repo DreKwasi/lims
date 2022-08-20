@@ -5,7 +5,7 @@
 py_env/
 
 .vscode/
-
+static/
 ### Django ###
 *.log
 *.pot

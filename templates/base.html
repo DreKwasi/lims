@@ -1,0 +1,558 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="en" data-textdirection="ltr" class="loading">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+
+    <title> Inventory Management </title>
+    <link rel="apple-touch-icon" sizes="60x60" href="{% static 'images/ico/apple-icon-60.png' %}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{% static 'images/ico/apple-icon-76.png' %}">
+    <link rel="apple-touch-icon" sizes="120x120" href="{% static 'images/ico/apple-icon-120.png' %}">
+    <link rel="apple-touch-icon" sizes="152x152" href="{% static 'images/ico/apple-icon-152.png' %}">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/ico/favicon.ico' %}">
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/ico/favicon-32.png' %}">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+    <!-- BEGIN VENDOR CSS-->
+    <link rel="stylesheet" type="text/css" href="{% static 'ltr/bootstrap.css' %}">
+    <!-- font icons-->
+    <link rel="stylesheet" type="text/css" href="{% static 'fonts/icomoon.css' %}">
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'fonts/flag-icon-css/css/flag-icon.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'vendors/css/extensions/pace.css' %}">
+    <!-- END VENDOR CSS-->
+
+    <!-- BEGIN ROBUST CSS-->
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'ltr/bootstrap-extended.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'ltr/app.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'ltr/colors.css' %}">
+    <!-- END ROBUST CSS-->
+
+    <!-- BEGIN Page Level CSS-->
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'ltr/core/menu/menu-types/vertical-menu.css' %}">
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'ltr/core/menu/menu-types/vertical-overlay-menu.css' %}">
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'ltr/core/colors/palette-gradient.css' %}">
+    <link rel="stylesheet" href="{% static 'custom/datepicker.min.css' %}">
+    <link rel="stylesheet" href="{% static 'custom/jquery.dataTables.css' %}">
+    <link rel="stylesheet" href="{% static 'custom/summernote-bs4.css' %}">
+    <link rel="stylesheet" href="{% static 'custom/select2.min.css' %}">
+    <!-- END Page Level CSS-->
+
+    <!-- BEGIN Custom CSS-->
+
+    <link rel="stylesheet" type="text/css" href="{% static 'ltr/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'ltr/custom.css' %}">
+    <link rel="stylesheet" href="{% static 'custom/style.css' %}">
+    <!-- END Custom CSS-->
+
+    <script src="{% static 'js/core/libraries/jquery.min.js' %}" type="text/javascript"></script>
+
+    <script src="{% static 'vendors/js/ui/tether.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/core/libraries/bootstrap.min.js' %}" type="text/javascript"></script>
+
+
+    <script src="{% static 'portjs/raphael.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'portjs/morris.min.js' %}" type="text/javascript"></script>
+
+
+    <script src="{% static 'myjs/datepicker.min.js' %}"></script>
+    <script src="{% static 'myjs/summernote-bs4.min.js' %}"></script>
+    <script src="{% static 'myjs/select2.min.js' %}"></script>
+
+
+
+</head>
+<body data-open="click" data-menu="vertical-menu" data-col="2-columns"
+      class="vertical-layout vertical-menu 2-columns  fixed-navbar"><span id="hdata" data-df="" data-curr=""></span>
+
+<!-- navbar-fixed-top-->
+{%include 'includes/navbar.html'%}
+
+
+<!-- ////////////////////////////////////////////////////////////////////////////-->
+
+<!-- main menu-->
+<div data-scroll-to-active="true" class="main-menu menu-static menu-dark menu-accordion menu-shadow" id="side">
+    <!-- main menu header-->
+    <div class="main-menu-header">
+        <div>
+            <div class="dropdown profile-element"> <span>
+                            <img alt="image" class="img-circle "
+                                 src="{% static 'userfiles/employee/example.png' %}">
+                             </span>
+                <a data-toggle="dropdown" class="dropdown-toggle block" href="#" aria-expanded="false">
+                    <span class="clear white">  <span
+                                class="text-xs"> Warehouse Manager<b
+                                    class="caret"></b></span> </span> </a>
+                <ul class="dropdown-menu animated m-t-xs">
+                    <li>
+                        <a href="#">&nbsp;Dre </a></li>
+
+                      <li class=" divider">
+                    </li>
+                    <li>
+                        <a href="#">&nbsp;Logout</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+    <!-- / main menu header-->
+    <!-- main menu content-->
+    <div class="main-menu-content">
+        <ul id="main-menu-navigation" data-menu="menu-navigation" class="navigation navigation-main">
+
+            <li class="nav-item">
+                <a href="" <i class="icon-dashboard"> </i>
+                    <span class="menu-title">Dashboard</span></a>
+
+                <li class="navigation-header"><span
+                            data-i18n="nav.category.support">Sales</span><i
+                            data-toggle="tooltip"
+                            data-placement="right"
+                            data-original-title="Sales"
+                            class="icon-ellipsis icon-ellipsis"></i>
+                </li>
+                <li class="nav-item has-sub">
+                    <a href=""> <i class="icon-plus"></i> <span
+                                class="menu-title">Sales Orders
+                            <i class="icon-arrow"></i></span></a>
+                    <ul class="menu-content">
+                        <li>
+                            <a href="">New Invoice</a>
+                        </li>
+                        <li>
+                            <a href="">Manage Invoices</a>
+                        </li>
+                        <li>
+                            <a href="">New Quote</a>
+                        </li>
+                        <li>
+                            <a href="">Manage Quotes</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item has-sub">
+                    <a href=""> <i class="icon-android-calendar"></i> <span
+                                class="menu-title">Recurring Sales<i
+                                    class="icon-arrow"></i></span></a>
+                    <ul class="menu-content">
+                        <li>
+                            <a href="">Dashboard</a>
+                        </li>
+                        <li>
+                            <a href="">New Invoice</a>
+                        </li>
+                        <li>
+                            <a href="">Manage Invoices</a>
+                        </li>
+
+                    </ul>
+                </li>
+
+             <li class="navigation-header"><span
+                            data-i18n="nav.category.support">Formulary</span><i
+                            data-toggle="tooltip"
+                            data-placement="right"
+                            data-original-title="Sales"
+                            class="icon-ellipsis icon-ellipsis"></i>
+                </li>
+                <li class="nav-item has-sub">
+                    <a href=""> <i class="icon-plus"></i> <span
+                                class="menu-title">Product Data
+                            <i class="icon-arrow"></i></span></a>
+                    <ul class="menu-content">
+                        <li>
+                            <a href="">New Product</a>
+                        </li>
+                        <li>
+                            <a href="">Product Overview</a>
+                        </li>
+                        <li>
+                            <a href="">Product Categories</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item has-sub">
+                    <a href=""> <i class="icon-android-calendar"></i> <span
+                                class="menu-title">Reports<i
+                                    class="icon-arrow"></i></span></a>
+                    <ul class="menu-content">
+                        <li>
+                            <a href="">New Inbounded Products</a>
+                        </li>
+                        <li>
+                            <a href="">Verified Product List</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="navigation-header"><span>Inventory Manager</span><i
+                            data-toggle="tooltip" data-placement="right"
+                            data-original-title="Stock"
+                            class="icon-ellipsis icon-ellipsis"></i>
+                </li>
+                <li class="nav-item has-sub">
+                    <a href=""> <i class="icon-truck2"></i><span
+                                class="menu-title">Inventory</span><i
+                                class="fa arrow"></i> </a>
+                    <ul class="menu-content">
+                        <li>
+                            <a href="">Stock Overview</a>
+                        </li>
+                        <li>
+                            <a href="">Stock Transfer</a>
+                        </li>
+                        <li>
+                            <a href="">Warehouses </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item has-sub">
+                    <a href=""> <i class="icon-file"></i><span
+                                class="menu-title"> Purchase Order </span><i
+                                class="fa arrow"></i> </a>
+                    <ul class="menu-content">
+                        <li>
+                            <a href="">New Order</a>
+                        </li>
+                        <li>
+                            <a href="">Manage Orders</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item has-sub">
+                    <a href=""> <i class="icon-share-square-o"></i> <span
+                                class="menu-title">Stock Return
+                            <i class="icon-arrow"></i></span></a>
+                    <ul class="menu-content">
+                        <li>
+                            <a href="">Add New</a>
+                        </li>
+                        <li>
+                            <a href="">Records</a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li class="navigation-header"><span>CRM</span><i
+                            data-toggle="tooltip" data-placement="right"
+                            data-original-title="CRM"
+                            class="icon-ellipsis icon-ellipsis"></i>
+                </li>
+                <li class="nav-item has-sub">
+                    <a href=""> <i class="icon-group"></i><span
+                                class="menu-title">Clients</span><i
+                                class="fa arrow"></i> </a>
+                    <ul class="menu-content">
+                        <li>
+                            <a href="">New Client</a>
+                        </li>
+                        <li>
+                            <a href="">Manage Clients</a>
+                        <li>
+                            <a href="">Manage Groups</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Support Ticket -->
+
+                <!-- <li class="nav-item has-sub">
+                    <a href=""> <i class="icon-ticket"></i><span
+                                class="menu-title">Support Tickets</span><i
+                                class="fa arrow"></i> </a>
+                    <ul class="menu-content">
+                        <li>
+                            <a href="">UnSolved</a>
+                        </li>
+                        <li>
+                            <a href="">Manage Tickets</a>
+                        </li>
+                    </ul>
+                </li> -->
+
+                <li class="nav-item has-sub">
+                    <a href=""> <i class="icon-ios-people"></i><span
+                                class="menu-title">Suppliers</span><i
+                                class="fa arrow"></i> </a>
+                    <ul class="menu-content">
+                        <li>
+                            <a href="">New Supplier</a>
+                        </li>
+                        <li>
+                            <a href="">Manage Suppliers</a>
+                        </li>
+                    </ul>
+                </li>
+                <!---------------- Start Project ----------------->
+
+                <!-- <li class="navigation-header"><span>Project</span><i
+                            data-toggle="tooltip" data-placement="right"
+                            data-original-title="Balance"
+                            class="icon-ellipsis icon-ellipsis"></i>
+                </li>
+                <li class="nav-item has-sub">
+                    <a href=""> <i class="icon-file"></i><span
+                                class="menu-title"> Project Management </span><i
+                                class="fa arrow"></i> </a>
+                    <ul class="menu-content">
+                        <li>
+                            <a href="">New Project</a>
+                        </li>
+                        <li>
+                            <a href="">Manage Projects</a>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href=""><i class="icon-android-done-all"></i><span
+                                class="menu-title"> To Do List</span></a></li> -->
+                <!---------------- end project ----------------->
+
+                <li class="navigation-header"><span>Balance</span><i
+                            data-toggle="tooltip" data-placement="right"
+                            data-original-title="Balance"
+                            class="icon-ellipsis icon-ellipsis"></i>
+                </li>
+                <li class="nav-item has-sub">
+                    <a href=""> <i class="icon-bank"></i><span
+                                class="menu-title"> Accounts</span><i
+                                class="fa arrow"></i> </a>
+                    <ul class="menu-content">
+                        <li>
+                            <a href="">Manage Accounts</a>
+                        </li>
+                        <li>
+                            <a href="">New Account</a>
+                        </li>
+                        <li>
+                            <a href="">Balance Sheet</a>
+                        </li>
+                        <li>
+                            <a href="">Account Statement</a>
+                        </li>
+
+                    </ul>
+                </li>
+
+                <li class="nav-item has-sub">
+                    <a href=""> <i class="icon-exchange"></i><span
+                                class="menu-title"> Transactions </span><i
+                                class="fa arrow"></i> </a>
+                    <ul class="menu-content">
+                        <li>
+                            <a href="">View Transactions</a>
+                        </li>
+                        <li>
+                            <a href="">New Transaction</a>
+                        </li>
+                        <li>
+                            <a href="">New Transfer</a>
+                        </li>
+                        <li>
+                            <a href="">Income</a>
+                        </li>
+                        <li>
+                            <a href="">Expense</a>
+                        </li>
+                    </ul>
+                </li>
+
+
+
+                <!-- <li class="navigation-header"><span>Configure</span><i data-toggle="tooltip" data-placement="right"
+                                                                       data-original-title="Configure"
+                                                                       class="icon-ellipsis icon-ellipsis"></i>
+                </li>
+                <li class="nav-item has-sub">
+                    <a href=""> <i class="icon-cog"></i><span
+                                class="menu-title"> Settings</span><i
+                                class="fa arrow"></i> </a>
+                    <ul class="menu-content">
+                        <li>
+                            <a href="">Company</a>
+                        </li>
+
+                        <li>
+                            <a href="">Billing & Language</a>
+                        </li>
+                        <li>
+                            <a href="">Currency</a>
+                        </li>
+                        <li>
+                            <a href="">Date & Time Format</a>
+                        </li>
+
+                        <li>
+                            <a href="">Transaction Categories</a>
+                        </li>
+                        <li>
+                            <a href="">Set Goals</a>
+                        </li>
+                        <li><a href="">REST API</a>
+                        </li>
+                        <li>
+                            <a href="">Email Config</a>
+                        </li>
+                        <li>
+                            <a href="">Billing Terms</a>
+                        </li>
+                        <li>
+                            <a href="">Automatic Cron Job</a>
+                        </li>
+                        <li>
+                            <a href="">Security</a>
+                        </li>
+                        <li>
+                            <a href="">Theme</a>
+                        </li>
+                        <li>
+                            <a href="">Support Tickets</a>
+                        </li>
+                        <li>
+                            <a href="">About</a>
+                        </li>
+                          <li>
+                            <a href="">Update</a>
+                        </li>
+
+
+                    </ul>
+                </li>
+                <li><a href=""><i class="icon-users"></i><span
+                                class="menu-title">Employees</span></a>
+                </li>
+                <li class="nav-item has-sub">
+                    <a href=""> <i class="icon-cc"></i><span
+                                class="menu-title">Payment Settings</span><i
+                                class="fa arrow"></i> </a>
+                    <ul class="menu-content">
+                        <li>
+                            <a href="">Payment Settings</a>
+                        </li>
+                        <li>
+                            <a href="">Payment Gateways</a>
+                        </li>
+                        <li>
+                            <a href="">Payment Currencies</a>
+                        </li>
+                        <li>
+                            <a href="">Currency Exchange</a>
+                        </li>
+                        <li>
+                            <a href="">Bank Accounts</a>
+                        </li>
+
+
+                    </ul>
+                </li>
+                <li class="nav-item has-sub">
+                    <a href=""> <i class="icon-anchor"></i><span
+                                class="menu-title"> Plugins </span><i
+                                class="fa arrow"></i> </a>
+                    <ul class="menu-content">
+                        <li>
+                            <a href="">reCaptcha Security</a>
+                        </li>
+                        <li>
+                            <a href="">URL Shortener</a>
+                        </li>
+                        <li>
+                            <a href="">Twilio SMS</a>
+                        </li>
+
+                        <li>
+                            <a href="">Currency Exchange API</a>
+                        </li>
+
+
+                    </ul>
+                </li>
+                <li class="nav-item has-sub">
+                    <a href=""> <i class="icon-table3"></i><span
+                                class="menu-title">Templates</span><i
+                                class="fa arrow"></i> </a>
+                    <ul class="menu-content">
+                        <li>
+                            <a href="">Email</a>
+                        </li>
+                        <li>
+                            <a href="">SMS</a>
+                        </li>
+                        <li>
+                            <a href="">Theme</a>
+                        </li>
+
+                    </ul>
+                </li> -->
+                
+                <li class="navigation-header"><span>Backup & Export<i
+                                data-toggle="tooltip" data-placement="right"
+                                data-original-title="Export"
+                                class="icon-ellipsis icon-ellipsis"></i>
+                </li>
+
+
+                <li class="nav-item has-sub">
+                    <a href=""> <i class="icon-database"></i><span
+                                class="menu-title">Export Data</span><i
+                                class="fa arrow"></i> </a>
+                    <ul class="menu-content">
+                        <li>
+                            <a href="">Export People Data</a>
+                        </li>
+                        <li>
+                            <a href="">Export Transactions</a>
+                        </li>
+                        <li>
+                            <a href="">Export Products</a>
+                        </li>
+                        <li>
+                            <a href="">Account Statements</a>
+                        </li>
+                        <li>
+                            <a href="">Database Backup</a>
+                        </li>
+                        <li>
+                            <a href="">TAX Statements</a>
+                        </li>
+
+
+
+                    </ul>
+                </li>
+                <li class="nav-item has-sub">
+                    <a href=""> <i class="icon-road2"></i><span
+                                class="menu-title">Import</span><i
+                                class="fa arrow"></i> </a>
+                    <ul class="menu-content">
+                        <li>
+                            <a href="">Import Products</a>
+                        </li>
+
+
+
+
+                    </ul>
+                </li>
+        </ul>
+    </div>
+    <!-- /main menu content-->
+    <!-- main menu footer-->
+    <!-- include includes/menu-footer-->
+    <!-- main menu footer-->
+    <div id="rough"></div>
+</div>
+<!-- / main menu-->
+
+<!-- FOOTER -->
+{%include 'includes/footer.html'%}

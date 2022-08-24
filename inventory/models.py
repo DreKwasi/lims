@@ -1,13 +1,14 @@
-from tabnanny import verbose
-
 from accounts.models import Facility
 from django.db import models
 from formulary.models import Product_List
 
 
 class Site(models.Model):
-    site_id = models.CharField(max_length=100, unique=True)
-    site_name = models.ForeignKey(Facility, on_delete=models.CASCADE)
+    site_id = models.SlugField(max_length=100, unique=True)
+    facilty_name = models.OneToOneField(
+        "accounts.facility", on_delete=models.CASCADE
+    )
+    date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.site_id
@@ -16,6 +17,7 @@ class Site(models.Model):
 class LogisticArea(models.Model):
     area_name = models.CharField(max_length=100, unique=True)
     area_description = models.CharField(max_length=100)
+    site_id = models.ForeignKey(Site, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.area_name
@@ -33,9 +35,7 @@ class Inventory(models.Model):
     product = models.ForeignKey(Product_List, on_delete=models.CASCADE)
     pack_quantity = models.IntegerField(verbose_name="Number of packs")
     site_id = models.ForeignKey(Site, null=True, on_delete=models.SET_NULL)
-    warehouse_location = models.ForeignKey(
-        LogisticArea, null=True, on_delete=models.SET_NULL
-    )
+
     expiration_date = models.DateTimeField()
     created_date = models.DateField(auto_now_add=True)
 

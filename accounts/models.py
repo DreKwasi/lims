@@ -88,9 +88,20 @@ class Account(AbstractBaseUser):
 
 
 class Facility(models.Model):
+
+    facility_type_choices = (
+        ("Warehouse", "Warehouse"),
+        ("Lab", "Lab"),
+    )
     facility_name = models.CharField(max_length=100, unique=True, null=True)
     facility_location = models.CharField(max_length=100, null=True, blank=True)
     contact_person = models.CharField(max_length=100, blank=True)
+    facility_type = models.CharField(
+        max_length=100, choices=facility_type_choices
+    )
+    site_id = models.OneToOneField(
+        "inventory.site", on_delete=models.SET_NULL, blank=True, null=True
+    )
     phone_regex = RegexValidator(
         regex=r"^\+?1?\d{9,15}$",
         message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.",

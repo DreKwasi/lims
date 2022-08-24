@@ -4,11 +4,14 @@ from formulary.models import Product_List
 
 
 class Site(models.Model):
-    site_id = models.SlugField(max_length=100, unique=True)
-    facilty_name = models.OneToOneField(
+    facility = models.OneToOneField(
         "accounts.facility", on_delete=models.CASCADE
     )
-    date_added = models.DateTimeField(auto_now_add=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def site_id(self):
+        return "SITE_" + self.facility.facility_name.lower().replace(" ", "_")
 
     def __str__(self):
         return self.site_id
@@ -27,8 +30,8 @@ class Inventory(models.Model):
 
     stock_type_choices = (
         ("Warehouse", "Warehouse"),
+        ("Pre-Delivered", "Pre-Delivered"),
         ("In-Transit", "In-Transit"),
-        ("Delivered", "Delivered"),
     )
 
     stock_type = models.CharField(max_length=100, choices=stock_type_choices)

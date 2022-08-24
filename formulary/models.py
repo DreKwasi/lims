@@ -1,5 +1,4 @@
 from django.db import models
-from accounts.models import Account
 
 # Developing table classes for Formulary
 
@@ -8,6 +7,8 @@ class Manufacturer(models.Model):
     manufacturer_name = models.CharField(
         max_length=100, null=True, unique=True
     )
+    is_active = models.BooleanField(default=True)
+    created_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.manufacturer_name
@@ -15,6 +16,8 @@ class Manufacturer(models.Model):
 
 class Brand(models.Model):
     brand_name = models.CharField(max_length=100, null=True, unique=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.brand_name
@@ -22,20 +25,27 @@ class Brand(models.Model):
 
 class Generic_Attr(models.Model):
     generic_name = models.CharField(max_length=100, null=True, unique=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.generic_name
 
 
 class Form(models.Model):
-    brand_name = models.CharField(max_length=100, null=True, unique=True)
+    form = models.CharField(max_length=100, null=True, unique=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.brand_name
+        return self.form
 
 
 class Tier(models.Model):
     tier = models.CharField(max_length=100, null=True, unique=True)
+    price_range = models.CharField(max_length=225, null=True, blank=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.tier
@@ -45,6 +55,8 @@ class Category(models.Model):
     category_name = models.CharField(max_length=100, null=True, unique=True)
     slug = models.SlugField(max_length=100, unique=True)
     description = models.TextField(max_length=225, blank=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = "Category"
@@ -83,8 +95,10 @@ class Product_List(models.Model):
 
     unit_of_measure = models.IntegerField(verbose_name="pack_size")
     created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
     created_by = models.ForeignKey(
-        Account, null=True, on_delete=models.SET_NULL
+        "accounts.Account", null=True, on_delete=models.SET_NULL
     )
 
     def __str__(self):

@@ -43,3 +43,17 @@ class FacilityAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Facility, FacilityAdmin)
+
+
+class SupplierAdmin(admin.ModelAdmin):
+    list_display = (
+        "supplier_name",
+        "contact_person",
+        "phone_number",
+        "is_active",
+    )
+    readonly_fields = ("created_date",)
+    ordering = ("-created_date",)
+
+
+admin.site.register(Supplier, SupplierAdmin)

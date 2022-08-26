@@ -7,20 +7,14 @@ class Manufacturer(models.Model):
     manufacturer_name = models.CharField(
         max_length=100, null=True, unique=True
     )
+    brand_name = models.CharField(max_length=100, null=True, unique=True)
+    tier = models.CharField(max_length=100, null=True, unique=True)
+    price_range = models.CharField(max_length=225, null=True, blank=True)
     is_active = models.BooleanField(default=True)
     created_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.manufacturer_name
-
-
-class Brand(models.Model):
-    brand_name = models.CharField(max_length=100, null=True, unique=True)
-    created_date = models.DateTimeField(auto_now_add=True)
-    is_active = models.BooleanField(default=True)
-
-    def __str__(self):
-        return self.brand_name
 
 
 class Generic_Attr(models.Model):
@@ -41,16 +35,6 @@ class Form(models.Model):
         return self.form
 
 
-class Tier(models.Model):
-    tier = models.CharField(max_length=100, null=True, unique=True)
-    price_range = models.CharField(max_length=225, null=True, blank=True)
-    created_date = models.DateTimeField(auto_now_add=True)
-    is_active = models.BooleanField(default=True)
-
-    def __str__(self):
-        return self.tier
-
-
 class Category(models.Model):
     category_name = models.CharField(max_length=100, null=True, unique=True)
     slug = models.SlugField(max_length=100, unique=True)
@@ -67,33 +51,36 @@ class Category(models.Model):
 
 
 class Product_List(models.Model):
+
+    # uom_choices = (
+    #     ("pack", "pack(s)"),
+    #     ("batch", "batch"),
+    #     ("volume", "volume"),
+    #     ("weight", "weight"),
+    #     ("unit", "unit"),
+    # )
+
     product_id = models.CharField(max_length=100, unique=True)
     product_name = models.CharField(max_length=225, unique=True)
-    product_category = models.ForeignKey(
+    category = models.ForeignKey(
         Category, null=True, on_delete=models.SET_NULL
-    )
-
-    product_brand = models.ForeignKey(
-        Brand, null=True, on_delete=models.SET_NULL
     )
 
     product_form = models.ForeignKey(
         Form, null=True, on_delete=models.SET_NULL
     )
 
-    product_generic_name = models.ForeignKey(
+    generic_name = models.ForeignKey(
         Generic_Attr, null=True, on_delete=models.SET_NULL
     )
 
-    product_manufacturer = models.ForeignKey(
+    manufacturer = models.ForeignKey(
         Manufacturer, null=True, on_delete=models.SET_NULL
     )
 
-    product_tier = models.ForeignKey(
-        Tier, null=True, on_delete=models.SET_NULL
-    )
-
+    # base_uom = models.CharField(choices=uom_choices)
     unit_of_measure = models.IntegerField(verbose_name="pack_size")
+    details = models.TextField(max_length=225, blank=True, null=True)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)

@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "inventory",
     "formulary",
     "dashboard",
+    "inbound",
 ]
 
 MIDDLEWARE = [

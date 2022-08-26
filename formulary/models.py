@@ -7,7 +7,6 @@ class Manufacturer(models.Model):
     manufacturer_name = models.CharField(
         max_length=100, null=True, unique=True
     )
-    brand_name = models.CharField(max_length=100, null=True, unique=True)
     tier = models.CharField(max_length=100, null=True, unique=True)
     price_range = models.CharField(max_length=225, null=True, blank=True)
     is_active = models.BooleanField(default=True)
@@ -15,16 +14,6 @@ class Manufacturer(models.Model):
 
     def __str__(self):
         return self.manufacturer_name
-
-
-class Generic_Attr(models.Model):
-    generic_name = models.CharField(max_length=100, null=True, unique=True)
-    created_date = models.DateTimeField(auto_now_add=True)
-    is_active = models.BooleanField(default=True)
-
-    def __str__(self):
-        return self.generic_name
-
 
 class Form(models.Model):
     form = models.CharField(max_length=100, null=True, unique=True)
@@ -66,10 +55,6 @@ class Product_List(models.Model):
 
     product_form = models.ForeignKey(
         Form, null=True, on_delete=models.SET_NULL
-    )
-
-    generic_name = models.ForeignKey(
-        Generic_Attr, null=True, on_delete=models.SET_NULL
     )
 
     manufacturer = models.ForeignKey(

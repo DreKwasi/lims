@@ -38,12 +38,6 @@ class ProductListForm(forms.ModelForm):
         widget=forms.Select(attrs={"class": "form-control"}),
     )
 
-    generic_name = forms.ModelChoiceField(
-        queryset=Generic_Attr.objects.all(),
-        empty_label="Choose Generic Name",
-        widget=forms.Select(attrs={"class": "form-control"}),
-    )
-
     created_by = forms.ModelChoiceField(
         queryset=Account.objects.all(),
         empty_label=None,
@@ -128,27 +122,9 @@ class ProductForm_Form(forms.ModelForm):
             ] = f"Enter {field} here ..."
 
 
-class GenericAttrForm(forms.ModelForm):
-    class Meta:
-        model = Generic_Attr
-        fields = "__all__"
-        exclude = ("is_active",)
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for field in self.fields:
-            self.fields[field].widget.attrs[
-                "class"
-            ] = "form-control margin-bottom  required"
-
-            self.fields[field].widget.attrs[
-                "placeholder"
-            ] = f"Enter {field} here ..."
-
 
 form_dict = {
     "category": CategoryForm,
     "manufacturer": Manform,
-    "generic_name": GenericAttrForm,
     "product_form": ProductForm_Form,
 }

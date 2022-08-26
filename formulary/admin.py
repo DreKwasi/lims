@@ -27,14 +27,6 @@ class FormAdmin(admin.ModelAdmin):
 
 admin.site.register(Form, FormAdmin)
 
-
-class GenericAttrAdmin(admin.ModelAdmin):
-    list_display = ("generic_name", "is_active", "created_date")
-
-
-admin.site.register(Generic_Attr, GenericAttrAdmin)
-
-
 class ProductAdmin(admin.ModelAdmin):
     list_display = (
         "product_name",

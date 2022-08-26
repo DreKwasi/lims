@@ -37,7 +37,6 @@ class Form(models.Model):
 
 class Category(models.Model):
     category_name = models.CharField(max_length=100, null=True, unique=True)
-    slug = models.SlugField(max_length=100, unique=True)
     description = models.TextField(max_length=225, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
@@ -60,7 +59,6 @@ class Product_List(models.Model):
     #     ("unit", "unit"),
     # )
 
-    product_id = models.CharField(max_length=100, unique=True)
     product_name = models.CharField(max_length=225, unique=True)
     category = models.ForeignKey(
         Category, null=True, on_delete=models.SET_NULL
@@ -90,3 +88,7 @@ class Product_List(models.Model):
 
     def __str__(self):
         return self.product_name
+
+    @property
+    def product_id(self):
+        return f"CHEM-{self.pk}"

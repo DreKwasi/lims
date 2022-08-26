@@ -9,4 +9,10 @@ urlpatterns = [
         views.product_detail,
         name="product_detail",
     ),
+    path("add_product/", views.add_product, name="add_product"),
+    path(
+        "add_product_attr/<str:item>",
+        views.add_product_attr,
+        name="add_product_attr",
+    ),
 ]

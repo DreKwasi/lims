@@ -21,7 +21,6 @@ class ProductFilter(django_filters.FilterSet):
     class Meta:
         model = Product_List
         fields = [
-            "product_id",
             "category__category_name",
             "product_form__form",
             "manufacturer__manufacturer_name",

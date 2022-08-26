@@ -11,15 +11,6 @@ class ProductListForm(forms.ModelForm):
         )
     )
 
-    product_id = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                "class": "form-control margin-bottom  required",
-                "readonly": True,
-            },
-        ),
-    )
-
     unit_of_measure = forms.IntegerField(
         widget=forms.TextInput(
             attrs={
@@ -63,6 +54,101 @@ class ProductListForm(forms.ModelForm):
         model = Product_List
         fields = "__all__"
 
+    product_id = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control margin-bottom  required",
+                "readonly": True,
+            },
+        ),
+    )
+
     def __init__(self, user, *args, **kwargs):
+        instance = kwargs.get("instance", None)
+        if instance:
+            kwargs["initial"] = {
+                "product_id": instance.product_id,
+            }
         super(ProductListForm, self).__init__(*args, **kwargs)
         self.fields["created_by"].queryset = Account.objects.filter(pk=user.id)
+        self.fields["product_id"].required = False
+
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = "__all__"
+        exclude = ("is_active",)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs[
+                "class"
+            ] = "form-control margin-bottom  required"
+
+            self.fields[field].widget.attrs[
+                "placeholder"
+            ] = f"Enter {field} here ..."
+
+
+class Manform(forms.ModelForm):
+    class Meta:
+        model = Manufacturer
+        fields = "__all__"
+        exclude = ("is_active",)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs[
+                "class"
+            ] = "form-control margin-bottom  required"
+
+            self.fields[field].widget.attrs[
+                "placeholder"
+            ] = f"Enter {field} here ..."
+
+
+class ProductForm_Form(forms.ModelForm):
+    class Meta:
+        model = Form
+        fields = "__all__"
+        exclude = ("is_active",)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs[
+                "class"
+            ] = "form-control margin-bottom  required"
+
+            self.fields[field].widget.attrs[
+                "placeholder"
+            ] = f"Enter {field} here ..."
+
+
+class GenericAttrForm(forms.ModelForm):
+    class Meta:
+        model = Generic_Attr
+        fields = "__all__"
+        exclude = ("is_active",)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs[
+                "class"
+            ] = "form-control margin-bottom  required"
+
+            self.fields[field].widget.attrs[
+                "placeholder"
+            ] = f"Enter {field} here ..."
+
+
+form_dict = {
+    "category": CategoryForm,
+    "manufacturer": Manform,
+    "generic_name": GenericAttrForm,
+    "product_form": ProductForm_Form,
+}

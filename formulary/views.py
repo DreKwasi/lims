@@ -6,7 +6,7 @@ from django.shortcuts import HttpResponseRedirect, redirect, render
 from django.urls import reverse
 
 from .filters import ProductFilter
-from .forms import ProductListForm
+from .forms import *
 from .models import *
 
 
@@ -31,7 +31,40 @@ def product_detail(request, product_id):
             print("Valid")
             form.save()
 
-            return redirect("product_detail", product_id)
+            return redirect("formulary")
 
     context = {"product": product, "form": form}
     return render(request, "formulary/product_detail.html", context)
+
+
+def add_product(request):
+    form = ProductListForm(request.user)
+    if request.method == "POST":
+        form = ProductListForm(request.user, request.POST)
+
+        if form.is_valid():
+            form.save()
+            return redirect("formulary")
+        else:
+            messages.error(request, "Submitted Form is not Valid")
+
+    context = {"form": form}
+    return render(request, "formulary/add_products.html", context)
+
+
+def add_product_attr(request, item):
+
+    form = form_dict[item]
+
+    if request.method == "POST":
+        item_form = form_dict[item]
+        form = item_form(request.POST)
+        # import pdb
+
+        # pdb.set_trace()
+        if form.is_valid():
+            form.save()
+            return redirect("add_product")
+
+    context = {"form": form}
+    return render(request, "formulary/product_attr.html", context)

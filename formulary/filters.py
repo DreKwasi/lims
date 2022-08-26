@@ -1,6 +1,6 @@
 import django_filters
 
-from .models import Product_List
+from .models import *
 
 
 class ProductFilter(django_filters.FilterSet):
@@ -25,3 +25,15 @@ class ProductFilter(django_filters.FilterSet):
             "product_form__form",
             "manufacturer__manufacturer_name",
         ]
+
+
+class ManufacturerFilter(django_filters.FilterSet):
+
+    manufacturer_name = django_filters.CharFilter(
+        field_name="manufacturer_name",
+        lookup_expr="icontains",
+    )
+
+    class Meta:
+        model = Manufacturer
+        fields = "__all__"

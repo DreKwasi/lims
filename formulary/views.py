@@ -1,11 +1,9 @@
-from unicodedata import category
-
 from django.contrib import messages
 from django.db.models import Q
-from django.shortcuts import HttpResponseRedirect, redirect, render
+from django.shortcuts import redirect, render
 from django.urls import reverse
 
-from .filters import ProductFilter
+from .filters import ManufacturerFilter, ProductFilter
 from .forms import *
 from .models import *
 
@@ -17,6 +15,13 @@ def formulary_view(request):
         "product_filter": product_filter,
     }
     return render(request, "formulary/formulary_view.html", context)
+
+
+def product_attr(request):
+    manufacturers = Manufacturer.objects.all()
+    man_filter = ManufacturerFilter(request.GET, manufacturers)
+    context = {"man_filter": man_filter}
+    return render(request, "formulary/product_attr.html", context)
 
 
 def product_detail(request, product_id):
@@ -59,12 +64,10 @@ def add_product_attr(request, item):
     if request.method == "POST":
         item_form = form_dict[item]
         form = item_form(request.POST)
-        # import pdb
 
-        # pdb.set_trace()
         if form.is_valid():
             form.save()
             return redirect("add_product")
 
     context = {"form": form}
-    return render(request, "formulary/product_attr.html", context)
+    return render(request, "formulary/add_product_attr.html", context)

@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
     path("", views.formulary_view, name="formulary"),
+    path("product_attr/", views.product_attr, name="product_attr"),
     path(
         "product_detail/<int:product_id>",
         views.product_detail,

@@ -175,7 +175,7 @@
                             <a href="">New Product</a>
                         </li>
                         <li>
-                            <a href="">Product Overview</a>
+                            <a href="{%url 'formulary'%}">Product Overview</a>
                         </li>
                         <li>
                             <a href="">Product Categories</a>
@@ -553,6 +553,9 @@
     <div id="rough"></div>
 </div>
 <!-- / main menu-->
+
+{%block content%}
+{%endblock%}
 
 <!-- FOOTER -->
 {%include 'includes/footer.html'%}

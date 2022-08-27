@@ -36,8 +36,11 @@ class Inventory(models.Model):
 
     stock_type = models.CharField(max_length=100, choices=stock_type_choices)
     product = models.ForeignKey(Product_List, on_delete=models.CASCADE)
+    batch = models.CharField(max_length=225, blank=True, null=True)
     pack_quantity = models.IntegerField(verbose_name="Number of packs")
-    site_id = models.ForeignKey(Site, null=True, on_delete=models.SET_NULL)
+    logistic_area = models.ForeignKey(
+        "inventory.logisticarea", on_delete=models.SET_NULL, null=True
+    )
 
     expiration_date = models.DateTimeField()
     created_date = models.DateField(auto_now_add=True)
@@ -52,3 +55,10 @@ class Inventory(models.Model):
     @property
     def unit_quantity(self):
         return self.product.uom * self.pack_quantity
+
+    @property
+    def site_id(self):
+        return self.logistic_area.site_id
+
+
+# signals to check logistic area and siteid

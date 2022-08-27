@@ -21,13 +21,13 @@ class InventoryAdmin(admin.ModelAdmin):
     list_display = (
         "product",
         "pack_quantity",
-        "site_id",
+        "logistic_area",
         "expiration_date",
         "created_date",
     )
     list_filter = (
         "product",
-        "site_id",
+        "logistic_area",
         "expiration_date",
     )
 

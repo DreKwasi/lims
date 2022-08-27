@@ -1,4 +1,5 @@
 from django.db import models
+from .model_managers import PutAwayManager, UnloadManager
 
 
 class PurchaseOrder(models.Model):
@@ -34,7 +35,8 @@ class PurchaseOrderProduct(models.Model):
     )
     supplied_qty = models.IntegerField()
     cost_price = models.FloatField()
-    batch_nummber = models.CharField(max_length=225)
+    batch_number = models.CharField(max_length=225)
+    expiration_date = models.DateTimeField(auto_now_add=True)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 
@@ -58,16 +60,22 @@ class Unload(models.Model):
         on_delete=models.SET_DEFAULT,
     )
     status = models.CharField(choices=status_choices, max_length=100)
-    purchase_product = models.ForeignKey(
-        PurchaseOrderProduct, on_delete=models.CASCADE
+    purchase_order = models.ForeignKey(
+        PurchaseOrder, on_delete=models.CASCADE, null=True
     )
     unload_qty = models.IntegerField()
 
     def unload_return_qty(self):
         return self.purchase_product.supplied_qty - self.unload_qty
 
+    objects = UnloadManager()
+
+    @property
+    def unload_id(self):
+        return f"UNLOAD-{self.pk}"
+
     def __str__(self):
-        return self.site_id
+        return self.unload_id
 
 
 class Put_Away(models.Model):
@@ -83,8 +91,18 @@ class Put_Away(models.Model):
     put_area = models.ForeignKey(
         "inventory.logisticarea", null=True, on_delete=models.SET_NULL
     )
-    final_unload = models.ForeignKey(Unload, on_delete=models.CASCADE)
-    status = models.CharField(choices=status_choices, max_length=225)
+    final_unload = models.ForeignKey(
+        Unload, on_delete=models.CASCADE, null=True
+    )
+    status = models.CharField(
+        choices=status_choices, max_length=225, null=True, blank=True
+    )
+
+    objects = PutAwayManager()
+
+    @property
+    def put_away_id(self):
+        return f"PUT-{self.pk}"
 
     def __str__(self) -> str:
-        return self.put_site
+        return self.put_away_id

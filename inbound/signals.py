@@ -9,12 +9,10 @@ def create_putaway(sender, instance, created, **kwargs):
         if instance.status == "Finished":
             status = "Not Started"
             put_site = instance.site_id
-            put_area = instance.unload_area
             final_unload = instance
             Put_Away.objects.create(
                 status=status,
                 put_site=put_site,
-                put_area=put_area,
                 final_unload=final_unload,
             )
             print("PutAway Created !!")
@@ -22,12 +20,10 @@ def create_putaway(sender, instance, created, **kwargs):
         if instance.status == "Finished":
             status = "Not Started"
             put_site = instance.site_id
-            put_area = instance.unload_area
             final_unload = instance
             Put_Away.objects.get_or_create(
                 status=status,
                 put_site=put_site,
-                put_area=put_area,
                 final_unload=final_unload,
             )
             print("PutAway Updated/Created !!")

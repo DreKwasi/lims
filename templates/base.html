@@ -159,30 +159,8 @@
                     </ul>
                 </li> -->
 
-             <li class="navigation-header"><span
-                            data-i18n="nav.category.support">Formulary</span><i
-                            data-toggle="tooltip"
-                            data-placement="right"
-                            data-original-title="Sales"
-                            class="icon-ellipsis icon-ellipsis"></i>
-                </li>
-                <li class="nav-item has-sub">
-                    <a href=""> <i class="icon-plus"></i> <span
-                                class="menu-title">Product Data
-                            <i class="icon-arrow"></i></span></a>
-                    <ul class="menu-content">
-                        <li>
-                            <a href="{%url 'add_product' %}">New Product</a>
-                        </li>
-                        <li>
-                            <a href="{%url 'formulary'%}">Product Overview</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'product_attr' %}">Product Attributes</a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item has-sub">
+             
+                <!-- <li class="nav-item has-sub">
                     <a href=""> <i class="icon-android-calendar"></i> <span
                                 class="menu-title">Reports<i
                                     class="icon-arrow"></i></span></a>
@@ -194,7 +172,93 @@
                             <a href="">Verified Product List</a>
                         </li>
                     </ul>
+                </li> -->
+
+                <li class="navigation-header"><span>Outbound</span><i
+                    data-toggle="tooltip" data-placement="right"
+                    data-original-title="Outbound
+                    class="icon-ellipsis icon-ellipsis"></i>
                 </li>
+                    <li class="nav-item has-sub">
+                        <a href=""> <i class="icon-plus"></i> <span
+                                    class="menu-title">Sales Orders
+                                <i class="icon-arrow"></i></span></a>
+                        <ul class="menu-content">
+                            <li>
+                                <a href="">New Invoice</a>
+                            </li>
+                            <li>
+                                <a href="">Manage Invoices</a>
+                            </li>
+                            <li>
+                                <a href="">New Quote</a>
+                            </li>
+                            <li>
+                                <a href="">Manage Quotes</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item has-sub">
+                        <a href=""> <i class="icon-exchange"></i> <span
+                                    class="menu-title">Stock Transfers
+                                <i class="icon-arrow"></i></span></a>
+                        <ul class="menu-content">
+                            <li>
+                                <a href="{% url 'stock_transfer' %}">New Transfer</a>
+                            </li>
+                            <li>
+                                <a href="">Manage Transfers</a>
+                            </li>
+                            <li>
+                                <a href="">New Quote</a>
+                            </li>
+                            <li>
+                                <a href="">Manage Quotes</a>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <li class="nav-item has-sub">
+                        <a href=""> <i class="icon-move"></i> <span
+                                    class="menu-title">Tasks
+                                <i class="icon-arrow"></i></span></a>
+                        <ul class="menu-content">
+                            <li>
+                                <a href="">Mobilization</a>
+                            </li>
+                            <li>
+                                <a href="">Outbound Deliveries</a>
+                            </li>
+                            <li>
+                                <a href="">Delivered Stock</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="navigation-header"><span
+                        data-i18n="nav.category.support">Formulary</span><i
+                        data-toggle="tooltip"
+                        data-placement="right"
+                        data-original-title="Sales"
+                        class="icon-ellipsis icon-ellipsis"></i>
+                    </li>
+                    <li class="nav-item has-sub">
+                        <a href=""> <i class="icon-plus"></i> <span
+                                    class="menu-title">Product Data
+                                <i class="icon-arrow"></i></span></a>
+                        <ul class="menu-content">
+                            <li>
+                                <a href="{%url 'add_product' %}">New Product</a>
+                            </li>
+                            <li>
+                                <a href="{%url 'formulary'%}">Product Overview</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'product_attr' %}">Product Attributes</a>
+                            </li>
+                        </ul>
+                    </li>
 
                 <li class="navigation-header"><span>Inventory Manager</span><i
                             data-toggle="tooltip" data-placement="right"
@@ -207,29 +271,14 @@
                                 class="fa arrow"></i> </a>
                     <ul class="menu-content">
                         <li>
-                            <a href="">Stock Overview</a>
+                            <a href="{% url 'inventory' %}">Stock Overview</a>
                         </li>
                         <li>
-                            <a href="">Stock Transfer</a>
-                        </li>
-                        <li>
-                            <a href="">Warehouses </a>
+                            <a href="{% url 'warehouse' %}">Warehouses </a>
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item has-sub">
-                    <a href=""> <i class="icon-file"></i><span
-                                class="menu-title"> Purchase Order </span><i
-                                class="fa arrow"></i> </a>
-                    <ul class="menu-content">
-                        <li>
-                            <a href="">New Order</a>
-                        </li>
-                        <li>
-                            <a href="">Manage Orders</a>
-                        </li>
-                    </ul>
-                </li>
+
                 <li class="nav-item has-sub">
                     <a href=""> <i class="icon-share-square-o"></i> <span
                                 class="menu-title">Stock Return
@@ -244,6 +293,40 @@
 
                     </ul>
                 </li>
+
+                <li class="navigation-header"><span>Inbound</span><i
+                    data-toggle="tooltip" data-placement="right"
+                    data-original-title="Inbound"
+                    class="icon-ellipsis icon-ellipsis"></i>
+                    </li>
+                    <li class="nav-item has-sub">
+                        <a href=""> <i class="icon-file"></i><span
+                                    class="menu-title"> Purchase Order </span><i
+                                    class="fa arrow"></i> </a>
+                        <ul class="menu-content">
+                            <li>
+                                <a href="{%url 'add_purchase' %}">New Order</a>
+                            </li>
+                            <li>
+                                <a href="{%url 'purchase_orders' %}">Manage Orders</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item has-sub">
+                        <a href=""> <i class="icon-android-calendar"></i><span
+                                    class="menu-title"> Put-Away </span><i
+                                    class="fa arrow"></i> </a>
+                        <ul class="menu-content">
+                            <li>
+                                <a href="">New Put-Away</a>
+                            </li>
+                            <li>
+                                <a href="">Manage Put-Away</a>
+                            </li>
+                        </ul>
+                    </li>
+
                 <li class="navigation-header"><span>Account Manager</span><i
                             data-toggle="tooltip" data-placement="right"
                             data-original-title="CRM"
@@ -264,6 +347,7 @@
                         </li>
                     </ul>
                 </li>
+
 
                 <!-- Support Ticket -->
 
@@ -544,6 +628,7 @@
 
                     </ul>
                 </li>
+            </li>
         </ul>
     </div>
     <!-- /main menu content-->

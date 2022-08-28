@@ -135,7 +135,6 @@ class Supplier(models.Model):
         validators=[phone_regex], max_length=17, blank=True
     )  # Validators should be a list
     description = models.TextField(max_length=225, blank=True, null=True)
-    supplied_products = models.ManyToManyField("formulary.Product_List")
     created_by = models.ForeignKey(
         Account, null=True, on_delete=models.SET_NULL
     )

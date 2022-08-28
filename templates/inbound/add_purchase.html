@@ -1,0 +1,410 @@
+{% extends 'base.html' %}
+{%include 'includes navbar.html'%}
+
+
+{%block content%}
+
+<article class="content">
+    <div class="card card-block">
+        <div id="notify" class="alert alert-success" style="display:none;">
+            <a href="#" class="close" data-dismiss="alert">&times;</a>
+
+            <div class="message"></div>
+        </div>
+        <form method="post" id="data_form">
+
+
+            <div class="row">
+
+
+                <div class="col-sm-6 cmp-pnl">
+                    <div id="customerpanel" class="inner-cmp-pnl">
+                        <div class="form-group row">
+                            <div class="fcol-sm-12">
+                                <h3 class="title">
+                                    Bill From <a href='#'
+                                                                                    class="btn btn-primary btn-sm rounded"
+                                                                                    data-toggle="modal"
+                                                                                    data-target="#addCustomer">
+                                        Add Supplier
+                                    </a>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="frmSearch col-sm-12"><label for="cst"
+                                                                    class="caption">Search Supplier</label>
+                                <input type="text" class="form-control" name="cst" id="supplier-box"
+                                       placeholder="Enter Supplier Name or Mobile Number to search" autocomplete="off"/>
+
+                                <div id="supplier-box-result"></div>
+                            </div>
+
+                        </div>
+                        <div id="customer">
+                            <div class="clientinfo">
+                                Supplier Details
+                                <hr>
+                                 <input type="hidden" name="customer_id" id="customer_id" value="' . $invoice['csd'] . '">
+                                <div id="customer_name"><strong>Name</strong></div>
+                            </div>
+                            <div class="clientinfo">
+
+                                <div id="customer_address1">
+                                    <strong>Address
+                                          <br>
+                                         </strong></div>
+                            </div>
+
+                            <div class="clientinfo">
+
+                                <div type="text" id="customer_phone">Phone: <strong></strong><br>Email: <strong></strong></div>
+                            </div>
+                                <hr>Warehouse <select id="warehouses" class="selectpicker form-control">
+                                    <option value="0">All</option>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 cmp-pnl">
+                        <div class="inner-cmp-pnl">
+                            <div class="form-group row">
+                                <div class="col-sm-12"><h3
+                                            class="title"> Purchase Order Properties</h3>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-6"><label for="invocieno"
+                                                             class="caption"> Purchase Order
+                                        #</label>
+
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><span class="icon-file-text-o"
+                                                                             aria-hidden="true"></span></div>
+                                        <input type="text" class="form-control" placeholder="Purchase Order #"
+                                               name="invocieno"
+                                               value="" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6"><label for="invocieno"
+                                                             class="caption"> Reference</label>
+
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><span class="icon-bookmark-o"
+                                                                             aria-hidden="true"></span></div>
+                                        <input type="text" class="form-control" placeholder="Reference #" name="refer"
+                                               value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+
+                                <div class="col-sm-6"><label for="invociedate"
+                                                             class="caption"> Order Date</label>
+
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><span class="icon-calendar4"
+                                                                             aria-hidden="true"></span></div>
+                                        <input type="text" class="form-control required editdate"
+                                               placeholder="Billing Date" name="invoicedate" autocomplete="false"
+                                               value="">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6"><label for="invocieduedate"
+                                                             class="caption">Order Due Date</label>
+
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><span class="icon-calendar-o"
+                                                                             aria-hidden="true"></span></div>
+                                        <input type="text" class="form-control required editdate" name="invocieduedate"
+                                               placeholder="Due Date" autocomplete="false"
+                                               value="">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-sm-6">
+                                    <label for="taxformat"
+                                           class="caption">Tax</label>
+                                    <select class="form-control" name="taxformat" onchange="changeTaxFormat(this.value)"
+                                            id="taxformat">
+                                        <option value="on" seleted>&raquo;On</option>
+                                        <option value="off">&raquo;Off</option>
+                                        <option value="on">On</option>
+                                        <option value="off">Off</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-6">
+
+                                    <div class="form-group">
+                                        <label for="discountFormat"
+                                               class="caption">Discount</label>
+                                        <select class="form-control" onchange="changeDiscountFormat(this.value)"
+                                                id="discountFormat">
+                                              <option value="">Do not change</option>'; ?>
+                                                 <option value="%"> Discount</option>
+                                                <option value="flat">Flat Discount After TAX</option>
+                                                  <option value="b_p">Discount Before TAX</option>
+                                                <option value="bflat">Flat Discount Before TAX</option>
+                                            <!-- <option value="0">Off</option> -->
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <label for="toAddInfo"
+                                           class="caption">Order Note</label>
+                                    <textarea class="form-control" name="notes"
+                                              rows="2"></textarea></div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div id="saman-row">
+                    <table class="table-responsive tfr my_stripe">
+
+<thead>
+                        <tr class="item_header">
+                            <th width="30%" class="text-center">Item Name</th>
+                            <th width="8%" class="text-center">Quantity</th>
+                            <th width="10%" class="text-center">Rate</th>
+                            <th width="10%" class="text-center">Tax(%)</th>
+                            <th width="10%" class="text-center">Tax</th>
+                            <th width="7%" class="text-center">Discount</th>
+                            <th width="10%" class="text-center">Amount</th>
+                            <th width="5%" class="text-center">Action</th>
+                        </tr></thead><tbody>
+                        
+                        <td><input type="text" class="form-control text-center" name="product_name[]" placeholder="Enter Product name or Code"  value="">
+                        </td>
+                        <td><input type="text" class="form-control req amnt" name="product_qty[]" id="amount-' . $i . '"
+                                   onkeypress="return isNumber(event)" onkeyup="rowTotal(' . $i . '), billUpyog()"
+                                   autocomplete="off" value="' . $row['qty'] . '" ><input type="hidden" name="old_product_qty[]" value="' . $row['qty'] . '" ></td>
+                        <td><input type="text" class="form-control req prc" name="product_price[]" id="price-' . $i . '"
+                                   onkeypress="return isNumber(event)" onkeyup="rowTotal(' . $i . '), billUpyog()"
+                                   autocomplete="off" value="' . $row['price'] . '"></td>
+                        <td> <input type="text" class="form-control vat" name="product_tax[]" id="vat-' . $i . '"
+                                    onkeypress="return isNumber(event)" onkeyup="rowTotal(' . $i . '), billUpyog()"
+                                    autocomplete="off"  value="' . $row['tax'] . '"></td>
+                        <td class="text-center" id=""></td>
+                        <td><input type="text" class="form-control discount" name="product_discount[]"
+                                   onkeypress="return isNumber(event)" id="discount-' . $i . '"
+                                   onkeyup="rowTotal(' . $i . '), billUpyog()" autocomplete="off"  value="' . $row['discount'] . '"></td>
+                        <td><span class="currenty"></span>
+                            <strong><span class="ttlText" id="result-' . $i . '"></span></strong></td>
+                        <td class="text-center">
+<button type="button" data-rowid="' . $i . '" class="btn btn-danger removeProd" title="Remove"> <i class="icon-minus-square"></i> </button>
+                        </td>
+                        <input type="hidden" name="taxa[]" id="taxa-' . $i . '" value="' . $row['totaltax'] . '">
+                        <input type="hidden" name="disca[]" id="disca-' . $i . '" value="' . $row['totaldiscount'] . '">
+                        <input type="hidden" class="ttInput" name="product_subtotal[]" id="total-' . $i . '" value="' . $row['subtotal'] . '">
+                        <input type="hidden" class="pdIn" name="pid[]" id="pid-' . $i . '" value="' . $row['pid'] . '">
+                    </tr><tr class="desc_p"><td colspan="8"><textarea id="dpid-' . $i . '" class="form-control" name="product_description[]" placeholder="Enter Product description" autocomplete="off">
+                        '</textarea><br></td></tr>
+                        <tr class="last-item-row sub_c">
+                            <td class="add-row">
+                                <button type="button" class="btn btn-success" aria-label="Left Align"
+                                        data-toggle="tooltip"
+                                        data-placement="top" title="Add product row" id="addproduct">
+                                    <i class="icon-plus-square"></i> Add Row
+                                </button>
+                            </td>
+                            <td colspan="7"></td>
+                        </tr>
+
+                        <tr class="sub_c" style="display: table-row;">
+                            <td colspan="6" align="right"><strong>Total Tax</strong></td>
+                            <td align="left" colspan="2"><span
+                                        class="currenty lightMode"></span>
+                                <span id="taxr" class="lightMode"></span></td>
+                        </tr>
+                        <tr class="sub_c" style="display: table-row;">
+                            <td colspan="6" align="right">
+                                <strong>Total Discount</strong></td>
+                            <td align="left" colspan="2"><span
+                                        class="currenty lightMode"></span>
+                                <span id="discs" class="lightMode"></span></td>
+                        </tr>
+
+                        <tr class="sub_c" style="display: table-row;">
+                            <td colspan="6" align="right"><input type="hidden"
+                                                                 value=""
+                                                                 id="subttlform"
+                                                                 name="subtotal"><strong>Shipping</strong>
+                            </td>
+                            <td align="left" colspan="2"><input type="text" class="form-control shipVal"
+                                                                onkeypress="return isNumber(event)" placeholder="Value"
+                                                                name="shipping" autocomplete="off"
+                                                                onkeyup="updateTotal()"
+                                                                value=""></td>
+                        </tr>
+
+                        <tr class="sub_c" style="display: table-row;">
+                            <td colspan="6" align="right"><strong>Grand Total(<span
+                                            class="currenty lightMode"></span>)</strong>
+                            </td>
+                            <td align="left" colspan="2"><input type="text" name="total" class="form-control"
+                                                                id="invoiceyoghtml"
+                                                                value="" readonly="">
+
+                            </td>
+                        </tr>
+                        <tr class="sub_c" style="display: table-row;">
+                            <td colspan="2">Payment Terms <select name="pterms" class="selectpicker form-control">
+                                 <option value=""></option>';
+                                    <option value=""></option>
+
+                                </select></td>
+                            <td colspan="2">
+                                <div>
+                                    <label>Update Stock</label>
+                                    <div class="input-group">
+                                        <label class="display-inline-block custom-control custom-radio ml-1">
+                                            <input type="radio" name="update_stock" class="custom-control-input"
+                                                   value="yes" checked="">
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-description ml-0">Yes</span>
+                                        </label>
+                                        <label class="display-inline-block custom-control custom-radio">
+                                            <input type="radio" name="update_stock" class="custom-control-input"
+                                                   value="no">
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-description ml-0">No</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </td>
+                            <td align="right" colspan="4"><input type="submit" class="btn btn-success sub-btn"
+                                                                 value="Update Order"
+                                                                 id="submit-data" data-loading-text="Updating...">
+                            </td>
+                        </tr>
+
+
+                        </tbody>
+                    </table>
+                </div>
+                <input type="hidden" value="purchase/editaction" id="action-url">
+                <input type="hidden" value="puchase_search" id="billtype">
+                <input type="hidden" value="" name="counter" id="ganak">
+                <input type="hidden" value="" name="currency">
+                <input type="hidden" value="%" name="taxformat" id="tax_format">
+                <input type="hidden" value="%" name="discountFormat" id="discount_format">
+                <input type="hidden" value="yes" name="tax_handle" id="tax_status">
+                <input type="hidden" value="yes" name="applyDiscount" id="discount_handle">
+        </form>
+    </div>
+
+</article>
+
+<div class="modal fade" id="addCustomer" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" id="product_action" class="form-horizontal">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Add Supplier</h4>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <p id="statusMsg"></p><input type="hidden" name="mcustomer_id" id="mcustomer_id" value="0">
+
+
+                    <div class="form-group row">
+
+                        <label class="col-sm-2 col-form-label"
+                               for="name">Name</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" placeholder="Name"
+                                   class="form-control margin-bottom" id="mcustomer_name" name="name" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+
+                        <label class="col-sm-2 col-form-label"
+                               for="phone">Phone</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" placeholder="Phone"
+                                   class="form-control margin-bottom" name="phone" id="mcustomer_phone">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+
+                        <label class="col-sm-2 col-form-label" for="email">Email</label>
+
+                        <div class="col-sm-10">
+                            <input type="email" placeholder="Email"
+                                   class="form-control margin-bottom crequired" name="email" id="mcustomer_email">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+
+                        <label class="col-sm-2 col-form-label"
+                               for="address">Address</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" placeholder="Address"
+                                   class="form-control margin-bottom " name="address" id="mcustomer_address1">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+
+
+                        <div class="col-sm-6">
+                            <input type="text" placeholder="City"
+                                   class="form-control margin-bottom" name="city" id="mcustomer_city">
+                        </div>
+                        <div class="col-sm-6">
+                            <input type="text" placeholder="Region"
+                                   class="form-control margin-bottom" name="region">
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row">
+
+
+                        <div class="col-sm-6">
+                            <input type="text" placeholder="Country"
+                                   class="form-control margin-bottom" name="country" id="mcustomer_country">
+                        </div>
+                        <div class="col-sm-6">
+                            <input type="text" placeholder="PostBox"
+                                   class="form-control margin-bottom" name="postbox">
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"
+                            data-dismiss="modal">Close</button>
+                    <input type="submit" id="msupplier_add" class="btn btn-primary submitBtn"
+                           value="ADD"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript"> $('.editdate').datepicker({autoHide: true, format: ''});</script>
+
+{% endblock %}
+
+{%include 'includes/footer.html' %}

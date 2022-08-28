@@ -27,6 +27,7 @@ class FormAdmin(admin.ModelAdmin):
 
 admin.site.register(Form, FormAdmin)
 
+
 class ProductAdmin(admin.ModelAdmin):
     list_display = (
         "product_name",
@@ -38,4 +39,4 @@ class ProductAdmin(admin.ModelAdmin):
     )
 
 
-admin.site.register(Product_List, ProductAdmin)
+admin.site.register(ProductList, ProductAdmin)

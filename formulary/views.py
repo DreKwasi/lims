@@ -9,7 +9,7 @@ from .models import *
 
 
 def formulary_view(request):
-    products = Product_List.objects.all()
+    products = ProductList.objects.all()
     product_filter = ProductFilter(request.GET, products)
     context = {
         "product_filter": product_filter,
@@ -25,11 +25,11 @@ def product_attr(request):
 
 
 def product_detail(request, product_id):
-    product = Product_List.objects.get(pk=product_id)
+    product = ProductList.objects.get(pk=product_id)
     form = ProductListForm(instance=product, user=request.user)
 
     if request.method == "POST":
-        product = Product_List.objects.get(pk=product_id)
+        product = ProductList.objects.get(pk=product_id)
         form = ProductListForm(request.user, request.POST, instance=product)
 
         if form.is_valid():

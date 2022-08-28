@@ -45,7 +45,7 @@ class ProductListForm(forms.ModelForm):
     )
 
     class Meta:
-        model = Product_List
+        model = ProductList
         fields = "__all__"
 
     product_id = forms.CharField(

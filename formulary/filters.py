@@ -19,7 +19,7 @@ class ProductFilter(django_filters.FilterSet):
     )
 
     class Meta:
-        model = Product_List
+        model = ProductList
         fields = [
             "category__category_name",
             "product_form__form",

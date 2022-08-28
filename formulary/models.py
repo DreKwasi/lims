@@ -15,6 +15,7 @@ class Manufacturer(models.Model):
     def __str__(self):
         return self.manufacturer_name
 
+
 class Form(models.Model):
     form = models.CharField(max_length=100, null=True, unique=True)
     created_date = models.DateTimeField(auto_now_add=True)
@@ -38,7 +39,7 @@ class Category(models.Model):
         return self.category_name
 
 
-class Product_List(models.Model):
+class ProductList(models.Model):
 
     # uom_choices = (
     #     ("pack", "pack(s)"),

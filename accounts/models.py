@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.core.validators import RegexValidator
 from django.db import models
 
 
@@ -84,3 +85,65 @@ class Account(AbstractBaseUser):
     def has_module_perms(self, add_label):
         "Does the user have permissions to view the app `app_label`?"
         return True
+
+
+class Facility(models.Model):
+
+    facility_type_choices = (
+        ("Warehouse", "Warehouse"),
+        ("Lab", "Lab"),
+    )
+    facility_name = models.CharField(max_length=100, unique=True, null=True)
+    facility_location = models.CharField(max_length=100, null=True, blank=True)
+    contact_person = models.CharField(max_length=100, blank=True)
+    facility_type = models.CharField(
+        max_length=100, choices=facility_type_choices
+    )
+
+    phone_regex = RegexValidator(
+        regex=r"^\+?1?\d{9,15}$",
+        message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.",
+    )
+    phone_number = models.CharField(
+        validators=[phone_regex], max_length=17, blank=True
+    )  # Validators should be a list
+    created_by = models.ForeignKey(
+        Account, null=True, on_delete=models.SET_NULL
+    )
+    created_date = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = "Facility"
+        verbose_name_plural = "Facilities"
+
+    def __str__(self):
+        return self.facility_name
+
+
+class Supplier(models.Model):
+    supplier_name = models.CharField(max_length=100, unique=True, null=True)
+    supplier_location = models.CharField(max_length=100, null=True, blank=True)
+    address = models.CharField(max_length=225, unique=True)
+    contact_person = models.CharField(max_length=100, blank=True)
+    email_address = models.EmailField(max_length=100, null=True, blank=True)
+    phone_regex = RegexValidator(
+        regex=r"^\+?1?\d{9,15}$",
+        message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.",
+    )
+    phone_number = models.CharField(
+        validators=[phone_regex], max_length=17, blank=True
+    )  # Validators should be a list
+    description = models.TextField(max_length=225, blank=True, null=True)
+    created_by = models.ForeignKey(
+        Account, null=True, on_delete=models.SET_NULL
+    )
+    created_date = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = "Supplier"
+        ordering = ["-created_date"]
+
+    def __str__(self):
+        return self.supplier_name

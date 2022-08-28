@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+{%include 'includes navbar.html'%}
+
+
+{% block content %}
+
+<article class="content">
+    <div class="card card-block">
+        <div id="notify" class="alert alert-success" style="display:none;">
+            <a href="#" class="close" data-dismiss="alert">&times;</a>
+
+            <div class="message"></div>
+        </div>
+        {% include 'includes/alerts.html' %}
+        <form method="post" id="data_form" class="form-horizontal">
+            {%csrf_token%}
+            <div class="grid_3 grid_4">
+                <h5>Add New Product</h5>
+                <hr>
+                <input type="hidden" name="act" value="add_product">
+
+
+                <div class="form-group row">
+
+                    <label class="col-sm-2 col-form-label"
+                           for="product_name">Product Name</label>
+
+                    <div class="col-sm-6">
+                        {{form.product_name}}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+
+                    <label class="col-sm-2 col-form-label"
+                           for="category">Product Category</label>
+
+                    <div class="col-sm-6">
+                        {{form.category }}
+                    </div>
+
+                    <div class="col-sm-2">
+                        <a href="{% url 'add_product_attr' 'category' %}" class="btn btn-secondary" >
+                            Add New
+                        </a>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+
+                    <label class="col-sm-2 col-form-label"
+                           for="manufacturer">Manufacturer </label>
+
+                    <div class="col-sm-6">
+                        {{form.manufacturer}}
+                    </div>
+
+                    <div class="col-sm-2">
+                        <a href="{% url 'add_product_attr' 'manufacturer' %}" class="btn btn-secondary" >
+                            Add New
+                        </a>
+                    </div>
+
+                </div>
+
+
+
+                <div class="form-group row">
+
+                    <label class="col-sm-2 col-form-label"
+                           for="product_form">Form </label>
+
+                    <div class="col-sm-6">
+                        {{form.product_form}}
+                    </div>
+
+                    <div class="col-sm-2">
+                        <a href="{% url 'add_product_attr' 'product_form' %}" class="btn btn-secondary" >
+                            Add New
+                        </a>
+                    </div>
+
+                </div>
+
+                <!-- <div class="form-group row">
+
+                    <label class="col-sm-2 col-form-label"
+                           for="product_code">Product Code</label>
+
+                    <div class="col-sm-6">
+                        {{form.product_id}}
+                    </div>
+                
+                </div> -->
+
+                <div class="form-group row">
+
+                    <label class="col-sm-2 control-label"
+                           for="uom">Unit Of Measure</label>
+
+                    <div class="col-sm-6">
+                        <div class="input-group">
+                            <span class="input-group-addon">Unit(s)</span>
+                                {{form.unit_of_measure}}
+                            </div>
+                        </div>
+                </div>
+
+                <div class="form-group row">
+
+                    <label class="col-sm-2 col-form-label">Details</label>
+
+                    <div class="col-sm-8">
+                        <textarea placeholder="Details"
+                                  class="form-control margin-bottom" name="product_desc"
+                        >{{product.details}}</textarea>
+                    </div>
+                </div>
+
+
+                <div class="form-group row">
+
+                    <label class="col-sm-2 col-form-label"
+                           for="product_name">Created By</label>
+
+                    <div class="col-sm-6">
+                            {{form.created_by}}
+                    </div>
+                </div>
+
+
+                <button type="submit" class="btn btn-success margin-bottom" >
+                    Add Product
+                </button>
+            </div>
+            {% if form.errors %}
+				{% for field in form %}
+					{% for error in field.errors %} 
+					   <div class="alert alert-danger">
+							<strong>Field Error: {{ error|escape }}</strong>
+					   </div>
+					{% endfor %}
+				{% endfor %}
+			 {% endif %}
+
+			 {% if form.non_field_errors %}
+			 {% for error in form.non_field_errors %} 
+				<div class="alert alert-danger">
+					 <strong>Non-Field Error {{ error|escape }}</strong>
+				</div>
+			 {% endfor %}
+	  		{% endif %}
+
+        </form>
+    </div>
+</article>
+
+{% endblock %}
+
+{%include 'includes/footer.html' %}

@@ -1,4 +1,5 @@
 {% load static%}
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en" data-textdirection="ltr" class="loading">
 <head>
@@ -305,7 +306,7 @@
                                     class="fa arrow"></i> </a>
                         <ul class="menu-content">
                             <li>
-                                <a href="{%url 'add_purchase' %}">New Order</a>
+                                <a href="{%url 'add_purchase_order' %}">New Order</a>
                             </li>
                             <li>
                                 <a href="{%url 'purchase_orders' %}">Manage Orders</a>

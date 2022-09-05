@@ -20,12 +20,16 @@
 <script src="{% static 'myjs/jquery.dataTables.min.js' %}"></script>
 
 
-<script type="text/javascript">var dtformat = $('#hdata').attr('data-df');
+<script type="text/javascript">
+    var dtformat = $('#hdata').attr('data-df');
     var currency = $('#hdata').attr('data-curr');
-    ;</script>
-<script src="{% static 'myjs/custom.js' %}"></script>
-<script src="{% static 'myjs/basic.js' %}"></script>
-<script src="{% static 'myjs/control.js' %}"></script>
+    </script>
+
+<script src="{% static 'myjs/custom.js' %}" defer></script>
+
+<script src="{% static 'myjs/basic.js' %}" defer></script>
+
+<script src="{% static 'myjs/control.js' %}" defer></script>
 
 <script src="{% static 'js/core/app.js' %}" type="text/javascript"></script>
 
@@ -33,7 +37,7 @@
 <script type="text/javascript">
     $.ajax({
 
-        url: baseurl + 'manager/pendingtasks',
+        url:'manager/pendingtasks',
         dataType: 'json',
         success: function (data) {
             $('#tasklist').html(data.tasks);

@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
-{%include 'includes navbar.html'%}
+{% load static %}
 
+{%include 'includes/navbar.html'%}
 
 {%block content%}
 
@@ -13,28 +14,30 @@
         </div>
         <div class="grid_3 grid_4 animated fadeInRight table-responsive">
             <h5>Purchase Orders</h5>
-
+            <a href= "{% url 'add_purchase_order' %}" class="btn btn-primary btn-sm rounded">
+                Create A Purchase Order
+            </a>
             <hr>
+
             <table id="invoices" class="table-striped" cellspacing="0" width="100%">
                 <thead>
-                <tr> <th>No</th>
+                <tr> 
+                    <th>No</th>
                     <th>Order #</th>
                     <th>Supplier</th>
                     <th>Date</th>
-                    <th>Amount</th>
+                    <th>Amount (GHS)</th>
                     <th>Status</th>
                     <th class="no-sort">Settings</th>
                 </tr>
                 </thead>
-                <tbody>
-                </tbody>
 
                 <tfoot>
                 <tr> <th>No</th>
                     <th>Order #</th>
                     <th>Supplier</th>
                     <th>Date</th>
-                    <th>Amount</th>
+                    <th>Amount (GHS)</th>
                     <th>Status</th>
                     <th class="no-sort">Settings</th>
                 </tr>
@@ -67,27 +70,53 @@
     </div>
 </div>
 
-{%block js%}
-<script type="text/javascript">
-    $(document).ready(function () {
+{%block scripts %}
+    <script type="text/javascript">
+        $(document).ready(function () {
 
-        var table = $('#invoices').DataTable({
-            "processing": true,
-            "order": [],
-            "columnDefs": [
-                {
-                    "targets": [0],
-                    "orderable": false,
+            var table = $('#invoices').DataTable({
+                "processing": true,
+                "paging": true,
+                "searching": true,
+                "order": [],
+                "scrollY":'400px',
+                "scrollCollapse":true,
+                "deferRender":true,
+
+                "ajax": {
+                    "type":'GET',
+                    "url":"purchase_orders_data/",
+                    "complete":function(){
+                        console.log("Complete")
+                    }
                 },
-            ],
+                'columns':[
+                    {data:"no"},
+                    {data:'order number'},
+                    {data:'supplier'},
+                    {data:'date'},
+                    {data:'amount'},
+                    {data:'status'},
+                    {"defaultContent":" <button type='button' class='btn btn-info' data-toggle='modal' data-target='#delete_model'> Edit </button>"},
+                ],
+
+                
+                "columnDefs": [
+                    {
+                        "targets": [0],
+                        "orderable": false,
+                    },
+                ],
+
+            });
 
         });
-
-    });
-</script>
-{%endblock js%}
+    </script>
+{%endblock scripts %}
 
 
 {% endblock %}
+
+
 
 {%include 'includes/footer.html' %}

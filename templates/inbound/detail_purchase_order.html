@@ -1,0 +1,503 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% load extras %}
+
+{% block content %}
+
+    <div class="app-content content container-fluid">
+        <div class="content-wrapper">
+            <div id="notify" class="alert alert-success" style="display:none;">
+                <a href="#" class="close" data-dismiss="alert">&times;</a>
+
+                <div class="message"></div>
+            </div>
+
+            <div class="content-body">
+                <section class="card">
+                    <div id="invoice-template" class="card-block">
+                        <div class="row wrapper white-bg page-heading">
+
+                            <div class="col-lg-12">
+                                    <div class="title-action">
+
+                                    <a href="" class="btn btn-warning">
+                                        <i class="icon-pencil"></i> Edit Order </a>
+
+                                    <a href="#part_payment" data-toggle="modal" data-remote="false" data-type="reminder"
+                                    class="btn btn-large btn-success" title="Partial Payment"
+                                    ><span class="icon-money"></span> Make Payment </a>
+
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
+                                                aria-haspopup="true" aria-expanded="false">
+                                            <span class="icon-envelope-o"></span> Send
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a href="" data-toggle="modal" data-remote="false" 
+                                            class="dropdown-item sendbill" data-type="purchase">Purchase Request</a>
+                                        </div>
+                                    </div>
+
+                                    <div class="btn-group ">
+                                        <button type="button" class="btn btn-success btn-min-width dropdown-toggle"
+                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+                                                    class="icon-print"></i> Print Order
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item"
+                                            href="">Print</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item"
+                                            href="">PDF Download</a>
+                                        </div>
+                                    </div>
+                                    <a href="" class="btn btn-primary"><i
+                                                class="icon-earth"></i> Public Preview
+                                    </a>
+
+                                    <a href="#pop_model" data-toggle="modal" data-remote="false"
+                                    class="btn btn-large btn-success" title="Change Status">
+                                    <span class="icon-tab"></span> Change Status</a>
+                                    <a href="#cancel-bill" class="btn btn-danger" id="cancel-bill_p"><i
+                                                class="icon-minus-circle"> </i> Cancel
+                                    </a>
+                                </div>
+                                <br>
+                                <h2 class="btn btn-oval btn-danger">{{purchase_order.order_status}}</h2>
+                            </div>
+                        </div>
+
+                        <!-- Invoice Company Details -->
+                        <div id="invoice-company-details" class="row mt-2">
+                            <div class="col-md-6 col-sm-12 text-xs-center text-md-left">
+                                <p></p>
+                                <img src="" class="img-responsive p-1 m-b-2" style="max-height: 120px;">
+                            </div>
+
+                            <div class="col-md-6 col-sm-12 text-xs-center text-md-right">
+                                <h2>Purchase Order</h2>
+                                <p class="pb-1">{{purchase_order.purchase_order_id}}</p>
+                                <p class="pb-1">Reference: {{purchase_order.reference_id}}</p>
+                                <ul class="px-0 list-unstyled">
+                                    <li>Gross Amount</li>
+                                    <li class="lead text-bold-800">{{purchase_order.total_value}}</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!--/ Invoice Company Details -->
+
+                        <!-- Invoice Customer Details -->
+                        <div id="invoice-customer-details" class="row pt-2">
+                            <div class="col-sm-12 text-xs-center text-md-left">
+                                <p class="text-muted">Bill From</p>
+                            </div>
+                            <div class="col-md-6 col-sm-12 text-xs-center text-md-left">
+                                <ul class="px-0 list-unstyled">
+                                    <li class="text-bold-800"><a href="">
+                                        <strong class="invoice_a">{{purchase_order.supplier.supplier_name}}</strong></a>
+                                    </li>
+                                    <li>{{purchase_order.supplier.address}}</li>
+                                    <li>{{purchase_order.supplier.city}} , {{purchase_order.supplier.country}} </li>
+                                    <li>{{purchase_order.supplier.phone_number}}</li>
+                                    <li>{{purchase_order.supplier.email}}></li>
+                                </ul>
+                            </div>
+
+                            <div class="offset-md-3 col-md-3 col-sm-12 text-xs-center text-md-left">
+                                <p><span class="text-muted">Order Date</span> {{purchase_order.order_date}}</p>
+                                <p><span class="text-muted">Due Date</span> Due Date</p> 
+                                <p><span class="text-muted">Terms</span>Terms</p>
+                            </div>
+                        </div>
+                        <!--/ Invoice Customer Details -->
+
+                        <!-- Invoice Items Details -->
+                        <div id="invoice-items-details" class="pt-2">
+                            <div class="row">
+                                <div class="table-responsive col-sm-12">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Description</th>
+                                            <th class="text-xs-left">Rate</th>
+                                            <th class="text-xs-left">Qty</th>
+                                            <th class="text-xs-left">Discount</th>
+                                            <th class="text-xs-left">Amount</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for product in products %}
+                                        <tr>
+                                            <th scope="row">{{product.id}}</th>
+                                            <td>{{product.product_name}}</td>
+                                            <td>{{product.cost_price}}</td>
+                                            <td>{{product.supplied_qty}}</td>
+                                            <td>{{product.discount}}</td>
+                                            <td>{{product.supplied_qty |multiply:product.cost_price | floatformat:"-2"}}</td>
+                                        </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <p></p>
+                            <div class="row">
+                                <div class="col-md-7 col-sm-12 text-xs-center text-md-left">
+
+                                </div>
+                                <div class="col-sm-12 text-md-right">
+                                    <p><strong>Total Due</strong>: {{purchase_order.total_value}}</p>
+                                    <div class="table-responsive">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--/ Invoice Footer -->
+                        <hr>
+                        <div class="row">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Files</th>
+                                </tr>
+                                </thead>
+                                <tbody id="activity">
+                                <tr>
+                                    <td>
+                                        <a data-url="" class="aj_delete">
+                                            <i class="btn-danger btn-lg icon-trash-a"></i>
+                                        </a> 
+                                        <a class="n_item" href=""> Col1 </a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <!-- The fileinput-button span is used to style the file input field as button -->
+                            <span class="btn btn-success fileinput-button">
+                                <i class="glyphicon glyphicon-plus"></i>
+                            <span>Select files...</span>
+                                <!-- The file input field used as target for the file upload widget -->
+                                <input id="fileupload" type="file" name="files[]" multiple>
+                            </span>
+                            <br>
+                            <pre>Allowed: gif, jpeg, png, docx, docs, txt, pdf, xls </pre>
+                            <br>
+                            <!-- The global progress bar -->
+                            <div id="progress" class="progress">
+                                <div class="progress-bar progress-bar-success"></div>
+                            </div>
+                            <!-- The container for the uploaded files -->
+                            <table id="files" class="files"></table>
+                            <br>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static '/myjs/jquery.ui.widget.js' %}"></script>
+    <script src="{% static '/myjs/jquery.fileupload.js' %}"></script>
+    {% block scripts %}
+        <script>
+            /*jslint unparam: true */
+            /*global window, $ */
+            $(function () {
+                'use strict';
+                // Change this to the location of your server-side upload handler:
+                var url = '';
+                $('#fileupload').fileupload({
+                    url: url,
+                    dataType: 'json',
+                    done: function (e, data) {
+                        $.each(data.result.files, function (index, file) {
+                            $('#files').append('<tr><td><a data-url="' + file.name + '" class="aj_delete"><i class="btn-danger btn-sm icon-trash-a"></i> ' + file.name + ' </a></td></tr>');
+
+                        });
+                    },
+                    progressall: function (e, data) {
+                        var progress = parseInt(data.loaded / data.total * 100, 10);
+                        $('#progress .progress-bar').css(
+                            'width',
+                            progress + '%'
+                        );
+                    }
+                }).prop('disabled', !$.support.fileInput)
+                    .parent().addClass($.support.fileInput ? undefined : 'disabled');
+            });
+
+            $(document).on('click', ".aj_delete", function (e) {
+                e.preventDefault();
+
+                var aurl = $(this).attr('data-url');
+                var obj = $(this);
+
+                jQuery.ajax({
+
+                    url: aurl,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        obj.closest('tr').remove();
+                        obj.remove();
+                    }
+                });
+
+            });
+        </script>
+        <script type="text/javascript">
+            $(function () {
+                $('.summernote').summernote({
+                    height: 100,
+                    toolbar: [
+                        // [groupName, [list of button]]
+                        ['style', ['bold', 'italic', 'underline', 'clear']],
+                        ['font', ['strikethrough', 'superscript', 'subscript']],
+                        ['fontsize', ['fontsize']],
+                        ['color', ['color']],
+                        ['para', ['ul', 'ol', 'paragraph']],
+                        ['height', ['height']],
+                        ['fullscreen', ['fullscreen']],
+                        ['codeview', ['codeview']]
+                    ]
+                });
+    
+                $('#sendM').on('click', function (e) {
+                    e.preventDefault();
+    
+                    sendBill($('.summernote').summernote('code'));
+    
+                });
+            });
+    
+            $(document).on('click', "#cancel-bill_p", function (e) {
+                e.preventDefault();
+    
+                $('#cancel_bill').modal({backdrop: 'static', keyboard: false}).one('click', '#send', function () {
+                    var acturl = 'transactions/cancelpurchase';
+                    cancelBill(acturl);
+    
+                });
+            });
+        </script>
+    {% endblock scripts %}
+    <!-- Modal HTML -->
+    <div id="part_payment" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Debit Payment Confirmation</h4>
+                </div>
+
+                <div class="modal-body">
+                    <form class="payment">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon"><?php echo $this->config->item('currency</div>
+                                    <input type="text" class="form-control" placeholder="Total Amount" name="amount"
+                                        id="rmpay" value="<?php echo $rming ?>">
+                                </div>
+
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon"><span class="icon-calendar4"
+                                                                        aria-hidden="true"></span></div>
+                                    <input type="text" class="form-control required" id="tsn_date"
+                                        placeholder="Billing Date" name="paydate"
+                                        value="<?php echo dateformat($this->config->item('date')); ?>">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12 mb-1"><label
+                                        for="pmethod">Payment Method</label>
+                                <select name="pmethod" class="form-control mb-1">
+                                    <option value="Cash">Cash</option>
+                                    <option value="Card">Card</option>
+                                    <option value="Bank">Bank</option>
+                                </select><label for="account">Account</label>
+
+                                <select name="account" class="form-control">
+                                    <?php foreach ($acclist as $row) {
+                                        echo '<option value="' . $row['id'] . '">' . $row['holder'] . ' / ' . $row['acn'] . '</option>';
+                                    }
+                                    ?>
+                                </select></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 mb-1"><label
+                                        for="shortnote">Note</label>
+                                <input type="text" class="form-control"
+                                    name="shortnote" placeholder="Short note"
+                                    value="Payment for purchase #<?php echo $invoice['tid'] ?>"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="hidden" class="form-control required"
+                                name="tid" id="invoiceid" value="<?php echo $invoice['tid'] ?>">
+                            <button type="button" class="btn btn-default"
+                                    data-dismiss="modal">Close</button>
+                            <input type="hidden" name="cid" value="<?php echo $invoice['cid'] ?>"><input type="hidden"
+                                                                                                        name="cname"
+                                                                                                        value="<?php echo $invoice['name'] ?>">
+                            <button type="button" class="btn btn-primary"
+                                    id="purchasepayment">Do Payment</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- cancel -->
+    <div id="cancel_bill" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Cancel Purchase Order</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="cancelbill">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                this action! Are you sure
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="hidden" class="form-control"
+                                name="tid" value="<?php echo $invoice['tid'] ?>">
+                            <button type="button" class="btn btn-default"
+                                    data-dismiss="modal"> Close</button>
+                            <button type="button" class="btn btn-primary"
+                                    id="send"> Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Modal HTML -->
+    <div id="sendEmail" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Email</h4>
+                </div>
+                <div id="request">
+                    <div id="ballsWaveG">
+                        <div id="ballsWaveG_1" class="ballsWaveG"></div>
+                        <div id="ballsWaveG_2" class="ballsWaveG"></div>
+                        <div id="ballsWaveG_3" class="ballsWaveG"></div>
+                        <div id="ballsWaveG_4" class="ballsWaveG"></div>
+                        <div id="ballsWaveG_5" class="ballsWaveG"></div>
+                        <div id="ballsWaveG_6" class="ballsWaveG"></div>
+                        <div id="ballsWaveG_7" class="ballsWaveG"></div>
+                        <div id="ballsWaveG_8" class="ballsWaveG"></div>
+                    </div>
+                </div>
+                <div class="modal-body" id="emailbody" style="display: none;">
+                    <form id="sendbill">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="input-group">
+                                    <div class="input-group-addon"><span class="icon-envelope-o"
+                                                                        aria-hidden="true"></span></div>
+                                    <input type="text" class="form-control" placeholder="Email" name="mailtoc"
+                                        value="<?php echo $invoice['email'] ?>">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-xs-12 mb-1"><label
+                                        for="shortnote">Customer Name</label>
+                                <input type="text" class="form-control"
+                                    name="customername" value="<?php echo $invoice['name'] ?>"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 mb-1"><label
+                                        for="shortnote">Subject</label>
+                                <input type="text" class="form-control"
+                                    name="subject" id="subject">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 mb-1"><label
+                                        for="shortnote">Message</label>
+                                <textarea name="text" class="summernote" id="contents" title="Contents"></textarea></div>
+                        </div>
+
+                        <input type="hidden" class="form-control"
+                            id="invoiceid" name="tid" value="<?php echo $invoice['tid'] ?>">
+                        <input type="hidden" class="form-control"
+                            id="emailtype" value="">
+
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"
+                            data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary"
+                            id="sendM">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="pop_model" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Change Status</h4>
+                </div>
+
+                <div class="modal-body">
+                    <form id="form_model">
+
+
+                        <div class="row">
+                            <div class="col-xs-12 mb-1"><label
+                                        for="pmethod">Mark As</label>
+                                <select name="status" class="form-control mb-1">
+                                    <option value="paid">Paid</option>
+                                    <option value="due">Due</option>
+                                    <option value="partial">Partial</option>
+                                </select>
+
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <input type="hidden" class="form-control required"
+                                name="tid" id="invoiceid" value="<?php echo $invoice['tid'] ?>">
+                            <button type="button" class="btn btn-default"
+                                    data-dismiss="modal">Close</button>
+                            <input type="hidden" id="action-url" value="purchase/update_status">
+                            <button type="button" class="btn btn-primary"
+                                    id="submit_model">Change Status</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock content %}

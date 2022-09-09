@@ -186,14 +186,12 @@
                                     {{formset.empty_form.cost_price}}
                                 </td>
                                 <td>
-                                    <!-- <input type="text" class="form-control discount" name="" id=""
-                                    onkeypress="" onkeyup="" autocomplete="off" value="" > -->
                                     {{formset.empty_form.discount}}
                                 </td>
 
                                 <td>
-                                    <input type="text" class="form-control discount" name="" id=""
-                                    onkeypress="" onkeyup="" autocomplete="" value="">
+                                    <span class="currenty">GHS </span>
+                                    <strong><span class='ttlText' id="result-0">0</span></strong>
                                 </td>
                                 
                                 <td class="text-center">
@@ -232,6 +230,7 @@
                 {% endif %}
 
                 <input type="hidden" value="add_purchase_order/" id="action-url">
+                <input type="hidden" value="%" name="discountFormat" id="discount_format">
         </form>
     </div>
 
@@ -357,6 +356,85 @@
     
     supplierResult.style = "display: none"
 
+    $('#tbody').delegate('tr', 'keyup', function()
+    
+    {
+                        const numb = $(this).attr("id")[1] - 1;
+                        console.log(typeof(numb));
+
+                            //most res
+                        var result;
+                        var totalValue;
+                        var amountVal = formInputGet2("#id_form", "supplied_qty", numb);
+                        var priceVal = formInputGet2("#id_form", "cost_price", numb);
+                        var discountVal = formInputGet2("#id_form", "discount", numb);
+                        if(discountVal=='') { $("#id_form-" + numb + "-discount").val(0);discountVal=0;}
+                        // var vatVal = formInputGet("#vat", numb);
+                        // if(vatVal=='') { $("#vat-"+numb).val(0);vatVal=0;}
+                        // var taxo = 0;
+                        // var disco = 0;
+                        var totalPrice = parseFloat(amountVal)*priceVal;
+                        var tax_status = $("#tax_status").val();
+                        var disFormat = $("#discount_format").val();
+                        
+                        console.log(numb)
+                        console.log(amountVal)
+
+                    if (disFormat == '%' || disFormat == 'flat') {
+                        if (tax_status == 'yes') {
+                            var Inpercentage = precentCalc(totalPrice, vatVal);
+                            totalValue = parseFloat(totalPrice) + parseFloat(Inpercentage);
+                            taxo = deciFormat(Inpercentage);
+                        console.log('percetn'+Inpercentage);  console.log('ttl'+totalValue);  console.log('price'+totalPrice); }
+                        else {
+                            totalValue = deciFormat(totalPrice);
+                        }
+                        if (disFormat == 'flat') {
+                            disco = deciFormat(discountVal);
+                            totalValue = parseFloat(totalValue) - parseFloat(discountVal);
+                        }
+                        else if (disFormat == '%') {
+                            var discount = precentCalc(totalValue, discountVal);
+                            totalValue = parseFloat(totalValue) - parseFloat(discount);
+                            disco = deciFormat(discount);
+                        }
+                        else {
+                            totalValue = deciFormat(totalValue);
+                        }
+                    } else{
+                    //before tax
+                            if (disFormat == 'bflat') {
+                            disco = deciFormat(discountVal);
+                            totalValue = parseFloat(totalPrice) - parseFloat(discountVal);
+                        }
+                        else if (disFormat == 'b_p') {
+                            var discount = precentCalc(totalPrice, discountVal);
+                            totalValue = parseFloat(totalPrice) - parseFloat(discount);
+                            disco = deciFormat(discount);
+                        }
+                        else {
+                            totalValue = deciFormat(totalPrice);
+                        }
+                        if (tax_status == 'yes') {
+                            var Inpercentage = precentCalc(totalValue, vatVal);
+                            totalValue = parseFloat(totalValue) + parseFloat(Inpercentage);
+                            taxo = deciFormat(Inpercentage);
+                            }
+                        else {
+                            totalValue = deciFormat(totalValue);
+                        }
+
+
+                        }
+                        $("#result-" + numb).html(deciFormat(totalValue));
+                        // $("#taxa-" + numb).val(taxo);
+                        // $("#texttaxa-" + numb).text(taxo);
+                        // $("#disca-" + numb).val(disco);
+                        var totalID = "#total-" + numb;
+                        $(totalID).val(deciFormat(totalValue));
+                    });
+    
+    
 
     $(document).ready(function () {
     
@@ -387,12 +465,11 @@
             const fields = [...document.getElementsByClassName("product-form")];
             // console.log(fields[0])
             fields.forEach(element => 
-            {   var id = element.id
-                console.log(element.name.replace(regex, "0"))
-                if (id.substring(0,4) !== "form")
+            {   var name = String(element.name)
+                if (name.indexOf('prefix') > -1)
                 {
-                element.setAttribute('id', "form-0");
                 element.name = element.name.replace(regex, "0")
+                element.id = element.id.replace(regex, "0")
                 }
             });
         }
@@ -412,12 +489,11 @@
             const fields = [...document.getElementsByClassName("product-form")];
             console.log(fields[0])
             fields.forEach(element => 
-            {   var id = element.id
-                console.log(id.substring(0,4))
-                if (id.substring(0,4) !== "form")
+            {   var name = String(element.name)
+                if (name.indexOf('prefix') > -1)
                 {
-                element.setAttribute('id', `form-${currentFormCount-1}`);
-                element.name = element.name.replace(regex, currentFormCount-1)
+                element.name = element.name.replace(regex, currentFormCount-1);
+                element.id = element.id.replace(regex, currentFormCount-1);
                 }
             });
 
@@ -461,9 +537,9 @@
                     {{formset.empty_form.discount}}
                 </td>
 
-                <td>
-                    <input type="text" class="form-control amount" name="" id=""
-                    onkeypress="" onkeyup="" autocomplete="off" value="" readonly>
+                < <td>
+                    <span class="currenty">GHS </span>
+                    <strong><span class='ttlText' id="result-${rowIdx-1}">0</span></strong>
                 </td>
 
                 <td class="text-center">
@@ -542,6 +618,18 @@
         });
 
 
+        
+
+    function total(){
+        var table = document.getElementById('displayTable');
+        let total = 0
+        for(let i = 1; i<table.rows.length; i++){
+            total+=Number(table.rows[i].cells[2].innerText)
+        }
+        const totalInput = document.getElementById('total')
+        totalInput.value=total
+
+    }
 
     
         

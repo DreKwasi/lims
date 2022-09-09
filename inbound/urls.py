@@ -15,13 +15,18 @@ urlpatterns = [
         name="add_purchase_order",
     ),
     path(
+        "add_purchase_order/get_supplier/",
+        views.get_supplier,
+        name="get_supplier",
+    ),
+    path(
         "add_purchase_order/add_supplier/",
         views.add_supplier_modal,
         name="add_supplier",
     ),
     path(
-        "add_purchase_order/get_supplier/",
-        views.get_supplier,
-        name="get_supplier",
+        "detail_purchase_order/<int:pk>",
+        views.detail_purchase_order,
+        name="detail_purchase_order",
     ),
 ]

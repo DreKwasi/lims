@@ -75,6 +75,7 @@ class PurchaseOrderProductForm(forms.ModelForm):
         widget=forms.NumberInput(
             attrs={
                 "class": "form-control product-form",
+                "onkeypress": "return isNumber(event)",
             }
         ),
     )
@@ -84,6 +85,7 @@ class PurchaseOrderProductForm(forms.ModelForm):
         widget=forms.NumberInput(
             attrs={
                 "class": "form-control product-form",
+                "onkeypress": "return isNumber(event)",
             }
         ),
     )
@@ -93,6 +95,7 @@ class PurchaseOrderProductForm(forms.ModelForm):
             attrs={
                 "class": "form-control product-form",
                 "value": "0.0",
+                "onkeypress": "return isNumber(event)",
             }
         ),
     )

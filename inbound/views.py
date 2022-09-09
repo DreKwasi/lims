@@ -107,8 +107,22 @@ def add_purchase_order(request):
         return redirect("purchase_orders")
 
 
-def update_purchase_order(request):
-    return render(request)
+def get_supplier(request):
+    name = request.GET.get("keyword")
+    try:
+        supplier = Supplier.objects.get(supplier_name=name)
+        data = []
+        item = {
+            "supplier": supplier.supplier_name,
+            "address": supplier.address,
+            "phone": supplier.phone_number,
+            "email": supplier.email,
+        }
+        data.append(item)
+        return JsonResponse({"data": data})
+
+    except Supplier.DoesNotExist:
+        return JsonResponse({"data": "Not found"})
 
 
 def add_supplier_modal(request):
@@ -141,19 +155,12 @@ def add_supplier_modal(request):
         return JsonResponse({"data": data})
 
 
-def get_supplier(request):
-    name = request.GET.get("keyword")
-    try:
-        supplier = Supplier.objects.get(supplier_name=name)
-        data = []
-        item = {
-            "supplier": supplier.supplier_name,
-            "address": supplier.address,
-            "phone": supplier.phone_number,
-            "email": supplier.email,
-        }
-        data.append(item)
-        return JsonResponse({"data": data})
+def detail_purchase_order(request, pk):
+    purchase_order = PurchaseOrder.objects.get(id=pk)
+    products = purchase_order.purchaseorderproduct_set.all()
 
-    except Supplier.DoesNotExist:
-        return JsonResponse({"data": "Not found"})
+    context = {
+        "purchase_order": purchase_order,
+        "products": products,
+    }
+    return render(request, "inbound/detail_purchase_order.html", context)

@@ -7,6 +7,13 @@ from .models import Inventory
 
 
 def create_inventory(sender, instance, created, **kwargs):
+    """_summary_
+
+    Args:
+        sender (_type_): _description_
+        instance (_type_): _description_
+        created (_type_): _description_
+    """
     if created:
         if instance.status == "Finished":
             putaways = instance.putaway_products.all()

@@ -122,19 +122,41 @@ class Facility(models.Model):
 
 
 class Supplier(models.Model):
-    supplier_name = models.CharField(max_length=100, unique=True, null=True)
-    supplier_location = models.CharField(max_length=100, null=True, blank=True)
-    address = models.CharField(max_length=225, unique=True)
-    contact_person = models.CharField(max_length=100, blank=True)
-    email_address = models.EmailField(max_length=100, null=True, blank=True)
+    supplier_name = models.CharField(
+        max_length=100, unique=True, null=True, verbose_name="Name"
+    )
+    city = models.CharField(
+        max_length=100, null=True, blank=True, verbose_name="City"
+    )
+    region = models.CharField(
+        max_length=100, null=True, blank=True, verbose_name="Region"
+    )
+    country = models.CharField(
+        max_length=100, null=True, blank=True, verbose_name="Country"
+    )
+    address = models.CharField(
+        max_length=225, unique=True, verbose_name="Address"
+    )
+    postbox = models.CharField(
+        max_length=225, blank=True, null=True, verbose_name="Post Box"
+    )
+    contact_person = models.CharField(
+        max_length=100, blank=True, verbose_name="Contact Person"
+    )
+    email = models.EmailField(
+        max_length=100, null=True, blank=True, verbose_name="Email"
+    )
+
     phone_regex = RegexValidator(
         regex=r"^\+?1?\d{9,15}$",
         message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.",
     )
     phone_number = models.CharField(
-        validators=[phone_regex], max_length=17, blank=True
+        validators=[phone_regex],
+        max_length=17,
+        blank=True,
+        verbose_name="Phone Number",
     )  # Validators should be a list
-    description = models.TextField(max_length=225, blank=True, null=True)
     created_by = models.ForeignKey(
         Account, null=True, on_delete=models.SET_NULL
     )

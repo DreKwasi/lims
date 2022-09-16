@@ -2,19 +2,6 @@ from django.contrib import admin
 from .models import *
 
 
-class PurchaseOrderAdmin(admin.ModelAdmin):
-    list_display = [
-        "reference_id",
-        "supplier",
-        "order_status",
-        "facility",
-        "created_date",
-    ]
-
-
-admin.site.register(PurchaseOrder, PurchaseOrderAdmin)
-
-
 class PurchaseOrderProductAdmin(admin.ModelAdmin):
     list_display = [
         "purchase_order",
@@ -26,7 +13,36 @@ class PurchaseOrderProductAdmin(admin.ModelAdmin):
     ]
 
 
+class PurchaseOrderProductInline(admin.TabularInline):
+    model = PurchaseOrderProduct
+
+
 admin.site.register(PurchaseOrderProduct, PurchaseOrderProductAdmin)
+
+
+class PurchaseOrderAdmin(admin.ModelAdmin):
+    inlines = [
+        PurchaseOrderProductInline,
+    ]
+    list_display = [
+        "purchase_order_id",
+        "supplier",
+        "order_status",
+        "facility",
+        "created_date",
+    ]
+    raw_id_fields = [
+        "supplier",
+        "facility",
+    ]
+    list_filter = [
+        "supplier",
+        "facility",
+        "order_status",
+    ]
+
+
+admin.site.register(PurchaseOrder, PurchaseOrderAdmin)
 
 
 class UnloadAdmin(admin.ModelAdmin):

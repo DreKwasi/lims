@@ -3,6 +3,8 @@ import uuid
 from django.db import models
 
 from .model_managers import PutAwayManager, UnloadManager
+from django.utils import timezone
+from datetime import date
 
 
 class PurchaseOrder(models.Model):
@@ -12,7 +14,10 @@ class PurchaseOrder(models.Model):
         ("Completed", "Completed"),
     )
 
-    supplier = models.ForeignKey("accounts.supplier", on_delete=models.CASCADE)
+    purchase_order_id = models.CharField(max_length=200, null=True, blank=True)
+    supplier = models.ForeignKey(
+        "accounts.supplier", on_delete=models.CASCADE, null=True, blank=True
+    )
     order_status = models.CharField(
         max_length=50,
         choices=inbound_status_choices,
@@ -22,20 +27,27 @@ class PurchaseOrder(models.Model):
     facility = models.ForeignKey(
         "accounts.facility", on_delete=models.SET_NULL, null=True
     )
+    reference_id = models.CharField(max_length=100, blank=True, null=True)
+
     products = models.ManyToManyField(
         "formulary.productlist",
         through="PurchaseOrderProduct",
         related_name="purchaseorders",
     )
+    order_date = models.DateField(default=date.today)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateField(auto_now=True)
 
-    @property
-    def reference_id(self):
+    def __str__(self):
         return f"PO-{self.pk}"
 
-    def __str__(self):
-        return self.reference_id
+    @property
+    def total_value(self):
+        all_product_objs = self.purchaseorderproduct_set.all()
+        product_values = [
+            x.cost_price * x.supplied_qty for x in all_product_objs
+        ]
+        return sum(product_values)
 
 
 class PurchaseOrderProduct(models.Model):
@@ -48,7 +60,7 @@ class PurchaseOrderProduct(models.Model):
     supplied_qty = models.IntegerField()
     cost_price = models.FloatField()
     batch_number = models.CharField(max_length=225)
-    expiration_date = models.DateTimeField()
+    expiration_date = models.DateField()
     stock_identifier = models.UUIDField(
         verbose_name="unique_identifier",
         default=uuid.uuid4(),
@@ -56,7 +68,7 @@ class PurchaseOrderProduct(models.Model):
         null=True,
         blank=True,
     )
-    discount = models.DecimalField(decimal_places=2, max_digits=15, null=True)
+    discount = models.FloatField(max_length=5, null=True, default=0.0)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 

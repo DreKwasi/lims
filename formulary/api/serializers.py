@@ -4,6 +4,7 @@ from rest_framework import serializers
 
 
 class ProductListSerializer(serializers.ModelSerializer):
+    product_id = serializers.ReadOnlyField()
     created_by = serializers.SlugRelatedField(
         slug_field="username",
         read_only=True,
@@ -34,15 +35,36 @@ class ProductListSerializer(serializers.ModelSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
+    category_products = serializers.HyperlinkedRelatedField(
+        many=True,
+        read_only=True,
+        view_name="products-detail",
+    )
+
     class Meta:
         model = Category
+        fields = "__all__"
 
 
 class ManufacturerSerializer(serializers.ModelSerializer):
+    manufacturer_products = serializers.HyperlinkedRelatedField(
+        many=True,
+        read_only=True,
+        view_name="products-detail",
+    )
+
     class Meta:
         model = Manufacturer
+        fields = "__all__"
 
 
 class ProductFormSerializer(serializers.ModelSerializer):
+    form_products = serializers.HyperlinkedRelatedField(
+        many=True,
+        read_only=True,
+        view_name="products-detail",
+    )
+
     class Meta:
         model = Form
+        fields = "__all__"

@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from .models import *
 
 
@@ -6,10 +7,10 @@ class PurchaseOrderProductAdmin(admin.ModelAdmin):
     list_display = [
         "purchase_order",
         "product",
-        "batch_number",
-        "expiration_date",
+        "open_quantity",
+        "delivered_quantity",
         "created_date",
-        "stock_identifier",
+        "updated_date",
     ]
 
 
@@ -28,26 +29,61 @@ class PurchaseOrderAdmin(admin.ModelAdmin):
         "purchase_order_id",
         "supplier",
         "order_status",
+        "payment_terms",
         "facility",
         "created_date",
+        "actual_delivery_date",
     ]
     raw_id_fields = [
         "supplier",
         "facility",
     ]
-    list_filter = [
-        "supplier",
-        "facility",
-        "order_status",
-    ]
+    list_filter = ["supplier", "facility", "order_status", "payment_terms"]
 
 
 admin.site.register(PurchaseOrder, PurchaseOrderAdmin)
 
 
+admin.site.register(PurchaseOrderTransaction)
+
+
+class IdentifiedStockInline(admin.TabularInline):
+    model = IdentifiedStock
+
+
+class IdentifiedStockAdmin(admin.ModelAdmin):
+    list_display = [
+        "batch_number",
+        "stock_identifier",
+        "unload",
+    ]
+
+
+admin.site.register(IdentifiedStock, IdentifiedStockAdmin)
+
+
+class UnloadProductAdmin(admin.ModelAdmin):
+    inlines = [IdentifiedStockInline]
+    list_display = [
+        "unload",
+        "purchase_product",
+        "open_quantity",
+        "actual_quantity",
+    ]
+
+
+class UnloadProductInline(admin.TabularInline):
+    model = UnloadProduct
+
+
+admin.site.register(UnloadProduct, UnloadProductAdmin)
+
+
 class UnloadAdmin(admin.ModelAdmin):
+    inlines = [UnloadProductInline]
     list_display = [
         "unload_id",
+        "target_logistic_area",
         "purchase_order",
         "site_id",
         "status",
@@ -59,22 +95,32 @@ class UnloadAdmin(admin.ModelAdmin):
 admin.site.register(Unload, UnloadAdmin)
 
 
-class UnloadProductAdmin(admin.ModelAdmin):
+class PutAwayProductAdmin(admin.ModelAdmin):
     list_display = [
-        "unload",
-        "purchase_product",
-        "unload_qty",
-        "created_date",
+        "putaway",
+        "unload_product",
+        "target_logistic_area",
+        "open_quantity",
+        "actual_quantity",
+        "batch",
+        "stock_identifier",
     ]
 
 
-admin.site.register(UnloadProduct, UnloadProductAdmin)
+class PutAwayProductInline(admin.TabularInline):
+    model = PutAwayProduct
+
+
+admin.site.register(PutAwayProduct, PutAwayProductAdmin)
 
 
 class PutAwayAdmin(admin.ModelAdmin):
+    inlines = [PutAwayProductInline]
     list_display = [
+        "put_away_id",
         "final_unload",
-        "put_site",
+        "site_id",
+        "source_logistic_area",
         "status",
         "created_date",
     ]
@@ -82,15 +128,3 @@ class PutAwayAdmin(admin.ModelAdmin):
 
 
 admin.site.register(PutAway, PutAwayAdmin)
-
-
-class PutAwayProductAdmin(admin.ModelAdmin):
-    list_display = [
-        "putaway",
-        "unload_product",
-        "put_area",
-        "created_date",
-    ]
-
-
-admin.site.register(PutAwayProduct, PutAwayProductAdmin)

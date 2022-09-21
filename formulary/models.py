@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -76,6 +77,9 @@ class ProductList(models.Model):
     # base_uom = models.CharField(choices=uom_choices)
     unit_of_measure = models.IntegerField(verbose_name=_("Pack Size"))
     details = models.TextField(max_length=225, blank=True, null=True)
+    product_image = models.ImageField(
+        upload_to="products", blank=True, null=True
+    )
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)

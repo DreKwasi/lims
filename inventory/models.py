@@ -22,7 +22,9 @@ class Site(models.Model):
 class LogisticArea(models.Model):
     area_name = models.CharField(max_length=100, unique=True)
     area_description = models.CharField(max_length=100)
-    site_id = models.ForeignKey(Site, on_delete=models.CASCADE)
+    site_id = models.ForeignKey(
+        Site, on_delete=models.CASCADE, related_name="areas"
+    )
 
     def __str__(self):
         return self.area_name

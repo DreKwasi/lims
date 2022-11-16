@@ -1,7 +1,7 @@
 import uuid
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
 
 # Developing table classes for Formulary
 
@@ -10,7 +10,7 @@ class Manufacturer(models.Model):
     manufacturer_name = models.CharField(
         max_length=100, null=True, unique=True
     )
-    tier = models.CharField(max_length=100, null=True, unique=True)
+    tier = models.CharField(max_length=100, null=True)
     price_range = models.CharField(max_length=225, null=True, blank=True)
     is_active = models.BooleanField(default=True)
     created_date = models.DateTimeField(auto_now_add=True)

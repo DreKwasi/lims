@@ -1,0 +1,240 @@
+{% extends 'base.html' %}
+{% load static %}
+{%include 'includes navbar.html'%}
+
+
+{%block content%}
+
+<style>
+    #result {
+        border: 1px dotted #ccc;
+        padding: 3px;
+    }
+
+    #result ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    #result ul li {
+        padding: 5px 0;
+    }
+
+    #result ul li:hover {
+        background: #eee;
+    }
+</style>
+
+
+<article class="content">
+    <div class="card card-block">
+        <div id="notify" class="alert alert-success" style="display:none;">
+            <a href="#" class="close" data-dismiss="alert">&times;</a>
+
+            <div class="message"></div>
+        </div>
+        <form enctype="multipart/form-data" id="unload-form">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-sm-6 cmp-pnl">
+                    <div id="customerpanel" class="inner-cmp-pnl">
+                        <div class="form-group row">
+                            <div class="fcol-sm-12">
+                                <h3 class="title">
+                                    Bill From
+                            </div>
+                        </div>
+
+                        <div id="supplier">
+                            <div class="clientinfo">
+                                Supplier Details
+                                <hr>
+                                <input type="hidden" name="customer_id" id="customer_id" value="">
+                                <div id="supplier_name">
+                                    <strong>Name</strong> :
+                                </div>
+                            </div>
+
+                            <div class="clientinfo">
+                                <div id="supplier_address"><strong>Address<br></strong></div>
+                            </div>
+
+                            <div class="clientinfo">
+                                <div type="text" id="supplier_phone">
+                                    Phone: <strong></strong>
+                                    <br>
+                                    Email: <strong></strong>
+                                </div>
+                            </div>
+
+                            <hr>
+                            Ship To Facility:
+                            <input id="warehouse-box" required type="text" class="form-control" name="facility"
+                                readonly>
+                            <br><br>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 cmp-pnl">
+                    <div class="inner-cmp-pnl">
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <h3 class="title"> Unload Properties</h3>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-6"><label for="" class="caption"></label>
+                                Unload ID Number
+                                </label>
+
+                                <div class="input-group">
+                                    <div class="input-group-addon"><span class="icon-file-text-o"
+                                            aria-hidden="true"></span></div>
+                                    <input id="unloadId" type="text" class="form-control" name="id" value="" readonly>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6"> <label for="invocieno" class="caption">
+                                    Purchase Order Number
+                                </label>
+
+                                <div class="input-group">
+                                    <div class="input-group-addon"><span class="icon-bookmark-o"
+                                            aria-hidden="true"></span></div>
+                                    <input id="purchaseOrder" type="text" class="form-control" name="purchase_order"
+                                        readonly>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group row">
+                            <div class="col-sm-6"><label for="invociedate" class="caption">
+                                    Created Date
+                                </label>
+
+                                <div class="input-group">
+                                    <div class="input-group-addon"><span class="icon-calendar4"
+                                            aria-hidden="true"></span></div>
+                                    <input readonly type="date" id="createdDate" class="form-control"
+                                        autocomplete="false">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <label for="toAddInfo" class="caption">Unload Status</label>
+                                <input readonly id="unloadStatus" class="form-control" name="status"
+                                    value="Not Started"></input>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="mb-3">
+                <button type="button" class="btn btn-info" aria-label="Left Align" data-toggle="tooltip"
+                    data-placement="top" title="Add product row" id="proposeQty">
+                    <i class="icon-plus-square"></i> Propose Actual Quantities
+                </button>
+                <button type="button" class="btn btn-info" aria-label="Left Align" data-toggle="tooltip"
+                    data-placement="top" title="Add product row" id="proposeArea">
+                    <i class="icon-plus-square"></i> Propose Logistic Areas
+                </button>
+            </div>
+            <div id="saman-row">
+                <table id="scrollable-table" class="table table-striped table-hover table-sm sortable" width="100%">
+                    <thead>
+                        <tr class="item_header">
+                            <th width="2%" class="text-center">#</th>
+                            <th width="7%" class="text-center"> Product ID</th>
+                            <th width="30%" class="text-center"> Product Name</th>
+                            <th width="3%" class="text-center"> Open Quantity </th>
+                            <th width="3%" class="text-center"> Planned Quantity </th>
+                            <th width="3%" class="text-center"> Actual Quantity </th>
+                            <th width="3%" class="text-center"> Batch Number </th>
+                            <th width="3%" class="text-center"> Expiry Date</th>
+                            <th width="3%" class="text-center"> Target Logistic Area</th>
+                            <th width="1%" class="text-center"> Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tbody">
+                        <tr id="R0" class="form-rows">
+                            <td>
+                                <span name="" id="id-form-0-no"> Item 0 <span>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="" id="id-form-0-productId"
+                                    autocomplete="off" value="" readonly>
+                            </td>
+                            <td>
+                                <input required type="text" class="form-control" id="id-form-0-productName"
+                                    name="product" list="product-list" aria-required="true" readonly>
+                                <div id="product-result"></div>
+                            </td>
+                            <td>
+                                <input required type="number" class="form-control req open" name="open_quantity"
+                                    id="id-form-0-open" autocomplete="off" value="0">
+                            </td>
+                            <td>
+                                <input required type="number" class="form-control req planned" name="planned_quantity"
+                                    id="id-form-0-planned" autocomplete="off" value="0">
+                            </td>
+                            <td>
+                                <input required type="number" class="form-control req actual" name="actual_quantity"
+                                    id="id-form-0-actual" autocomplete="off" value="0">
+                            </td>
+                            <td>
+                                <input required type="text" class="form-control batch" name="batch_number"
+                                    id="id-form-0-batch" autocomplete="off" value="">
+                            </td>
+                            <td>
+                                <input required type="date" class="form-control expiry" name="expiry_date"
+                                    id="id-form-0-expiry" autocomplete="off" value="">
+                            </td>
+                            <td>
+                                <select id="id-form-0-area" class="form-control area" name="area">
+                                </select>
+                            </td>
+
+                            <td class="text-center">
+                                <button type="button" data-rowid="" class="btn btn-info" title="Split" id="splitBtn-0">
+                                    <i class="icon-plus-square"> Split </i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div align="right" class="mt-2">
+                    <button type="submit" class="btn btn-success sub-btn" id="submit-unload-order"
+                        data-loading-text="Creating...">
+                        Generate Order
+                    </button>
+                </div>
+
+                <input type="hidden" value="update" name="update" id="update-check">
+            </div>
+        </form>
+    </div>
+
+</article>
+
+
+{% block scripts %}
+<script type="text/javascript" src="{% static 'myjs/edit-unload.js' %}">
+
+</script>
+
+{% endblock scripts %}
+
+
+{% endblock %}
+
+{%include 'includes/footer.html' %}

@@ -1,0 +1,139 @@
+{% extends 'base.html' %} {% load static %} {%include 'includes/navbar.html'%}
+{%block content%}
+
+<article class="content">
+  <div class="card card-block">
+    <div id="notify" class="alert alert-success" style="display: none">
+      <a href="#" class="close" data-dismiss="alert">&times;</a>
+
+      <div class="message"></div>
+    </div>
+    <div class="grid_3 grid_4 animated fadeInRight table-responsive">
+
+      <hr />
+
+      <table id="unload" class="table-striped" cellspacing="0" width="100%">
+        <thead>
+          <tr>
+            <th>Unload #</th>
+            <th>Site ID</th>
+            <th>Unload Status</th>
+            <th>Purchase Order ID</th>
+            <th>Created Date</th>
+            <th class="no-sort">Settings</th>
+          </tr>
+        </thead>
+
+        <tfoot>
+          <tr>
+            <th>Unload #</th>
+            <th>Site ID</th>
+            <th>Unload Status</th>
+            <th>Purchase Order ID</th>
+            <th>Created Date</th>
+            <th class="no-sort">Settings</th>
+          </tr>
+        </tfoot>
+      </table>
+
+      <table id="put-away" class="table-striped" cellspacing="0" width="100%" style="display: none;">
+        <thead>
+          <tr>
+            <th>PutAway #</th>
+            <th>Site ID</th>
+            <th>Source Logistic Area</th>
+            <th>PutAway Status</th>
+            <th>Unload ID</th>
+            <th>Created Date</th>
+            <th class="no-sort">Settings</th>
+          </tr>
+        </thead>
+
+        <tfoot>
+          <tr>
+            <th>PutAway #</th>
+            <th>Site ID</th>
+            <th>Source Logistic Area</th>
+            <th>PutAway Status</th>
+            <th>Unload ID</th>
+            <th>Created Date</th>
+            <th class="no-sort">Settings</th>
+          </tr>
+        </tfoot>
+      </table>
+
+    </div>
+  </div>
+</article>
+
+<div id="delete_model" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Delete Order</h4>
+      </div>
+      <div class="modal-body">
+        <p>delete this order</p>
+      </div>
+      <div class="modal-footer">
+        <input type="hidden" id="object-id" value="" />
+        <input type="hidden" id="action-url" value="purchase/delete_i" />
+        <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete-confirm">
+          Delete
+        </button>
+        <button type="button" data-dismiss="modal" class="btn">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{%block scripts %}
+<script type="text/javascript">
+  $(document).ready(function () {
+
+
+    $("#unload").DataTable(
+      {
+        processing: true,
+        serverside: true,
+        order: [],
+        scrollY: "400px",
+        scrollCollapse: true,
+        retrieve: true,
+
+        ajax: {
+          type: "GET",
+          url: "/inbound/api/unloads/?format=datatables",
+          complete: function () {
+            console.log("Unload ");
+          },
+        },
+        columns: [
+          { data: "unload_id" },
+          { data: "site_id" },
+          { data: "status" },
+          { data: "purchase_order" },
+          { data: "created_date" },
+          {
+            sortable: false,
+            render: function (data, type, full, meta) {
+              return `<a href='/inbound/preview_unload/${full.id}'> <button type='button' class='btn btn-info'> Edit </button> </a>`;
+            },
+          },
+        ],
+
+        columnDefs: [
+          {
+            targets: [0],
+            orderable: false,
+          },
+        ],
+      });
+
+
+  });
+</script>
+{%endblock scripts %} {% endblock %} {%include 'includes/footer.html' %}

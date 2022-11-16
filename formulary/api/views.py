@@ -1,14 +1,13 @@
-from django_filters.rest_framework import DjangoFilterBackend
-from formulary.filters import ProductDatatableFilterSet, ProductListFilterSet
+from functools import partial
+
+from accounts.models import Account
 from formulary.models import Category, Form, Manufacturer, ProductList
 from rest_framework import generics, mixins, status, viewsets
-from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import (
     IsAuthenticated,
     IsAuthenticatedOrReadOnly,
 )
 from rest_framework.response import Response
-from rest_framework_datatables.django_filters import backends
 
 from .serializers import (
     CategorySerializer,
@@ -35,18 +34,9 @@ class CreateListRetrieveViewSet(
     pass
 
 
-class ProductListApiViewset(
-    CreateListRetrieveViewSet, generics.GenericAPIView
-):
-    queryset = ProductList.objects.all().order_by("created_date")
+class ProductListApiViewset(CreateListRetrieveViewSet):
+    queryset = ProductList.objects.all()
     serializer_class = ProductListSerializer
-    parser_classes = (
-        FormParser,
-        MultiPartParser,
-    )
-    filter_backend = DjangoFilterBackend
-    filterset_class = ProductListFilterSet
-    filterset_field = "product_name"
 
     def create(self, request, *args, **kwargs):
         serializer = self.serializer_class(
@@ -54,7 +44,7 @@ class ProductListApiViewset(
         )
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.data)
         else:
             return Response(serializer.errors)
 

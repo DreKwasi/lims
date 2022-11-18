@@ -8,7 +8,6 @@ from inventory.models import LogisticArea
 from .model_managers import (
     PurchaseOrderManager,
     PurchaseOrderProductManager,
-    PutAwayManager,
     UnloadManager,
 )
 
@@ -29,7 +28,6 @@ class PurchaseOrder(models.Model):
         ("Cash In Advance", "Cash In Advance"),
     )
 
-    purchase_order_id = models.CharField(max_length=200, null=True, blank=True)
     supplier = models.ForeignKey(
         "accounts.supplier", on_delete=models.CASCADE, null=True, blank=True
     )
@@ -42,9 +40,7 @@ class PurchaseOrder(models.Model):
     facility = models.ForeignKey(
         "accounts.facility", on_delete=models.SET_NULL, null=True
     )
-    site_id = models.ForeignKey(
-        "inventory.site", on_delete=models.SET_NULL, null=True
-    )
+
     reference_id = models.CharField(max_length=100, blank=True, null=True)
 
     products = models.ManyToManyField(
@@ -57,7 +53,7 @@ class PurchaseOrder(models.Model):
         max_length=100, choices=payment_terms_choices, null=True
     )
     created_date = models.DateTimeField(auto_now_add=True)
-    actual_delivery_date = models.DateTimeField(null=True)
+    due_date = models.DateField(null=True)
     updated_date = models.DateField(auto_now=True)
 
     objects = PurchaseOrderManager()
@@ -67,11 +63,18 @@ class PurchaseOrder(models.Model):
 
     @property
     def total_value(self):
-        all_product_objs = self.purchaseorderproduct_set.all()
-        product_values = [
-            x.cost_price * x.supplied_qty for x in all_product_objs
-        ]
-        return sum(product_values)
+        if self.po_products.all().exists():
+            all_product_objs = self.po_products.all()
+            product_values = [
+                x.unit_price * x.planned_quantity for x in all_product_objs
+            ]
+            return sum(product_values)
+        else:
+            return 0
+
+    @property
+    def site_id(self):
+        return self.facility.site
 
 
 class PurchaseOrderProduct(models.Model):
@@ -87,7 +90,7 @@ class PurchaseOrderProduct(models.Model):
     open_quantity = models.IntegerField()
     delivered_quantity = models.IntegerField(default=0)
     planned_quantity = models.IntegerField(blank=True)
-    unit_price = models.FloatField()
+    unit_price = models.FloatField(default=0.0)
     discount = models.FloatField(max_length=5, null=True, default=0.0)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
@@ -97,6 +100,10 @@ class PurchaseOrderProduct(models.Model):
     @property
     def product_name(self):
         return self.product.product_name
+
+    @property
+    def total_value(self):
+        return self.planned_quantity * self.unit_price
 
     def __str__(self):
         return self.product_name
@@ -121,10 +128,8 @@ class Unload(models.Model):
     site_id = models.ForeignKey(
         "inventory.site", on_delete=models.SET_NULL, null=True
     )
-    target_logistic_area = models.ForeignKey(
-        LogisticArea,
-        null=True,
-        on_delete=models.SET_NULL,
+    logistic_area = models.ForeignKey(
+        "inventory.logisticarea", on_delete=models.SET_NULL, null=True
     )
     status = models.CharField(
         choices=status_choices, max_length=15, default="Not Started"
@@ -150,25 +155,19 @@ class UnloadProduct(models.Model):
     unload = models.ForeignKey(
         Unload, on_delete=models.CASCADE, related_name="unload_products"
     )
-    purchase_product = models.ForeignKey(
-        PurchaseOrderProduct,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
+    product = models.ForeignKey(
+        "formulary.productlist", on_delete=models.CASCADE, null=True
     )
     open_quantity = models.IntegerField(default=0)
+    planned_quantity = models.IntegerField(default=0)
     actual_quantity = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.purchase_product.product_name
+        return self.product.product_name
 
     @property
     def product_name(self):
-        return self.purchase_product.product_name
-
-    @property
-    def product(self):
-        return self.purchase_product.product
+        return self.product.product_name
 
 
 class IdentifiedStock(models.Model):
@@ -176,79 +175,31 @@ class IdentifiedStock(models.Model):
     expiration_date = models.DateField()
     stock_identifier = models.UUIDField(
         verbose_name=_("Unique Identifier"),
-        default=uuid.uuid4(),
+        default=uuid.uuid4,
         editable=False,
         null=True,
         blank=True,
+        unique=True,
     )
     unload = models.ForeignKey(
-        UnloadProduct,
-        on_delete=models.SET_NULL,
+        Unload,
+        on_delete=models.CASCADE,
         null=True,
         related_name="identified_stock",
-    )
-    split_quantity = models.IntegerField(default=0)
-    created_date = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.batch_number
-
-
-class PutAway(models.Model):
-    status_choices = (
-        ("Not Started", "Not Started"),
-        ("In Process", "In Process"),
-        ("Finished", "Finished"),
-    )
-
-    site_id = models.ForeignKey(
-        "inventory.site", null=True, on_delete=models.SET_NULL
-    )
-    final_unload = models.ForeignKey(
-        Unload, on_delete=models.CASCADE, null=True
-    )
-    source_logistic_area = models.ForeignKey(
-        "inventory.logisticarea", null=True, on_delete=models.SET_NULL
-    )
-    status = models.CharField(
-        choices=status_choices,
-        max_length=15,
-        null=True,
-        blank=True,
-        default="Not Started",
-    )
-
-    created_date = models.DateTimeField(auto_now_add=True)
-    updated_date = models.DateTimeField(auto_now=True)
-
-    objects = PutAwayManager()
-
-    @property
-    def put_away_id(self):
-        return f"PUT-{self.pk}"
-
-    def __str__(self) -> str:
-        return self.put_away_id
-
-
-class PutAwayProduct(models.Model):
-    putaway = models.ForeignKey(
-        PutAway, on_delete=models.CASCADE, related_name="putaway_products"
     )
     unload_product = models.ForeignKey(
         UnloadProduct,
         on_delete=models.CASCADE,
         null=True,
-        blank=True,
+        related_name="identified_stock",
     )
+    split_quantity = models.IntegerField(default=0)
     target_logistic_area = models.ForeignKey(
-        LogisticArea, null=True, on_delete=models.SET_NULL
+        LogisticArea,
+        null=True,
+        on_delete=models.SET_NULL,
     )
-    open_quantity = models.IntegerField()
-    actual_quantity = models.IntegerField(default=0)
-    batch = models.CharField(max_length=50, null=True, blank=True)
-    expiration_date = models.DateField()
-    stock_identifier = models.UUIDField()
+    created_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.unload_product.product_name
+        return self.batch_number

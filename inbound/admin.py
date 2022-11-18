@@ -16,6 +16,7 @@ class PurchaseOrderProductAdmin(admin.ModelAdmin):
 
 class PurchaseOrderProductInline(admin.TabularInline):
     model = PurchaseOrderProduct
+    extra = 0
 
 
 admin.site.register(PurchaseOrderProduct, PurchaseOrderProductAdmin)
@@ -26,13 +27,16 @@ class PurchaseOrderAdmin(admin.ModelAdmin):
         PurchaseOrderProductInline,
     ]
     list_display = [
-        "purchase_order_id",
+        "__str__",
         "supplier",
         "order_status",
         "payment_terms",
         "facility",
         "created_date",
-        "actual_delivery_date",
+        "due_date",
+    ]
+    list_editable = [
+        "order_status",
     ]
     raw_id_fields = [
         "supplier",
@@ -49,12 +53,14 @@ admin.site.register(PurchaseOrderTransaction)
 
 class IdentifiedStockInline(admin.TabularInline):
     model = IdentifiedStock
+    extra = 0
 
 
 class IdentifiedStockAdmin(admin.ModelAdmin):
     list_display = [
         "batch_number",
         "stock_identifier",
+        "unload_product",
         "unload",
     ]
 
@@ -66,7 +72,7 @@ class UnloadProductAdmin(admin.ModelAdmin):
     inlines = [IdentifiedStockInline]
     list_display = [
         "unload",
-        "purchase_product",
+        "product",
         "open_quantity",
         "actual_quantity",
     ]
@@ -74,6 +80,7 @@ class UnloadProductAdmin(admin.ModelAdmin):
 
 class UnloadProductInline(admin.TabularInline):
     model = UnloadProduct
+    extra = 0
 
 
 admin.site.register(UnloadProduct, UnloadProductAdmin)
@@ -83,7 +90,6 @@ class UnloadAdmin(admin.ModelAdmin):
     inlines = [UnloadProductInline]
     list_display = [
         "unload_id",
-        "target_logistic_area",
         "purchase_order",
         "site_id",
         "status",
@@ -93,38 +99,3 @@ class UnloadAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Unload, UnloadAdmin)
-
-
-class PutAwayProductAdmin(admin.ModelAdmin):
-    list_display = [
-        "putaway",
-        "unload_product",
-        "target_logistic_area",
-        "open_quantity",
-        "actual_quantity",
-        "batch",
-        "stock_identifier",
-    ]
-
-
-class PutAwayProductInline(admin.TabularInline):
-    model = PutAwayProduct
-
-
-admin.site.register(PutAwayProduct, PutAwayProductAdmin)
-
-
-class PutAwayAdmin(admin.ModelAdmin):
-    inlines = [PutAwayProductInline]
-    list_display = [
-        "put_away_id",
-        "final_unload",
-        "site_id",
-        "source_logistic_area",
-        "status",
-        "created_date",
-    ]
-    list_editable = ["status"]
-
-
-admin.site.register(PutAway, PutAwayAdmin)

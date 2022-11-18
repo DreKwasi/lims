@@ -1,12 +1,21 @@
 from django.db import models
+from django.dispatch import Signal
+
 from .queryset import CustomQuerySet
 
+post_save = Signal()
 
-class UnloadManager(models.Manager):
+
+class PurchaseOrderManager(models.Manager):
     def get_queryset(self):
         return CustomQuerySet(self.model, using=self._db)
 
 
-class PutAwayManager(models.Manager):
+class PurchaseOrderProductManager(models.Manager):
+    def get_queryset(self):
+        return CustomQuerySet(self.model, using=self._db)
+
+
+class UnloadManager(models.Manager):
     def get_queryset(self):
         return CustomQuerySet(self.model, using=self._db)

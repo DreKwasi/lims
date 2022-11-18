@@ -14,6 +14,8 @@ urlpatterns = [
     path("acounts/", include("accounts.urls")),
     path("inbound/api/", include("inbound.api.urls")),
     path("inbound/", include("inbound.urls")),
+    path("outbound/api/", include("outbound.api.urls")),
+    path("outbound/", include("outbound.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

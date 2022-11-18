@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "formulary",
     "dashboard",
     "inbound",
+    "outbound",
     "rest_framework",
     "corsheaders",
 ]

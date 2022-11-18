@@ -1,32 +1,46 @@
 from django.urls import path
 
 from . import views
+from django.views.generic import TemplateView
 
 urlpatterns = [
-    path("", views.purchase_orders, name="purchase_orders"),
     path(
-        "purchase_orders_data/",
-        views.ajax_purchase_order_list_view,
-        name="purchase_orders_data",
+        "",
+        TemplateView.as_view(template_name="inbound/purchase_orders.html"),
+        name="purchase_orders",
     ),
     path(
         "add_purchase_order/",
-        views.add_purchase_order,
+        TemplateView.as_view(template_name="inbound/add_purchase_order.html"),
         name="add_purchase_order",
     ),
     path(
-        "add_purchase_order/get_supplier/",
-        views.get_supplier,
-        name="get_supplier",
+        "preview_purchase_order/<int:pk>",
+        TemplateView.as_view(
+            template_name="inbound/print_preview_purchase_order.html"
+        ),
+        name="preview_purchase_order",
     ),
     path(
-        "add_purchase_order/add_supplier/",
-        views.add_supplier_modal,
-        name="add_supplier",
+        "edit_purchase_order/<int:pk>",
+        TemplateView.as_view(template_name="inbound/edit_purchase_order.html"),
+        name="edit_purchase_order",
     ),
     path(
-        "detail_purchase_order/<int:pk>",
-        views.detail_purchase_order,
-        name="detail_purchase_order",
+        "unload_tasks/",
+        TemplateView.as_view(template_name="inbound/tasks.html"),
+        name="unload_tasks",
+    ),
+    path(
+        "preview_unload/<int:pk>",
+        TemplateView.as_view(
+            template_name="inbound/print_preview_unload.html"
+        ),
+        name="preview_unload",
+    ),
+    path(
+        "edit_unload/<int:pk>",
+        TemplateView.as_view(template_name="inbound/edit_unload.html"),
+        name="edit_unload",
     ),
 ]

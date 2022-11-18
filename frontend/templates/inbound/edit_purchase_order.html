@@ -1,0 +1,299 @@
+{% extends 'base.html' %}
+{% load static %}
+{%include 'includes navbar.html'%}
+
+
+{%block content%}
+
+<style>
+    #result {
+        border: 1px dotted #ccc;
+        padding: 3px;
+    }
+
+    #result ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    #result ul li {
+        padding: 5px 0;
+    }
+
+    #result ul li:hover {
+        background: #eee;
+    }
+</style>
+
+
+<article class="content">
+    <div class="card card-block">
+        <div id="notify" class="alert alert-success" style="display:none;">
+            <a href="#" class="close" data-dismiss="alert">&times;</a>
+
+            <div class="message"></div>
+        </div>
+        <form enctype="multipart/form-data" id="purchase-order-form">
+            {% csrf_token %}
+            <div class="row">
+
+                <div class="col-sm-6 cmp-pnl">
+                    <div id="customerpanel" class="inner-cmp-pnl">
+                        <div class="form-group row">
+                            <div class="fcol-sm-12">
+                                <h3 class="title">
+                                    Bill From
+                            </div>
+                        </div>
+
+                        <div id="supplier">
+                            <div class="clientinfo">
+                                Supplier Details
+                                <hr>
+                                <input type="hidden" name="customer_id" id="customer_id" value="">
+                                <div id="supplier_name">
+                                    <strong>Name</strong> :
+                                </div>
+                            </div>
+
+                            <div class="clientinfo">
+                                <div id="supplier_address"><strong>Address<br></strong></div>
+                            </div>
+
+                            <div class="clientinfo">
+                                <div type="text" id="supplier_phone">
+                                    Phone: <strong></strong>
+                                    <br>
+                                    Email: <strong></strong>
+                                </div>
+                            </div>
+
+                            <hr>
+                            Ship To Facility:
+                            <input id="warehouse-box" required type="text" class="form-control" name="facility"
+                                readonly>
+                            <br><br>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 cmp-pnl">
+                    <div class="inner-cmp-pnl">
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <h3 class="title"> Purchase Order Properties</h3>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-6"><label for="invocieno" class="caption"></label>
+                                Purchase Order Number
+                                </label>
+
+                                <div class="input-group">
+                                    <div class="input-group-addon"><span class="icon-file-text-o"
+                                            aria-hidden="true"></span></div>
+                                    <input required id="poNumber" type="text" class="form-control"
+                                        placeholder="Invoice #" name="purchase_order" value="">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6"> <label for="invocieno" class="caption">
+                                    Reference
+                                </label>
+
+                                <div class="input-group">
+                                    <div class="input-group-addon"><span class="icon-bookmark-o"
+                                            aria-hidden="true"></span></div>
+                                    <input required id="reference_id" type="text" class="form-control" placeholder="Reference #"
+                                        name="reference_id">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group row">
+
+                            <div class="col-sm-6"><label for="invociedate" class="caption">
+                                    Order Date
+                                </label>
+
+                                <div class="input-group">
+                                    <div class="input-group-addon"><span class="icon-calendar4"
+                                            aria-hidden="true"></span></div>
+                                    <input type="text" id="order_date" class="form-control required" placeholder="Billing Date"
+                                        name="order_date" data-toggle="datepicker" autocomplete="false">
+                                </div>
+                            </div>
+                            <div class="col-sm-6"><label for="invocieduedate" class="caption">
+                                    Order Due Date
+                                </label>
+
+                                <div class="input-group">
+                                    <div class="input-group-addon"><span class="icon-calendar-o"
+                                            aria-hidden="true"></span></div>
+                                    <input type="text" id="due_date" class="form-control required" name="invocieduedate"
+                                        placeholder="Due Date" data-toggle="datepicker" autocomplete="false">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <label for="toAddInfo" class="caption">Order Status</label>
+                                <input readonly id="orderStatus" class="form-control" name="order_status"
+                                    value="Ordered"></input>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="mb-3">
+                <button type="button" class="btn btn-success" aria-label="Left Align" data-toggle="tooltip"
+                    data-placement="top" title="Add product row" id="addProduct">
+                    <i class="icon-plus-square"></i> Add Row
+                </button>
+                <button type="button" class="btn btn-info" aria-label="Left Align" data-toggle="tooltip"
+                    data-placement="top" title="Add product row" id="proposeQty">
+                    <i class="icon-plus-square"></i> Propose Delivered Quantity
+                </button>
+            </div>
+            <div id="saman-row">
+                <table id="scrollable-table" class="table table-striped table-hover table-sm sortable" width="100%">
+                    <thead>
+                        <tr class="item_header">
+                            <th width="2%" class="text-center">#</th>
+                            <th width="7%" class="text-center"> Product ID</th>
+                            <th width="30%" class="text-center"> Product Name</th>
+                            <th width="3%" class="text-center"> Open Quantity </th>
+                            <th width="3%" class="text-center"> Planned Quantity </th>
+                            <th width="3%" class="text-center"> Delivered Quantity </th>
+                            <th width="3%" class="text-center"> Unit Price </th>
+                            <th width="3%" class="text-center"> Discount </th>
+                            <th width="3%" class="text-center"> Total Amount</th>
+                            <th width="1%" class="text-center"> Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tbody">
+                        <tr id="R0" class="form-rows">
+                            <td>
+                                <span name="" id="id-form-0-no"> Item 0 <span>
+                                <input type="hidden" value="" name="purchase_product_id" id="purchase-product-id">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="" id="id-form-0-productId"
+                                    autocomplete="off" value="" readonly>
+                            </td>
+                            <td>
+                                <input required type="text" class="form-control" id="id-form-0-productName" name="product"
+                                    list="product-list" aria-required="true" placeholder="Search Product Here">
+                                <div id="product-result"></div>
+                            </td>
+                            <td>
+                                <input required type="number" class="form-control req amnt" name="open_quantity"
+                                    id="id-form-0-open" autocomplete="off" value="0">
+                            </td>
+                            <td>
+                                <input required type="number" class="form-control req amnt" name="planned_quantity"
+                                    id="id-form-0-planned" autocomplete="off" value="0" readonly>
+                            </td>
+                            <td>
+                                <input required type="number" class="form-control req amnt" name="delivered_quantity"
+                                    id="id-form-0-delivered" autocomplete="off" value="0">
+                            </td>
+                            <td>
+                                <input required type="number" class="form-control discount" name="unit_price"
+                                    id="id-form-0-price" autocomplete="off" value="0">
+                            </td>
+
+                            <td>
+                                <input required type="number" class="form-control discount" name="discount"
+                                    id="id-form-0-discount" autocomplete="off" value="0">
+                            </td>
+
+                            <td>
+                                <span class="currenty">GHS </span>
+                                <strong><span class='ttlText' id="result-0">0</span></strong>
+                            </td>
+
+                            <td class="text-center">
+                                <button type="button" data-rowid="" class="btn btn-danger removeProd" title="Remove">
+                                    <i class="icon-minus-square"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="form-group row">
+                    <label class="col-sm-1 col-form-label mt-2" for="product_cat">
+                        Payment Terms
+                    </label>
+
+                    <div class="col-sm-5">
+                        <select id="#paymentTerms" class="form-control mt-2" name="payment_terms">
+                            <option value="90 days due net">90 days due net</option>
+                            <option value="60 days due net">60 days due net</option>
+                            <option value="15 days due net">15 days due net</option>
+                            <option value="Pay In Advance">Pay In Advance</option>
+                            <option value="Cash On Delivery">Cash On Delivery</option>
+                            <option value="Cash In Advance">Cash In Advance</option>
+                        </select>
+                    </div>
+
+                </div>
+
+
+                <div class="form-group row">
+                    <label class="col-sm-1 col-form-label">
+                        Total Discount <strong><span>(GHS)</span></strong>
+                    </label>
+
+                    <div class="col-sm-1 mt-1">
+                        <input type="text" name="total-discount" class="form-control" id="table-total-discount"
+                            value="0" readonly="true">
+                    </div>
+
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-1 col-form-label">
+                        Grand Total <strong><span>(GHS)</span></strong>
+                    </label>
+
+                    <div class="col-sm-1 mt-1">
+                        <input type="text" name="total" class="form-control" id="table-total" value="0" readonly="true">
+                    </div>
+
+                </div>
+
+                <div align="right" class="mt-5">
+                    <button type="submit" class="btn btn-success sub-btn" id="submit-purchase-order"
+                        data-loading-text="Creating...">
+                        Generate Order
+                    </button>
+                </div>
+
+                <input type="hidden" value="%" name="discountFormat" id="discount_format">
+                <input type="hidden" value="update" name="update" id="update-check">
+            </div>
+        </form>
+    </div>
+
+</article>
+
+
+{% block scripts %}
+<script type="text/javascript" src="{% static 'myjs/edit-po.js' %}">
+
+</script>
+
+{% endblock scripts %}
+
+
+{% endblock %}
+
+{%include 'includes/footer.html' %}

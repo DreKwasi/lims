@@ -1,60 +1,52 @@
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.signals import post_save
-from inbound.models import PutAway
 
-from .models import *
 from .models import Inventory
+from inbound.models import Unload
+import random
+
+
+def check_area(product, site_id):
+    areas = site_id.areas.all()
+    stock = Inventory.objects.filter(product=product)
+    filtered = [x for x in stock if x.site_id == site_id]
+    if filtered:
+        return filtered[0].logistic_area
+    else:
+        return random.choice(areas)
 
 
 def create_inventory(sender, instance, created, **kwargs):
-    """_summary_
-
-    Args:
-        sender (_type_): _description_
-        instance (_type_): _description_
-        created (_type_): _description_
-    """
-    if created:
-        if instance.status == "Finished":
-            putaways = instance.putaway_products.all()
-            for putaway in putaways:
-                product = putaway.product
-                batch = putaway.batch
-                expiration_date = putaway.expiration_date
-                pack_quantity = putaway.unload_qty
-                logistic_area = putaway.put_area
-                stock_identifier = putaway.stock_id
-                Inventory.objects.create(
-                    product=product,
-                    batch=batch,
-                    pack_quantity=pack_quantity,
-                    logistic_area=logistic_area,
-                    stock_type="Warehouse",
-                    expiration_date=expiration_date,
-                    stock_identifier=stock_identifier,
-                )
-                print("Inventory Created !!")
 
     if not created:
-        if instance.status == "Finished":
-            putaways = instance.putaway_products.all()
-            for putaway in putaways:
-                product = putaway.product
-                batch = putaway.batch
-                expiration_date = putaway.expiration_date
-                pack_quantity = putaway.unload_qty
-                logistic_area = putaway.put_area
-                stock_identifier = putaway.stock_id
-                Inventory.objects.create(
-                    product=product,
-                    batch=batch,
-                    pack_quantity=pack_quantity,
-                    logistic_area=logistic_area,
-                    stock_type="Warehouse",
-                    expiration_date=expiration_date,
-                    stock_identifier=stock_identifier,
-                )
-                print("Inventory Created !!")
+        if instance.status == "In Process":
+
+            for product in instance.unload_products.all():
+                objs = []
+                for stk in product.identified_stock.all():
+                    stock_identifier = stk.stock_identifier
+                    pack_quantity = stk.split_quantity
+                    batch = stk.batch_number
+                    expiration_date = stk.expiration_date
+
+                    objs.append(
+                        Inventory(
+                            product=product.product,
+                            batch=batch,
+                            pack_quantity=pack_quantity,
+                            logistic_area=check_area(
+                                product.product, instance.site_id
+                            )
+                            if stk.target_logistic_area == None
+                            else stk.target_logistic_area,
+                            stock_type="Warehouse",
+                            expiration_date=expiration_date,
+                            stock_identifier=stock_identifier,
+                        )
+                    )
+
+                Inventory.objects.bulk_create(objs)
+            print("Inventory Created !!")
 
 
-post_save.connect(create_inventory, PutAway)
+post_save.connect(create_inventory, Unload)

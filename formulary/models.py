@@ -43,15 +43,6 @@ class Category(models.Model):
 
 
 class ProductList(models.Model):
-
-    # uom_choices = (
-    #     ("pack", "pack(s)"),
-    #     ("batch", "batch"),
-    #     ("volume", "volume"),
-    #     ("weight", "weight"),
-    #     ("unit", "unit"),
-    # )
-
     product_name = models.CharField(max_length=225, unique=True)
     category = models.ForeignKey(
         Category,
@@ -74,8 +65,6 @@ class ProductList(models.Model):
         related_name="manufacturer_products",
     )
 
-    # base_uom = models.CharField(choices=uom_choices)
-    unit_of_measure = models.IntegerField(verbose_name=_("Pack Size"))
     details = models.TextField(max_length=225, blank=True, null=True)
     product_image = models.ImageField(
         upload_to="products", blank=True, null=True
@@ -96,3 +85,12 @@ class ProductList(models.Model):
     @property
     def product_id(self):
         return f"CHEM-{self.pk}"
+
+
+class UnitOfMeasure(models.Model):
+    product = models.OneToOneField(
+        ProductList, on_delete=models.CASCADE, related_name="unit_of_measure"
+    )
+    milliliters = models.PositiveIntegerField(verbose_name="mls")
+    gram = models.PositiveIntegerField(verbose_name="g")
+    pack = models.PositiveIntegerField(verbose_name="pack")

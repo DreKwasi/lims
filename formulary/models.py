@@ -89,8 +89,13 @@ class ProductList(models.Model):
 
 class UnitOfMeasure(models.Model):
     product = models.OneToOneField(
-        ProductList, on_delete=models.CASCADE, related_name="unit_of_measure"
+        ProductList, on_delete=models.CASCADE, related_name="product_uom"
     )
-    milliliters = models.PositiveIntegerField(verbose_name="mls")
-    gram = models.PositiveIntegerField(verbose_name="g")
-    pack = models.PositiveIntegerField(verbose_name="pack")
+    milliliter = models.IntegerField(
+        verbose_name="Volume in Mls", null=True, blank=True
+    )
+    gram = models.IntegerField(
+        verbose_name="Weight in Gram", null=True, blank=True
+    )
+    pack = models.IntegerField(verbose_name="Pack", null=True, blank=True)
+    unit = models.IntegerField(verbose_name="Unit", null=True, blank=True)

@@ -6,11 +6,14 @@ from .views import (
     FormApiViewset,
     ManApiViewset,
     ProductListApiViewset,
+    UnitOfMeasureApiViewset,
 )
 
 router = DefaultRouter()
 
 router.register(r"products", ProductListApiViewset, basename="products")
+router.register(r"uom", UnitOfMeasureApiViewset, basename="uom")
+
 router.register(
     r"product_category", CategoryApiViewset, basename="product_category"
 )

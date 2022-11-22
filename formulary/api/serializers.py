@@ -1,6 +1,7 @@
+from rest_framework import serializers
+
 from accounts.api.serializers import AccountSerializer
 from formulary.models import *
-from rest_framework import serializers
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -75,3 +76,16 @@ class ProductListSerializer(serializers.ModelSerializer):
         return ProductList.objects.create(
             created_by=request.user, **validated_data
         )
+
+
+class UnitOfMeasureSerializer(serializers.ModelSerializer):
+    product = serializers.SlugRelatedField(
+        queryset=ProductList.objects.all(),
+        slug_field="product_name",
+        read_only=False,
+        required=False,
+    )
+
+    class Meta:
+        model = UnitOfMeasure
+        fields = "__all__"

@@ -33,10 +33,18 @@ class ProductAdmin(admin.ModelAdmin):
         "product_name",
         "category",
         "product_form",
-        "unit_of_measure",
+        "product_uom",
         "is_active",
         "created_date",
     )
+    list_editable = ("is_active",)
 
 
 admin.site.register(ProductList, ProductAdmin)
+
+
+class UnitOfMeasureAdmin(admin.ModelAdmin):
+    list_display = ("product", "milliliter", "gram", "pack")
+
+
+admin.site.register(UnitOfMeasure, UnitOfMeasureAdmin)

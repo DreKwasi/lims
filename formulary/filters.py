@@ -47,3 +47,11 @@ class ProductListFilterSet(django_filters.FilterSet):
         ]
 
 
+class UnitOfMeasureFilterSet(django_filters.FilterSet):
+    product = django_filters.CharFilter(
+        field_name="product__product_name", lookup_expr="icontains"
+    )
+
+    class Meta:
+        models = UnitOfMeasure
+        fields = ["product"]

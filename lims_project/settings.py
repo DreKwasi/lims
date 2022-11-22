@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "dashboard",
     "inbound",
     "outbound",
+    "billing",
     "rest_framework",
     "corsheaders",
 ]

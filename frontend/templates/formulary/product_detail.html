@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 
 {% load static %}
-{%include 'includes navbar.html'%} 
+{%include 'includes navbar.html'%}
 
 
 
- {% block content %}
- 
+{% block content %}
+
 
 
 
@@ -23,9 +23,9 @@
         <h5 id="heading"></h5>
 
         <div class="col-2">
-            <p>
-              <img id="product_image" />
-            </p>
+          <p>
+            <img id="product_image" />
+          </p>
         </div>
 
         <hr />
@@ -36,19 +36,32 @@
           <label class="col-sm-2 col-form-label" for="product_name"> Product Name </label>
 
           <div class="col-sm-6">
-            <input
-              type="text"
-              placeholder="Product Name"
-              id="product_name"
-              class="form-control margin-bottom required"
-              name="product_name"
-            />
+            <input type="text" placeholder="Product Name" id="product_name" class="form-control margin-bottom required"
+              name="product_name" />
+          </div>
+
+          <div>
+            <button type="button" id="uom-modal" class="btn btn-info" data-toggle="modal" data-target="#view-uom-modal">
+              View Unit of Measure
+            </button>
+          </div>
+
+        </div>
+
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label" for="product_cat">
+            Product ID
+          </label>
+
+          <div class="col-sm-6">
+            <input type="text" placeholder="Product ID" class="form-control margin-bottom required" id="product_id"
+              disabled="true" />
           </div>
         </div>
 
 
         <div class="form-group row">
-          <label class="col-sm-2 col-form-label" for="product_cat"> 
+          <label class="col-sm-2 col-form-label" for="product_cat">
             Product Category </label>
 
           <div class="col-sm-6">
@@ -100,53 +113,14 @@
               Add New Form
             </button>
           </div>
-
         </div>
 
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label" for="product_cat">
-            Product ID
-          </label>
-
-          <div class="col-sm-6">
-            <input
-              type="text"
-              placeholder="Product ID"
-              class="form-control margin-bottom required"
-              id="product_id"
-              disabled="true"
-            />
-          </div>
-        </div>
-
-        <div class="form-group row">
-          <label class="col-sm-2 control-label" for="product_price">
-            Unit Of Measure
-          </label>
-
-          <div class="col-sm-6">
-            <div class="input-group">
-              <span class="input-group-addon"> Unit(s) </span>
-              <input
-                type="text"
-                placeholder="Unit of Measure"
-                class="form-control margin-bottom required"
-                id="unit"
-                name="unit_of_measure"
-              />
-            </div>
-          </div>
-        </div>
         <div class="form-group row">
           <label class="col-sm-2 col-form-label"> Details </label>
 
           <div class="col-sm-8">
-            <textarea
-              placeholder="Details"
-              class="form-control margin-bottom"
-              id="product_desc"
-              name="details"
-            ></textarea>
+            <textarea placeholder="Details" class="form-control margin-bottom" id="product_desc"
+              name="details"></textarea>
           </div>
         </div>
 
@@ -156,25 +130,18 @@
           </label>
 
           <div class="col-sm-6">
-            <input
-              type="text"
-              placeholder=""
-              class="form-control margin-bottom required"
-              id="product_user"
-              value=""
-              disabled="true"
-              name="created_by"
-            />
+            <input type="text" placeholder="" class="form-control margin-bottom required" id="product_user" value=""
+              disabled="true" name="created_by" />
           </div>
         </div>
 
         <div class="form-group row">
           <!-- The fileinput-button span is used to style the file input field as button -->
           <span class="btn btn-success fileinput-button">
-              <i class="glyphicon glyphicon-plus"></i>
-          <span>Select files...</span>
-              <!-- The file input field used as target for the file upload widget -->
-              <input id="fileupload" type="file" name="product_image" multiple>
+            <i class="glyphicon glyphicon-plus"></i>
+            <span>Select files...</span>
+            <!-- The file input field used as target for the file upload widget -->
+            <input id="fileupload" type="file" name="product_image" multiple>
           </span>
           <br>
           <pre>Allowed: gif, jpeg, png</pre>
@@ -185,22 +152,107 @@
         </button>
         <button class="btn btn-danger margin-bottom" id="back" onclick="window.history.back();return false;">
           Close
-      </button>
+        </button>
       </div>
     </form>
   </div>
 </article>
+
+<div id="view-uom-modal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+
+        <h4 class="modal-title">Unit of Measurements</h4>
+
+      </div>
+
+      <div class="modal-body">
+        <form id="uom_form">
+
+          <!-- <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="product"> Product </label>
+
+            <div class="col-sm-6">
+              <input type="text" id="uom_product" class="form-control margin-bottom required"
+                name="product" />
+            </div>
+            <div class="col-sm-1">
+              <input type="text" id="uom_id" class="form-control margin-bottom required"
+                name="id" />
+            </div>
+
+          </div> -->
+
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="milliliters"> Volume (mls) </label>
+
+            <div class="col-sm-6">
+              <input type="text" placeholder="Eg. 200mls" id="uom_mls" class="form-control margin-bottom required"
+                name="milliliters" />
+            </div>
+
+          </div>
+
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="gram"> Weight (g) </label>
+
+            <div class="col-sm-6">
+              <input type="number" placeholder="Eg. 2000g" id="uom_gram" class="form-control margin-bottom required"
+                name="gram" />
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="pack"> Pack Size </label>
+
+            <div class="col-sm-6">
+              <input type="number" placeholder="Eg. 28 tablets per pack" id="uom_pack"
+                class="form-control margin-bottom required" name="pack" />
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="unit"> Unit Size </label>
+
+            <div class="col-sm-6">
+              <input type="number" placeholder="Eg. One Tablet" id="uom_unit"
+                class="form-control margin-bottom required" name="unit" value=1 />
+            </div>
+            <input  type="hidden" id="uom_id" name="id"/>
+            <input  type="hidden" id="uom_product" name="product"/>
+            
+          </div>
+
+        </form>
+      </div>
+
+
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-primary" id="edit-uom">
+          Edit
+        </button>
+        <button type="button" data-dismiss="modal" class="btn btn-primary" id="add-uom">
+          Add
+        </button>
+        <button type="button" data-dismiss="modal" class="btn btn-danger">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
 <div id="add-cat-modal" class="modal fade">
   <div class="modal-dialog">
     <div class="modal-content">
 
       <div class="modal-header">
-        <button
-          type="button"
-          class="close"
-          data-dismiss="modal"
-          aria-label="Close">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
 
@@ -209,46 +261,32 @@
       </div>
 
       <div class="modal-body">
-      <form id="cat_form">
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label" for="category_name"> Category </label>
+        <form id="cat_form">
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="category_name"> Category </label>
 
-          <div class="col-sm-6">
-            <input
-              type="text"
-              placeholder="Category Name"
-              id="mo_category_name"
-              class="form-control margin-bottom required"
-              name="category_name"
-            />
+            <div class="col-sm-6">
+              <input type="text" placeholder="Category Name" id="mo_category_name"
+                class="form-control margin-bottom required" name="category_name" />
+            </div>
           </div>
-        </div>
 
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label" for="category_desc"> Description </label>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="category_desc"> Description </label>
 
-          <div class="col-sm-6">
-            <input
-              type="text"
-              placeholder="Description"
-              id="mo_category_desc"
-              class="form-control margin-bottom required"
-              name="category_description"
-            />
+            <div class="col-sm-6">
+              <input type="text" placeholder="Description" id="mo_category_desc"
+                class="form-control margin-bottom required" name="category_description" />
+            </div>
           </div>
-        </div>
 
-      </form>
+        </form>
       </div>
 
 
       <div class="modal-footer">
-        <button
-          type="button"
-          data-dismiss="modal"
-          class="btn btn-primary"
-          id="add-category" >
-          Add 
+        <button type="button" data-dismiss="modal" class="btn btn-primary" id="add-category">
+          Add
         </button>
         <button type="button" data-dismiss="modal" class="btn">Cancel</button>
       </div>
@@ -261,11 +299,7 @@
     <div class="modal-content">
 
       <div class="modal-header">
-        <button
-          type="button"
-          class="close"
-          data-dismiss="modal"
-          aria-label="Close">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
 
@@ -274,31 +308,22 @@
       </div>
 
       <div class="modal-body">
-      <form id="cat_form">
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label" for="mo-form"> Form </label>
+        <form id="cat_form">
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="mo-form"> Form </label>
 
-          <div class="col-sm-6">
-            <input
-              type="text"
-              placeholder="Add Product Form eg. Tablet, Kit, Suspension etc"
-              id="mo_form"
-              class="form-control margin-bottom required"
-              name="mo_form"
-            />
+            <div class="col-sm-6">
+              <input type="text" placeholder="Add Product Form eg. Tablet, Kit, Suspension etc" id="mo_form"
+                class="form-control margin-bottom required" name="mo_form" />
+            </div>
           </div>
-        </div>
-      </form>
+        </form>
       </div>
 
 
       <div class="modal-footer">
-        <button
-          type="button"
-          data-dismiss="modal"
-          class="btn btn-primary"
-          id="add-form" >
-          Add 
+        <button type="button" data-dismiss="modal" class="btn btn-primary" id="add-form">
+          Add
         </button>
         <button type="button" data-dismiss="modal" class="btn">Cancel</button>
       </div>
@@ -311,11 +336,7 @@
     <div class="modal-content">
 
       <div class="modal-header">
-        <button
-          type="button"
-          class="close"
-          data-dismiss="modal"
-          aria-label="Close">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
 
@@ -324,62 +345,43 @@
       </div>
 
       <div class="modal-body">
-      <form id="cat_form">
+        <form id="cat_form">
 
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label" for="manufacturer_name"> Manufacturer </label>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="manufacturer_name"> Manufacturer </label>
 
-          <div class="col-sm-6">
-            <input
-              type="text"
-              placeholder="Manufacturer Name"
-              id="mo_manufacturer_name"
-              class="form-control margin-bottom required"
-              name="manufacturer_name"
-            />
+            <div class="col-sm-6">
+              <input type="text" placeholder="Manufacturer Name" id="mo_manufacturer_name"
+                class="form-control margin-bottom required" name="manufacturer_name" />
+            </div>
+
           </div>
 
-        </div>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="tier"> Tier </label>
 
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label" for="tier"> Tier </label>
-
-          <div class="col-sm-6">
-            <input
-              type="text"
-              placeholder="Description"
-              id="mo_tier"
-              class="form-control margin-bottom required"
-              name="tier"
-            />
+            <div class="col-sm-6">
+              <input type="text" placeholder="Description" id="mo_tier" class="form-control margin-bottom required"
+                name="tier" />
+            </div>
           </div>
-        </div>
 
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label" for="price_range"> Price Range </label>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="price_range"> Price Range </label>
 
-          <div class="col-sm-6">
-            <input
-              type="text"
-              placeholder="Price Range"
-              id="mo_price_range"
-              class="form-control margin-bottom required"
-              name="price_range"
-            />
+            <div class="col-sm-6">
+              <input type="text" placeholder="Price Range" id="mo_price_range"
+                class="form-control margin-bottom required" name="price_range" />
+            </div>
           </div>
-        </div>
 
-      </form>
+        </form>
       </div>
 
 
       <div class="modal-footer">
-        <button
-          type="button"
-          data-dismiss="modal"
-          class="btn btn-primary"
-          id="add-manufacturer" >
-          Add 
+        <button type="button" data-dismiss="modal" class="btn btn-primary" id="add-manufacturer">
+          Add
         </button>
         <button type="button" data-dismiss="modal" class="btn">Cancel</button>
       </div>
@@ -397,14 +399,14 @@
     var slug = window.location.href.match(/[^\/]+/g)[4];
     console.log(slug);
 
-    // Ajax Call for Modals
+    // Ajax Call for Product Properties
 
     // Category Modal
-    const categoryModal = () =>{
-    var data = {};
+    const categoryModal = () => {
+      var data = {};
 
-    data.category_name = $("#mo_category_name").val();
-    data.description = $("#mo_category_description").val();
+      data.category_name = $("#mo_category_name").val();
+      data.description = $("#mo_category_description").val();
 
       $.ajax({
         type: "POST",
@@ -414,74 +416,19 @@
         },
         data: data,
         contentType: "application/x-www-form-urlencoded",
-        success: function(data) {
+        success: function (data) {
           console.log(data);
         },
-        error: function(error){
+        error: function (error) {
           console.log(error);
         }
-        
+
       });
     }
 
     $("#add-category").click(categoryModal);
 
-    //Manufacturer Modal 
-    const manModal = () =>{
-    var data = {};
-
-    data.manufacturer_name = $("#mo_manufacturer_name").val();
-    data.tier = $("#mo_tier").val();
-    data.price_range = $("#mo_price_range").val();
-
-      $.ajax({
-        type: "POST",
-        url: "/formulary/api/product_manufacturer/",
-        headers: {
-          "X-CSRFToken": $csrf
-        },
-        data: data,
-        contentType: "application/x-www-form-urlencoded",
-        success: function(data) {
-          console.log(data);
-        },
-        error: function(error){
-          console.log(error);
-        }
-        
-      });
-    }
-
-    $("#add-manufacturer").click(manModal);
-
-
-    // Form Modal
-    const formModal = () =>{
-    var data = {};
-
-    data.form = $("#mo_form").val();
-
-      $.ajax({
-        type: "POST",
-        url: "/formulary/api/product_form/",
-        headers: {
-          "X-CSRFToken": $csrf
-        },
-        data: data,
-        contentType: "application/x-www-form-urlencoded",
-        success: function(data) {
-          console.log(data);
-        },
-        error: function(error){
-          console.log(error);
-        }
-        
-      });
-    }
-
-    $("#add-form").click(formModal);
-
-
+    // Category Dropdown
     const catCall = (type) => {
       $.ajax({
         url: "/formulary/api/product_category/",
@@ -506,6 +453,35 @@
 
     $("#product_cat").click(catCall);
 
+    //Manufacturer Modal 
+    const manModal = () => {
+      var data = {};
+
+      data.manufacturer_name = $("#mo_manufacturer_name").val();
+      data.tier = $("#mo_tier").val();
+      data.price_range = $("#mo_price_range").val();
+
+      $.ajax({
+        type: "POST",
+        url: "/formulary/api/product_manufacturer/",
+        headers: {
+          "X-CSRFToken": $csrf
+        },
+        data: data,
+        contentType: "application/x-www-form-urlencoded",
+        success: function (data) {
+          console.log(data);
+        },
+        error: function (error) {
+          console.log(error);
+        }
+
+      });
+    }
+
+    $("#add-manufacturer").click(manModal);
+
+    // Manufacturer Dropdown
     const manCall = () => {
       $.ajax({
         url: "/formulary/api/product_manufacturer/",
@@ -534,6 +510,34 @@
 
     $("#product_man").click(manCall);
 
+
+    // Form Modal
+    const formModal = () => {
+      var data = {};
+
+      data.form = $("#mo_form").val();
+
+      $.ajax({
+        type: "POST",
+        url: "/formulary/api/product_form/",
+        headers: {
+          "X-CSRFToken": $csrf
+        },
+        data: data,
+        contentType: "application/x-www-form-urlencoded",
+        success: function (data) {
+          console.log(data);
+        },
+        error: function (error) {
+          console.log(error);
+        }
+
+      });
+    }
+
+    $("#add-form").click(formModal);
+
+    // Form Dropdown
     const formCall = () => {
       $.ajax({
         url: "/formulary/api/product_form/",
@@ -543,7 +547,7 @@
 
           data.forEach((element, index) => {
             if (
-              !($(`#product_form option[value='${element.form}']`).length > 0)
+              !($(`#uom_mls option[value='${element.form}']`).length > 0)
             ) {
               $("#product_form").append(new Option(element.form, element.form));
             }
@@ -554,12 +558,89 @@
 
     $("#product_form").click(formCall);
 
-    const mainCall = () => { 
-        $.ajax({
+
+    // UOM Modal
+    const uomCall = (productName) => {
+      $("#uom_product").val(productName)
+
+      $.ajax({
+        url: `/formulary/api/uom/?product=${productName}`,
+        type: "GET",
+        success: function (reponse, status) {
+          var data = reponse.results;
+          console.log("Worked")
+          data.forEach((element, index) => {
+            console.log(element)
+            $("#uom_gram").val(element.gram)
+            $("#uom_mls").val(element.milliliter)
+            $("#uom_pack").val(element.pack)
+            $("#uom_unit").val(element.unit)
+            $("#uom_id").val(element.id)
+          });
+        },
+        error: function (err) {
+          console.log(err);
+        }
+      });
+    };
+
+    $("#uom-modal").on("click", function () {
+      uomCall($("#product_name").val());
+    });
+
+    $("#edit-uom").on("click", function () {
+      var uomForm = new FormData(document.getElementById("uom_form"));
+
+      $.ajax({
+        url:`/formulary/api/uom/${$("#uom_id").val()}/`,
+        type: 'PUT',
+        headers: {
+          "X-CSRFToken": $csrf
+        },
+        data: uomForm,
+        contentType: false,
+        processData: false,
+        cache: false,
+        success: function (response, status){
+          console.log(status)
+        },
+        error: function (err){
+          console.log(err)
+        }
+      })
+    });
+
+    $("#add-uom").on("click", function () {
+      var uomForm = new FormData(document.getElementById("uom_form"));
+
+      $.ajax({
+        url:`/formulary/api/uom/`,
+        type: 'POST',
+        headers: {
+          "X-CSRFToken": $csrf
+        },
+        data: uomForm,
+        contentType: false,
+        processData: false,
+        cache: false,
+        success: function (response, status){
+          console.log(status)
+        },
+        error: function (err){
+          console.log(err)
+        }
+      })
+    });
+
+
+
+    const mainCall = () => {
+      $.ajax({
         url: `/formulary/api/products/${slug}`,
         type: "GET",
-        success: function (data, status, settings) {
+        success: function (data) {
           $("#heading").text(`Edit - ${data.product_name}`);
+
           console.log(data.product_image);
           $("#product_name").val(data.product_name);
           $("#product_image").attr("src", data.product_image);
@@ -586,16 +667,16 @@
 
     mainCall();
 
-    $("#product_image").mouseenter(()=>{
-      $("#product_image").css("width","500px");
+    $("#product_image").mouseenter(() => {
+      $("#product_image").css("width", "500px");
     })
 
-    $("#product_image").mouseleave(()=>{
-      $("#product_image").css("width","300px");
+    $("#product_image").mouseleave(() => {
+      $("#product_image").css("width", "300px");
     })
-    
 
-    $("#data_form").submit( (e) =>{
+
+    $("#data_form").submit((e) => {
       e.preventDefault();
 
       var form = new FormData(document.getElementById("data_form"));
@@ -616,19 +697,21 @@
         contentType: false,
         processData: false,
         cache: false,
-        beforeSend: function(){
-          document.body.style.backgroundColor="gray"},
+        beforeSend: function () {
+          document.body.style.backgroundColor = "gray"
+        },
         success: function (data, status, settings) {
           console.log(data, status);
           mainCall();
-          document.body.style.backgroundColor="#fff";
+          document.body.style.backgroundColor = "#fff";
         },
         error: function (error) {
           console.log(error);
-          document.body.style.backgroundColor="#fff";
+          document.body.style.backgroundColor = "#fff";
         },
-        
-      })}
+
+      })
+    }
     )
   });
 </script>

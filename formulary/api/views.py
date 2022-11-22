@@ -1,7 +1,4 @@
-from functools import partial
-
-from accounts.models import Account
-from formulary.models import Category, Form, Manufacturer, ProductList
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, mixins, status, viewsets
 from rest_framework.permissions import (
     IsAuthenticated,
@@ -9,11 +6,22 @@ from rest_framework.permissions import (
 )
 from rest_framework.response import Response
 
+from accounts.models import Account
+from formulary.filters import UnitOfMeasureFilterSet
+from formulary.models import (
+    Category,
+    Form,
+    Manufacturer,
+    ProductList,
+    UnitOfMeasure,
+)
+
 from .serializers import (
     CategorySerializer,
     ManufacturerSerializer,
     ProductFormSerializer,
     ProductListSerializer,
+    UnitOfMeasureSerializer,
 )
 
 
@@ -47,6 +55,42 @@ class ProductListApiViewset(CreateListRetrieveViewSet):
             return Response(serializer.data)
         else:
             return Response(serializer.errors)
+
+
+class UnitOfMeasureApiViewset(CreateListRetrieveViewSet):
+    queryset = UnitOfMeasure.objects.all()
+    serializer_class = UnitOfMeasureSerializer
+    filter_backend = DjangoFilterBackend
+    filterset_class = UnitOfMeasureFilterSet
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.serializer_class(
+            data=request.data, context={"request": request}
+        )
+        if serializer.is_valid():
+            print("Valid")
+            serializer.save(
+                product=ProductList.objects.get(
+                    product_name=request.data.get("product")
+                )
+            )
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            print("not Valid")
+            return Response(
+                serializer.errors, status=status.HTTP_400_BAD_REQUEST
+            )
+
+    def update(self, request, pk=None):
+        uom = self.get_object()
+        serializer = self.serializer_class(uom, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(
+                serializer.errors, status=status.HTTP_400_BAD_REQUEST
+            )
 
 
 class CategoryApiViewset(CreateListRetrieveViewSet):

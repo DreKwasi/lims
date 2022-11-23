@@ -48,6 +48,19 @@ class ProductFormSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class UnitOfMeasureSerializer(serializers.ModelSerializer):
+    product = serializers.SlugRelatedField(
+        queryset=ProductList.objects.all(),
+        slug_field="product_name",
+        read_only=False,
+        required=False,
+    )
+
+    class Meta:
+        model = UnitOfMeasure
+        fields = "__all__"
+
+
 class ProductListSerializer(serializers.ModelSerializer):
     product_id = serializers.ReadOnlyField()
     created_by = serializers.SlugRelatedField(
@@ -66,6 +79,7 @@ class ProductListSerializer(serializers.ModelSerializer):
     product_form = serializers.SlugRelatedField(
         slug_field="form", queryset=Form.objects.all(), read_only=False
     )
+    product_uom = UnitOfMeasureSerializer(read_only=True, many=False)
 
     class Meta:
         model = ProductList
@@ -76,16 +90,3 @@ class ProductListSerializer(serializers.ModelSerializer):
         return ProductList.objects.create(
             created_by=request.user, **validated_data
         )
-
-
-class UnitOfMeasureSerializer(serializers.ModelSerializer):
-    product = serializers.SlugRelatedField(
-        queryset=ProductList.objects.all(),
-        slug_field="product_name",
-        read_only=False,
-        required=False,
-    )
-
-    class Meta:
-        model = UnitOfMeasure
-        fields = "__all__"

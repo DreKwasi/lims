@@ -170,6 +170,7 @@
                             <th width="3%" class="text-center"> Open Quantity </th>
                             <th width="3%" class="text-center"> Planned Quantity </th>
                             <th width="3%" class="text-center"> Delivered Quantity </th>
+                            <th width="3%" class="text-center"> Unit Of Measure </th>
                             <th width="3%" class="text-center"> Unit Price </th>
                             <th width="3%" class="text-center"> Discount </th>
                             <th width="3%" class="text-center"> Total Amount</th>
@@ -203,6 +204,14 @@
                             <td>
                                 <input required type="number" class="form-control req amnt" name="delivered_quantity"
                                     id="id-form-0-delivered" autocomplete="off" value="0">
+                            </td>
+                            <td>
+                                <select required class="form-control" name="unit_of_measure" id="id-form-0-uom">
+                                    <option value="Packs">Packs</option>
+                                    <option value="Unit">Unit</option>
+                                    <option value="Volume in Mls">Volume in Mls</option>
+                                    <option value="Weight in Grams">Weight in Grams</option>
+                                </select>
                             </td>
                             <td>
                                 <input required type="number" class="form-control discount" name="unit_price"

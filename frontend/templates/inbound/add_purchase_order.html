@@ -34,7 +34,7 @@
 
             <div class="message"></div>
         </div>
-        <form enctype="multipart/form-data"  id="purchase-order-form">
+        <form enctype="multipart/form-data" id="purchase-order-form">
             {% csrf_token %}
             <div class="row">
 
@@ -66,7 +66,7 @@
                                 <hr>
                                 <input type="hidden" name="customer_id" id="customer_id" value="">
                                 <div id="supplier_name">
-                                    <strong>Name</strong> : 
+                                    <strong>Name</strong> :
                                 </div>
                             </div>
 
@@ -82,7 +82,7 @@
                                 </div>
                             </div>
 
-                            <hr> 
+                            <hr>
                             Warehouse
 
                             <input required id="warehouse-box" required type="text" class="form-control" name="facility"
@@ -109,8 +109,8 @@
                                 <div class="input-group">
                                     <div class="input-group-addon"><span class="icon-file-text-o"
                                             aria-hidden="true"></span></div>
-                                    <input readonly required id="poNumber" type="text" class="form-control" placeholder="Invoice #" name="purchase_order"
-                                        value="">
+                                    <input readonly required id="poNumber" type="text" class="form-control"
+                                        placeholder="Invoice #" name="purchase_order" value="">
                                 </div>
                             </div>
 
@@ -121,7 +121,8 @@
                                 <div class="input-group">
                                     <div class="input-group-addon"><span class="icon-bookmark-o"
                                             aria-hidden="true"></span></div>
-                                    <input required type="text" class="form-control" placeholder="Reference #" name="reference_id">
+                                    <input required type="text" class="form-control" placeholder="Reference #"
+                                        name="reference_id">
                                 </div>
                             </div>
                         </div>
@@ -156,7 +157,8 @@
                         <div class="form-group row">
                             <div class="col-sm-12">
                                 <label for="toAddInfo" class="caption">Order Status</label>
-                                <input readonly id="orderStatus" class="form-control" name="order_status" value="Ordered" ></input>
+                                <input readonly id="orderStatus" class="form-control" name="order_status"
+                                    value="Ordered"></input>
                             </div>
                         </div>
 
@@ -185,6 +187,7 @@
                             <th width="3%" class="text-center"> Open Quantity </th>
                             <th width="3%" class="text-center"> Planned Quantity </th>
                             <th width="3%" class="text-center"> Delivered Quantity </th>
+                            <th width="3%" class="text-center"> Unit of measure </th>
                             <th width="3%" class="text-center"> Unit Price </th>
                             <th width="3%" class="text-center"> Discount </th>
                             <th width="3%" class="text-center"> Total Amount</th>
@@ -202,30 +205,39 @@
                                     autocomplete="off" value="" readonly>
                             </td>
                             <td>
-                                <input required type="text" class="form-control" id="id-form-0-productName" name="product"
-                                    list="product-list" aria-required="true" placeholder="Search Product Here">
+                                <input required type="text" class="form-control" id="id-form-0-productName"
+                                    name="product" list="product-list" aria-required="true"
+                                    placeholder="Search Product Here">
                                 <div id="product-result"></div>
                             </td>
                             <td>
-                                <input required type="number" class="form-control req amnt" name="open_quantity" id="id-form-0-open"
-                                    autocomplete="off" value="0">
+                                <input required type="number" class="form-control req amnt" name="open_quantity"
+                                    id="id-form-0-open" autocomplete="off" value="0">
                             </td>
                             <td>
-                                <input required type="number" class="form-control req amnt" name="planned_quantity" id="id-form-0-planned"
-                                    autocomplete="off" value="0" readonly>
+                                <input required type="number" class="form-control req amnt" name="planned_quantity"
+                                    id="id-form-0-planned" autocomplete="off" value="0" readonly>
                             </td>
                             <td>
-                                <input required type="number" class="form-control req amnt" name="delivered_quantity" id="id-form-0-delivered"
-                                    autocomplete="off" value="0">
+                                <input required type="number" class="form-control req amnt" name="delivered_quantity"
+                                    id="id-form-0-delivered" autocomplete="off" value="0">
                             </td>
                             <td>
-                                <input required type="number" class="form-control discount" name="unit_price" id="id-form-0-price"
-                                    autocomplete="off" value="0">
+                                <select required class="form-control" name="unit_of_measure" id="id-form-0-uom">
+                                    <option value="Packs">Packs</option>
+                                    <option value="Unit">Packs</option>
+                                    <option value="Volume in Mls">Volume in Mls</option>
+                                    <option value="Weight in Grams">Weight in Grams</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input required type="number" class="form-control discount" name="unit_price"
+                                    id="id-form-0-price" autocomplete="off" value="0">
                             </td>
 
                             <td>
-                                <input required type="number" class="form-control discount" name="discount" id="id-form-0-discount"
-                                    autocomplete="off" value="0">
+                                <input required type="number" class="form-control discount" name="discount"
+                                    id="id-form-0-discount" autocomplete="off" value="0">
                             </td>
 
                             <td>

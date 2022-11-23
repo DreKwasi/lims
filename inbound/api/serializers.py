@@ -1,4 +1,3 @@
-
 from rest_framework import serializers
 
 from accounts.models import Facility, Supplier
@@ -145,4 +144,5 @@ class UnloadProductSerializer(serializers.ModelSerializer):
             "actual_quantity",
             "created_date",
             "identified_stock",
+            "unit_of_measure",
         ]

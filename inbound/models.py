@@ -3,6 +3,7 @@ from datetime import date
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
 from inventory.models import LogisticArea
 
 from .model_managers import (
@@ -78,6 +79,12 @@ class PurchaseOrder(models.Model):
 
 
 class PurchaseOrderProduct(models.Model):
+    uom_choices = (
+        ("Volume in Mls", "Volume in Mls"),
+        ("Weight in Grams", "Weight in Grams"),
+        ("Packs", "Packs"),
+        ("Units", "Units"),
+    )
     purchase_order = models.ForeignKey(
         PurchaseOrder,
         on_delete=models.CASCADE,
@@ -88,6 +95,13 @@ class PurchaseOrderProduct(models.Model):
         "formulary.productlist", on_delete=models.CASCADE, null=True
     )
     open_quantity = models.IntegerField()
+    unit_of_measure = models.CharField(
+        max_length=30,
+        choices=uom_choices,
+        default="Packs",
+        null=True,
+        blank=True,
+    )
     delivered_quantity = models.IntegerField(default=0)
     planned_quantity = models.IntegerField(blank=True)
     unit_price = models.FloatField(default=0.0)
@@ -152,6 +166,12 @@ class Unload(models.Model):
 
 
 class UnloadProduct(models.Model):
+    uom_choices = (
+        ("Volume in Mls", "Volume in Mls"),
+        ("Weight in Grams", "Weight in Grams"),
+        ("Packs", "Packs"),
+        ("Units", "Units"),
+    )
     unload = models.ForeignKey(
         Unload, on_delete=models.CASCADE, related_name="unload_products"
     )
@@ -159,6 +179,13 @@ class UnloadProduct(models.Model):
         "formulary.productlist", on_delete=models.CASCADE, null=True
     )
     open_quantity = models.IntegerField(default=0)
+    unit_of_measure = models.CharField(
+        max_length=30,
+        choices=uom_choices,
+        default="Packs",
+        null=True,
+        blank=True,
+    )
     planned_quantity = models.IntegerField(default=0)
     actual_quantity = models.IntegerField(default=0)
 

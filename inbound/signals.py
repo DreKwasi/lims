@@ -48,6 +48,7 @@ def create_unload(sender, instance, created, **kwargs):
                 product=product.product,
                 open_quantity=open_quantity,
                 planned_quantity=open_quantity,
+                unit_of_measure=product.unit_of_measure,
             )
             objs.append(unload_product)
 

@@ -17,10 +17,21 @@
 
       <div class="message"></div>
     </div>
+
+    <div class="mb-2">
+      <button type="submit" class="btn btn-success margin-bottom" id="uploadBtn" form="data_form">
+        Update Details
+      </button>
+      <button class="btn btn-danger margin-bottom" id="back" onclick="window.history.back();return false;">
+        Close
+      </button>
+    </div>
+
     <form enctype="multipart/form-data" id="data_form" class="form-horizontal">
       {% csrf_token %}
+
       <div class="grid_3 grid_4">
-        <h5 id="heading"></h5>
+        <h5 id="heading">Edit Product</h5>
 
         <div class="col-2">
           <p>
@@ -147,12 +158,6 @@
           <pre>Allowed: gif, jpeg, png</pre>
           <br>
         </div>
-        <button type="submit" class="btn btn-success margin-bottom" id="uploadBtn">
-          Update Details
-        </button>
-        <button class="btn btn-danger margin-bottom" id="back" onclick="window.history.back();return false;">
-          Close
-        </button>
       </div>
     </form>
   </div>
@@ -174,26 +179,12 @@
       <div class="modal-body">
         <form id="uom_form">
 
-          <!-- <div class="form-group row">
-            <label class="col-sm-2 col-form-label" for="product"> Product </label>
-
-            <div class="col-sm-6">
-              <input type="text" id="uom_product" class="form-control margin-bottom required"
-                name="product" />
-            </div>
-            <div class="col-sm-1">
-              <input type="text" id="uom_id" class="form-control margin-bottom required"
-                name="id" />
-            </div>
-
-          </div> -->
-
           <div class="form-group row">
             <label class="col-sm-2 col-form-label" for="milliliters"> Volume (mls) </label>
 
             <div class="col-sm-6">
-              <input type="text" placeholder="Eg. 200mls" id="uom_mls" class="form-control margin-bottom required"
-                name="milliliters" />
+              <input type="number" placeholder="Eg. 200mls" id="uom_mls" class="form-control margin-bottom required"
+                name="milliliter" value="" />
             </div>
 
           </div>
@@ -203,7 +194,7 @@
 
             <div class="col-sm-6">
               <input type="number" placeholder="Eg. 2000g" id="uom_gram" class="form-control margin-bottom required"
-                name="gram" />
+                name="gram" value="" />
             </div>
           </div>
 
@@ -223,9 +214,9 @@
               <input type="number" placeholder="Eg. One Tablet" id="uom_unit"
                 class="form-control margin-bottom required" name="unit" value=1 />
             </div>
-            <input  type="hidden" id="uom_id" name="id"/>
-            <input  type="hidden" id="uom_product" name="product"/>
-            
+            <input type="hidden" id="uom_id" name="id" />
+            <input type="hidden" id="uom_product" name="product" />
+
           </div>
 
         </form>
@@ -244,7 +235,6 @@
     </div>
   </div>
 </div>
-
 
 
 <div id="add-cat-modal" class="modal fade">
@@ -570,13 +560,20 @@
           var data = reponse.results;
           console.log("Worked")
           data.forEach((element, index) => {
-            console.log(element)
             $("#uom_gram").val(element.gram)
             $("#uom_mls").val(element.milliliter)
             $("#uom_pack").val(element.pack)
             $("#uom_unit").val(element.unit)
             $("#uom_id").val(element.id)
           });
+          console.log(data)
+          if (data[0] == null) {
+            $("#edit-uom").attr("style", "display: none")
+          }
+          else {
+            $("#add-uom").attr("style", "display: none")
+            $("#edit-uom").attr("style", "display: true")
+          }
         },
         error: function (err) {
           console.log(err);
@@ -585,14 +582,18 @@
     };
 
     $("#uom-modal").on("click", function () {
+
       uomCall($("#product_name").val());
+
     });
+
+
 
     $("#edit-uom").on("click", function () {
       var uomForm = new FormData(document.getElementById("uom_form"));
 
       $.ajax({
-        url:`/formulary/api/uom/${$("#uom_id").val()}/`,
+        url: `/formulary/api/uom/${$("#uom_id").val()}/`,
         type: 'PUT',
         headers: {
           "X-CSRFToken": $csrf
@@ -601,10 +602,10 @@
         contentType: false,
         processData: false,
         cache: false,
-        success: function (response, status){
+        success: function (response, status) {
           console.log(status)
         },
-        error: function (err){
+        error: function (err) {
           console.log(err)
         }
       })
@@ -614,7 +615,7 @@
       var uomForm = new FormData(document.getElementById("uom_form"));
 
       $.ajax({
-        url:`/formulary/api/uom/`,
+        url: `/formulary/api/uom/`,
         type: 'POST',
         headers: {
           "X-CSRFToken": $csrf
@@ -623,10 +624,10 @@
         contentType: false,
         processData: false,
         cache: false,
-        success: function (response, status){
+        success: function (response, status) {
           console.log(status)
         },
-        error: function (err){
+        error: function (err) {
           console.log(err)
         }
       })

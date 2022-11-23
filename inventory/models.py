@@ -81,4 +81,3 @@ class Inventory(models.Model):
     @property
     def site_id(self):
         return self.logistic_area.site_id
-

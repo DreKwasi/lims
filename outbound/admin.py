@@ -34,28 +34,61 @@ class StockTransferProductAdmin(admin.ModelAdmin):
 admin.site.register(StockTransferProduct, StockTransferProductAdmin)
 
 
-class SalesOrderAdmin(admin.ModelAdmin):
+class PickPackAdmin(admin.ModelAdmin):
     list_display = [
-        "account",
-        "order_priority",
+        "__str__",
+        "ship_to_location",
+        "ship_from_location",
         "status",
+        "user",
         "created_date",
         "updated_date",
     ]
 
 
-admin.site.register(SalesOrder, SalesOrderAdmin)
+admin.site.register(PickPack, PickPackAdmin)
 
 
-class SalesOrderProductAdmin(admin.ModelAdmin):
+class PickPackProductAdmin(admin.ModelAdmin):
     list_display = [
-        "sales_order",
+        "pickpack",
         "product",
-        "inventory_level",
         "quantity",
-        "unit_of_measure",
-        "status",
+        "batch_number",
+        "expiration_date",
+        "created_date",
+        "updated_date",
     ]
 
 
-admin.site.register(SalesOrderProduct, SalesOrderProductAdmin)
+admin.site.register(PickPackProduct, PickPackProductAdmin)
+
+
+class DeliveryAdmin(admin.ModelAdmin):
+    list_display = [
+        "__str__",
+        "ship_to_location",
+        "ship_from_location",
+        "status",
+        "user",
+        "created_date",
+        "updated_date",
+    ]
+
+
+admin.site.register(Delivery, DeliveryAdmin)
+
+
+class DeliveryProductAdmin(admin.ModelAdmin):
+    list_display = [
+        "delivery",
+        "product",
+        "quantity",
+        "batch_number",
+        "expiration_date",
+        "created_date",
+        "updated_date",
+    ]
+
+
+admin.site.register(DeliveryProduct, DeliveryProductAdmin)

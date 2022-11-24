@@ -22,6 +22,7 @@ class InventoryAdmin(admin.ModelAdmin):
         "product",
         "pack_quantity",
         "logistic_area",
+        "stock_identifier",
         "expiration_date",
         "created_date",
     )
@@ -29,6 +30,7 @@ class InventoryAdmin(admin.ModelAdmin):
         "product",
         "logistic_area",
         "expiration_date",
+        "stock_identifier",
     )
 
 

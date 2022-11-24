@@ -172,6 +172,88 @@ class PickPackProduct(models.Model):
     updated_date = models.DateTimeField(auto_now=True)
 
 
+class Delivery(models.Model):
+    order_priority_choices = (("Normal", "Normal"), ("Urgent", "Urgent"))
+    status_choices = (
+        ("Cancelled", "Cancelled"),
+        ("Finished", "Finished"),
+        ("Not Started", "Not Started"),
+    )
+    ship_to_location = models.ForeignKey(
+        "accounts.facility",
+        related_name="facility_ship_to",
+        on_delete=models.SET_NULL,
+        null=True,
+    )
+    ship_from_location = models.ForeignKey(
+        "accounts.facility",
+        related_name="facility_ship_from",
+        on_delete=models.SET_NULL,
+        null=True,
+    )
+
+    status = models.CharField(
+        max_length=20, choices=status_choices, default="Not Started"
+    )
+    order_priority = models.CharField(
+        choices=order_priority_choices, default="Normal", max_length=10
+    )
+    user = models.ForeignKey(
+        "accounts.account",
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name="user_delivery",
+    )
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"DEL-{self.id}"
+
+    class Meta:
+        verbose_name_plural = _("Deliveries")
+
+
+class DeliveryProduct(models.Model):
+    uom_choices = (
+        ("Packs", "Packs"),
+        ("Units", "Units"),
+        ("Volume in Mls", "Volume in Mls"),
+        ("Weight in Grams", "Weight in Grams"),
+    )
+    delivery = models.ForeignKey(
+        Delivery,
+        related_name="delivery_products",
+        on_delete=models.CASCADE,
+        null=True,
+    )
+    product = models.ForeignKey(
+        "formulary.productlist",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="formulary_delivery",
+    )
+    quantity = models.PositiveIntegerField(default=1)
+    logistic_area = models.ForeignKey(
+        "inventory.logisticarea", on_delete=models.SET_NULL, null=True
+    )
+    batch_number = models.CharField(max_length=225, null=True, blank=True)
+    expiration_date = models.DateField()
+    stock_identifier = models.UUIDField(
+        verbose_name=_("Unique Identifier"),
+        editable=False,
+        null=True,
+        blank=True,
+        unique=True,
+    )
+    unit_of_measure = models.CharField(
+        max_length=20, choices=uom_choices, default="Packs"
+    )
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
+
+
 class SalesOrder(models.Model):
     order_priority_choices = (("Normal", "Normal"), ("Urgent", "Urgent"))
     status_choices = (

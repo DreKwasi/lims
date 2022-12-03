@@ -5,6 +5,12 @@ from django.utils.translation import gettext_lazy as _
 
 from inventory.models import Inventory
 
+from .model_managers import (
+    DeliveryManager,
+    PickPackManager,
+    StockTransferManager,
+)
+
 # Create your models here.
 
 
@@ -43,6 +49,8 @@ class StockTransfer(models.Model):
     )
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
+
+    objects = StockTransferManager()
 
     def __str__(self):
         return f"ST-{self.id}"
@@ -86,6 +94,7 @@ class StockTransferProduct(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 
+    @property
     def inventory_level(self):
         batch_qtys = Inventory.objects.filter(
             product=self.product
@@ -99,6 +108,18 @@ class PickPack(models.Model):
         ("Cancelled", "Cancelled"),
         ("Finished", "Finished"),
         ("Not Started", "Not Started"),
+    )
+    stock_transfer_order = models.ForeignKey(
+        StockTransfer,
+        related_name="stock_transfer_picks",
+        on_delete=models.CASCADE,
+        null=True,
+    )
+    sales_order = models.ForeignKey(
+        StockTransfer,
+        related_name="sales_order_picks",
+        on_delete=models.CASCADE,
+        null=True,
     )
     ship_to_location = models.ForeignKey(
         "accounts.facility",
@@ -127,6 +148,8 @@ class PickPack(models.Model):
     )
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
+
+    objects = PickPackManager()
 
     def __str__(self):
         return f"PP-{self.id}"
@@ -206,6 +229,8 @@ class Delivery(models.Model):
     )
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
+
+    objects = DeliveryManager()
 
     def __str__(self):
         return f"DEL-{self.id}"

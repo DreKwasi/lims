@@ -1,0 +1,4 @@
+py_env/
+.env
+whole.json
+db.sqlite3

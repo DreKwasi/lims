@@ -1,9 +1,6 @@
 from django.db import models
-from django.dispatch import Signal
 
-from .queryset import CustomQuerySet
-
-post_save = Signal()
+from utils.queryset import CustomQuerySet
 
 
 class PurchaseOrderManager(models.Manager):

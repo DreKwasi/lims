@@ -3,21 +3,6 @@ from django.contrib import admin
 from .models import *
 
 
-class StockTransferAdmin(admin.ModelAdmin):
-    list_display = [
-        "user",
-        "ship_to_location",
-        "ship_from_location",
-        "order_priority",
-        "status",
-        "created_date",
-        "updated_date",
-    ]
-
-
-admin.site.register(StockTransfer, StockTransferAdmin)
-
-
 class StockTransferProductAdmin(admin.ModelAdmin):
     list_display = [
         "stock_transfer_order",
@@ -32,6 +17,27 @@ class StockTransferProductAdmin(admin.ModelAdmin):
 
 
 admin.site.register(StockTransferProduct, StockTransferProductAdmin)
+
+
+class StockTransferProductInline(admin.TabularInline):
+    model = StockTransferProduct
+    extra = 0
+
+
+class StockTransferAdmin(admin.ModelAdmin):
+    inlines = [StockTransferProductInline]
+    list_display = [
+        "user",
+        "ship_to_location",
+        "ship_from_location",
+        "order_priority",
+        "status",
+        "created_date",
+        "updated_date",
+    ]
+
+
+admin.site.register(StockTransfer, StockTransferAdmin)
 
 
 class PickPackAdmin(admin.ModelAdmin):

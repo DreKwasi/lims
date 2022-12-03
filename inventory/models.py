@@ -52,7 +52,11 @@ class Inventory(models.Model):
         ("In-Transit", "In-Transit"),
     )
     stock_type = models.CharField(max_length=100, choices=stock_type_choices)
-    product = models.ForeignKey(ProductList, on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        ProductList,
+        on_delete=models.CASCADE,
+        related_name="inventory_products",
+    )
     batch = models.CharField(max_length=225, blank=True, null=True)
     pack_quantity = models.PositiveIntegerField(
         verbose_name="Number of packs", validators=[MinValueValidator(1)]

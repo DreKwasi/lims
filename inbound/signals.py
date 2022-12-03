@@ -4,7 +4,6 @@ from .models import *
 
 
 def create_unload(sender, instance, created, **kwargs):
-    print("called")
     if instance.order_status == "Pending":
         purchase_order = instance
         status = "Not Started"

@@ -3,7 +3,7 @@ import uuid
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from inventory.models import Inventory
+from inventory.models import Inventory, Site
 
 from .model_managers import (
     DeliveryManager,
@@ -85,6 +85,7 @@ class StockTransferProduct(models.Model):
         related_name="formulary_stock_transfer",
     )
     quantity = models.PositiveIntegerField(default=1)
+    inventory_level = models.IntegerField(blank=True, null=True)
     unit_of_measure = models.CharField(
         max_length=20, choices=uom_choices, default="Packs"
     )
@@ -94,12 +95,17 @@ class StockTransferProduct(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 
-    @property
-    def inventory_level(self):
+    def save(self, *args, **kwargs):
+        ship_from_location = Site.objects.get(
+            facility=self.stock_transfer_order.ship_from_location
+        )
         batch_qtys = Inventory.objects.filter(
-            product=self.product
+            product=self.product,
+            stock_type="Warehouse",
+            site=ship_from_location,
         ).values_list("pack_quantity", flat=True)
-        return sum(batch_qtys)
+        self.inventory_level = sum(batch_qtys)
+        super(StockTransferProduct, self).save(*args, **kwargs)
 
 
 class PickPack(models.Model):
@@ -120,6 +126,7 @@ class PickPack(models.Model):
         related_name="sales_order_picks",
         on_delete=models.CASCADE,
         null=True,
+        blank=True,
     )
     ship_to_location = models.ForeignKey(
         "accounts.facility",
@@ -140,11 +147,18 @@ class PickPack(models.Model):
     order_priority = models.CharField(
         choices=order_priority_choices, default="Normal", max_length=10
     )
-    user = models.ForeignKey(
+    user_ordered = models.ForeignKey(
         "accounts.account",
         null=True,
         on_delete=models.SET_NULL,
-        related_name="user_pickpack",
+        related_name="user_ordered_pickpack",
+    )
+    user_processed = models.ForeignKey(
+        "accounts.account",
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name="user_processed_pickpack",
+        blank=True,
     )
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
@@ -186,7 +200,7 @@ class PickPackProduct(models.Model):
         editable=False,
         null=True,
         blank=True,
-        unique=True,
+        unique=False,
     )
     unit_of_measure = models.CharField(
         max_length=20, choices=uom_choices, default="Packs"

@@ -18,7 +18,7 @@ def check_area(product, site_id):
 def create_inventory(sender, instance, created, **kwargs):
 
     if not created:
-        if instance.status == "In Process":
+        if instance.status == "In Process" or instance.status == "Completed":
 
             for product in instance.unload_products.all():
                 objs = []

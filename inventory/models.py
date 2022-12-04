@@ -1,8 +1,9 @@
 import uuid
 
-from accounts.models import Facility
 from django.core.validators import MinValueValidator
 from django.db import models
+
+from accounts.models import Facility
 from formulary.models import ProductList
 
 
@@ -49,7 +50,7 @@ class Inventory(models.Model):
     stock_type_choices = (
         ("Warehouse", "Warehouse"),
         ("Pre-Delivered", "Pre-Delivered"),
-        ("In-Transit", "In-Transit"),
+        ("Delivered", "Delivered"),
     )
     stock_type = models.CharField(max_length=100, choices=stock_type_choices)
     product = models.ForeignKey(
@@ -57,9 +58,16 @@ class Inventory(models.Model):
         on_delete=models.CASCADE,
         related_name="inventory_products",
     )
-    batch = models.CharField(max_length=225, blank=True, null=True)
+    batch_number = models.CharField(max_length=225, blank=True, null=True)
     pack_quantity = models.PositiveIntegerField(
         verbose_name="Number of packs", validators=[MinValueValidator(1)]
+    )
+    site = models.ForeignKey(
+        Site,
+        related_name="site_inventory",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
     )
     logistic_area = models.ForeignKey(
         "inventory.logisticarea",
@@ -67,7 +75,12 @@ class Inventory(models.Model):
         null=True,
         related_name="inventory_areas",
     )
-    stock_identifier = models.UUIDField(default=uuid.uuid4, blank=True)
+    stock_identifier = models.CharField(
+        blank=True,
+        max_length=255,
+        unique=False,
+        editable=False,
+    )
     expiration_date = models.DateTimeField()
     created_date = models.DateField(auto_now_add=True)
 
@@ -82,6 +95,6 @@ class Inventory(models.Model):
     def unit_quantity(self):
         return self.product.uom * self.pack_quantity
 
-    @property
-    def site_id(self):
-        return self.logistic_area.site_id
+    def save(self, *args, **kwargs):
+        self.site = self.logistic_area.site_id
+        super(Inventory, self).save(*args, **kwargs)

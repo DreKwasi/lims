@@ -22,15 +22,16 @@ class InventoryAdmin(admin.ModelAdmin):
         "product",
         "pack_quantity",
         "logistic_area",
-        "stock_identifier",
+        "batch_number",
         "expiration_date",
         "created_date",
     )
     list_filter = (
+        "stock_type",
+        "site",
         "product",
         "logistic_area",
         "expiration_date",
-        "stock_identifier",
     )
 
 

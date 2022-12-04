@@ -106,8 +106,9 @@
     //datatables
 
     table = $("#productstable").DataTable({
-      serverSide: true,
+      serverSide: false,
       processing: true,
+      searching: true,
 
       ajax: {
         type: "GET",

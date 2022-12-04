@@ -163,23 +163,23 @@
             <div id="saman-row">
                 <table id="scrollable-table" class="table table-striped table-hover table-sm sortable" width="100%">
                     <thead>
-                        <tr class="item_header">
-                            <th width="2%" class="text-center">#</th>
-                            <th width="7%" class="text-center"> Product ID</th>
-                            <th width="30%" class="text-center"> Product Name</th>
-                            <th width="3%" class="text-center"> Open Quantity </th>
-                            <th width="3%" class="text-center"> Planned Quantity </th>
-                            <th width="3%" class="text-center"> Delivered Quantity </th>
-                            <th width="3%" class="text-center"> Unit Of Measure </th>
-                            <th width="3%" class="text-center"> Unit Price </th>
-                            <th width="3%" class="text-center"> Discount </th>
-                            <th width="3%" class="text-center"> Total Amount</th>
-                            <th width="1%" class="text-center"> Action</th>
+                        <tr>
+                            <th width="2%" >#</th>
+                            <th width="10%" > Product ID</th>
+                            <th width="30%" > Product Name</th>
+                            <th width="3%" > Open Quantity </th>
+                            <th width="3%" > Planned Quantity </th>
+                            <th width="3%" > Delivered Quantity </th>
+                            <th width="3%" > Unit Of Measure </th>
+                            <th width="3%" > Unit Price </th>
+                            <th width="3%" > Discount </th>
+                            <th width="3%" > Total Amount</th>
+                            <th width="10%" > Action</th>
                         </tr>
                     </thead>
 
                     <tbody id="tbody">
-                        <tr id="R0" class="form-rows">
+                        <tr id="R0"  >
                             <td>
                                 <span name="" id="id-form-0-no"> Item 0 <span>
                                 <input type="hidden" value="" name="purchase_product_id" id="purchase-product-id">
@@ -228,7 +228,7 @@
                                 <strong><span class='ttlText' id="result-0">0</span></strong>
                             </td>
 
-                            <td class="text-center">
+                            <td>
                                 <button type="button" data-rowid="" class="btn btn-danger removeProd" title="Remove">
                                     <i class="icon-minus-square"></i>
                                 </button>
@@ -279,12 +279,17 @@
 
                 </div>
 
-                <div align="right" class="mt-5">
+                <div class="mt-5">
                     <button type="submit" class="btn btn-success sub-btn" id="submit-purchase-order"
                         data-loading-text="Creating...">
-                        Generate Order
+                        Save and Close
                     </button>
+                    <button class="btn btn-danger margin-bottom" id="back" onclick="window.history.back();return false;">
+                        Close
+                      </button>
                 </div>
+                
+
 
                 <input type="hidden" value="%" name="discountFormat" id="discount_format">
                 <input type="hidden" value="update" name="update" id="update-check">

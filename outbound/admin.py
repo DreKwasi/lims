@@ -40,21 +40,6 @@ class StockTransferAdmin(admin.ModelAdmin):
 admin.site.register(StockTransfer, StockTransferAdmin)
 
 
-class PickPackAdmin(admin.ModelAdmin):
-    list_display = [
-        "__str__",
-        "ship_to_location",
-        "ship_from_location",
-        "status",
-        "user",
-        "created_date",
-        "updated_date",
-    ]
-
-
-admin.site.register(PickPack, PickPackAdmin)
-
-
 class PickPackProductAdmin(admin.ModelAdmin):
     list_display = [
         "pickpack",
@@ -68,6 +53,28 @@ class PickPackProductAdmin(admin.ModelAdmin):
 
 
 admin.site.register(PickPackProduct, PickPackProductAdmin)
+
+
+class PickPackProductInline(admin.TabularInline):
+    model = PickPackProduct
+    extra = 0
+
+
+class PickPackAdmin(admin.ModelAdmin):
+    inlines = [PickPackProductInline]
+    list_display = [
+        "__str__",
+        "ship_to_location",
+        "ship_from_location",
+        "status",
+        "user_ordered",
+        "user_processed",
+        "created_date",
+        "updated_date",
+    ]
+
+
+admin.site.register(PickPack, PickPackAdmin)
 
 
 class DeliveryAdmin(admin.ModelAdmin):

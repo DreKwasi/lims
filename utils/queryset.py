@@ -13,5 +13,5 @@ class CustomQuerySet(models.query.QuerySet):
     """
 
     def update(self, *args, **kwargs):
-        super(CustomQuerySet, self).update(kwargs)
+        super(CustomQuerySet, self).update(*args, **kwargs)
         post_update.send(sender=self.model)

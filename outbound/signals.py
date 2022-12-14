@@ -12,7 +12,6 @@ from .models import (
     PickPack,
     PickPackProduct,
     StockTransfer,
-    StockTransferProduct,
 )
 
 
@@ -30,8 +29,7 @@ def inventory_locator(requested_qty, inventory_qs):
         if remainder_qty > item.pack_quantity:
             remainder_qty -= item.pack_quantity
             item_dict["pack_quantity"].append(item.pack_quantity)
-            item.stock_type = "Pre-Delivered"
-            item.save()
+            item.update(stock_type="Pre-Delivered")
 
         elif remainder_qty < item.pack_quantity:
             diff = item.pack_quantity - remainder_qty
@@ -56,8 +54,10 @@ def inventory_locator(requested_qty, inventory_qs):
 
 
 def create_pick_pack(sender, instance, created, **kwargs):
-    if instance.status == "Partial" or instance.status == "Finished":
-        if [x.inventory_level for x in instance.stock_transfer_products.all()]:
+    if instance.status in ["Partial", "Finished"]:
+        if any(
+            x.inventory_level for x in instance.stock_transfer_products.all()
+        ):
             pick_pack = PickPack(
                 stock_transfer_order=instance,
                 ship_to_location=instance.ship_to_location,
@@ -75,12 +75,10 @@ def create_pick_pack(sender, instance, created, **kwargs):
             )
 
             pp_product_objs = []
-
-            for st_product in instance.stock_transfer_products.filter(
-                Q(status="Not Started")
-                | Q(status="Not Released")
-                | Q(status="Partial")
-            ):
+            st_products = instance.stock_transfer_products.filter(
+                Q(status__in=["Not Started", "Not Released", "Partial"])
+            )
+            for st_product in st_products:
                 prev_qty = sum(
                     [
                         x.quantity
@@ -120,12 +118,11 @@ def create_pick_pack(sender, instance, created, **kwargs):
                         )
                         for index, batch in enumerate(inv_dict["batch_number"])
                     ]
-                    st_product.status = (
-                        "Released"
+                    st_product.update(
+                        status="Released"
                         if sum(inv_dict["pack_quantity"]) == requested_qty
                         else "Partial"
                     )
-                    st_product.save()
             if pp_product_objs:
                 pick_pack.save()
                 PickPackProduct.objects.bulk_create(pp_product_objs)
@@ -156,3 +153,10 @@ post_save.connect(create_pick_pack, StockTransfer)
 
 
 # # post_save.connect(cancel_pick_pack, PickPack)
+
+
+def create_delivery_note(sender, instance, created, **kwargs):
+    pass
+
+
+post_save.connect(create_delivery_note, PickPack)

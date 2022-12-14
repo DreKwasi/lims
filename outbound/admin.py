@@ -27,6 +27,7 @@ class StockTransferProductInline(admin.TabularInline):
 class StockTransferAdmin(admin.ModelAdmin):
     inlines = [StockTransferProductInline]
     list_display = [
+        "__str__",
         "user",
         "ship_to_location",
         "ship_from_location",

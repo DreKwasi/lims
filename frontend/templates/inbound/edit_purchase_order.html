@@ -5,26 +5,38 @@
 
 {%block content%}
 
+{%block mycss%}
 <style>
-    #result {
-        border: 1px dotted #ccc;
-        padding: 3px;
+    table {
+        width: 100%;
+        border-collapse: collapse;
     }
 
-    #result ul {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
+    /* Style the table cells */
+    td,
+    th {
+        border: 1px solid #ddd;
+        padding: 8px;
     }
 
-    #result ul li {
-        padding: 5px 0;
+    /* Style the table header */
+    th {
+        background-color: #0a5e69;
+        color: rgb(253, 251, 251);
+        cursor: pointer;
+        pointer-events: all;
     }
 
-    #result ul li:hover {
-        background: #eee;
+    /* Style the table body */
+    tbody {
+        height: 59px;
+        /* Set the height of the table body */
+        overflow-y: auto;
+        overflow-x: hidden;
+        /* Add a scrollbar to the table body */
     }
 </style>
+{%endblock mycss%}
 
 
 <article class="content">
@@ -104,8 +116,8 @@
                                 <div class="input-group">
                                     <div class="input-group-addon"><span class="icon-bookmark-o"
                                             aria-hidden="true"></span></div>
-                                    <input required id="reference_id" type="text" class="form-control" placeholder="Reference #"
-                                        name="reference_id">
+                                    <input required id="reference_id" type="text" class="form-control"
+                                        placeholder="Reference #" name="reference_id">
                                 </div>
                             </div>
                         </div>
@@ -120,8 +132,9 @@
                                 <div class="input-group">
                                     <div class="input-group-addon"><span class="icon-calendar4"
                                             aria-hidden="true"></span></div>
-                                    <input type="text" id="order_date" class="form-control required" placeholder="Billing Date"
-                                        name="order_date" data-toggle="datepicker" autocomplete="false">
+                                    <input type="text" id="order_date" class="form-control required"
+                                        placeholder="Billing Date" name="order_date" data-toggle="datepicker"
+                                        autocomplete="false">
                                 </div>
                             </div>
                             <div class="col-sm-6"><label for="invocieduedate" class="caption">
@@ -161,79 +174,81 @@
                 </button>
             </div>
             <div id="saman-row">
-                <table id="scrollable-table" class="table table-striped table-hover table-sm sortable" width="100%">
+                <table id="scrollable-table">
                     <thead>
                         <tr>
-                            <th width="2%" >#</th>
-                            <th width="10%" > Product ID</th>
-                            <th width="30%" > Product Name</th>
-                            <th width="3%" > Open Quantity </th>
-                            <th width="3%" > Planned Quantity </th>
-                            <th width="3%" > Delivered Quantity </th>
-                            <th width="3%" > Unit Of Measure </th>
-                            <th width="3%" > Unit Price </th>
-                            <th width="3%" > Discount </th>
-                            <th width="3%" > Total Amount</th>
-                            <th width="10%" > Action</th>
+                            <th >#</th>
+                            <th width="10%"> Product ID</th>
+                            <th width="30%"> Product Name</th>
+                            <th width="3%"> Open Quantity </th>
+                            <th width="3%"> Planned Quantity </th>
+                            <th width="3%"> Delivered Quantity </th>
+                            <th width="7%"> Unit Of Measure </th>
+                            <th width="7%"> Unit Price </th>
+                            <th width="3%"> Discount </th>
+                            <th width="3%"> Total Amount</th>
+                            <th width="5%"> Action</th>
                         </tr>
                     </thead>
 
                     <tbody id="tbody">
-                        <tr id="R0"  >
-                            <td>
-                                <span name="" id="id-form-0-no"> Item 0 <span>
-                                <input type="hidden" value="" name="purchase_product_id" id="purchase-product-id">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control" name="" id="id-form-0-productId"
-                                    autocomplete="off" value="" readonly>
-                            </td>
-                            <td>
-                                <input required type="text" class="form-control" id="id-form-0-productName" name="product"
-                                    list="product-list" aria-required="true" placeholder="Search Product Here">
-                                <div id="product-result"></div>
-                            </td>
-                            <td>
-                                <input required type="number" class="form-control req amnt" name="open_quantity"
-                                    id="id-form-0-open" autocomplete="off" value="0">
-                            </td>
-                            <td>
-                                <input required type="number" class="form-control req amnt" name="planned_quantity"
-                                    id="id-form-0-planned" autocomplete="off" value="0" readonly>
-                            </td>
-                            <td>
-                                <input required type="number" class="form-control req amnt" name="delivered_quantity"
-                                    id="id-form-0-delivered" autocomplete="off" value="0">
-                            </td>
-                            <td>
-                                <select required class="form-control" name="unit_of_measure" id="id-form-0-uom">
-                                    <option value="Packs">Packs</option>
-                                    <option value="Unit">Unit</option>
-                                    <option value="Volume in Mls">Volume in Mls</option>
-                                    <option value="Weight in Grams">Weight in Grams</option>
-                                </select>
-                            </td>
-                            <td>
-                                <input required type="number" class="form-control discount" name="unit_price"
-                                    id="id-form-0-price" autocomplete="off" value="0">
-                            </td>
+                            <tr id="R0">
+                                <td>
+                                    <span name="" id="id-form-0-no"> Item 0 <span>
+                                            <input type="hidden" value="" name="purchase_product_id"
+                                                id="purchase-product-id">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="" id="id-form-0-productId"
+                                        autocomplete="off" value="" readonly>
+                                </td>
+                                <td>
+                                    <input required type="text" class="form-control" id="id-form-0-productName"
+                                        name="product" list="product-list" aria-required="true"
+                                        placeholder="Search Product Here">
+                                    <div id="product-result"></div>
+                                </td>
+                                <td>
+                                    <input required type="number" class="form-control req amnt" name="open_quantity"
+                                        id="id-form-0-open" autocomplete="off" value="0">
+                                </td>
+                                <td>
+                                    <input required type="number" class="form-control req amnt" name="planned_quantity"
+                                        id="id-form-0-planned" autocomplete="off" value="0" readonly>
+                                </td>
+                                <td>
+                                    <input required type="number" class="form-control req amnt" name="delivered_quantity"
+                                        id="id-form-0-delivered" autocomplete="off" value="0">
+                                </td>
+                                <td>
+                                    <select required class="form-control" name="unit_of_measure" id="id-form-0-uom">
+                                        <option value="Packs">Packs</option>
+                                        <option value="Unit">Unit</option>
+                                        <option value="Volume in Mls">Volume in Mls</option>
+                                        <option value="Weight in Grams">Weight in Grams</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input required type="number" class="form-control discount" name="unit_price"
+                                        id="id-form-0-price" autocomplete="off" value="0">
+                                </td>
 
-                            <td>
-                                <input required type="number" class="form-control discount" name="discount"
-                                    id="id-form-0-discount" autocomplete="off" value="0">
-                            </td>
+                                <td>
+                                    <input required type="number" class="form-control discount" name="discount"
+                                        id="id-form-0-discount" autocomplete="off" value="0">
+                                </td>
 
-                            <td>
-                                <span class="currenty">GHS </span>
-                                <strong><span class='ttlText' id="result-0">0</span></strong>
-                            </td>
+                                <td>
+                                    <span class="currenty">GHS </span>
+                                    <strong><span class='ttlText' id="result-0">0</span></strong>
+                                </td>
 
-                            <td>
-                                <button type="button" data-rowid="" class="btn btn-danger removeProd" title="Remove">
-                                    <i class="icon-minus-square"></i>
-                                </button>
-                            </td>
-                        </tr>
+                                <td>
+                                    <button type="button" data-rowid="" class="btn btn-danger removeProd" title="Remove">
+                                        <i class="icon-minus-square"></i>
+                                    </button>
+                                </td>
+                            </tr>
                     </tbody>
                 </table>
 
@@ -284,11 +299,12 @@
                         data-loading-text="Creating...">
                         Save and Close
                     </button>
-                    <button class="btn btn-danger margin-bottom" id="back" onclick="window.history.back();return false;">
+                    <button class="btn btn-danger margin-bottom" id="back"
+                        onclick="window.history.back();return false;">
                         Close
-                      </button>
+                    </button>
                 </div>
-                
+
 
 
                 <input type="hidden" value="%" name="discountFormat" id="discount_format">

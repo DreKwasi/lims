@@ -12,8 +12,8 @@
         </div>
         <div class="grid_3 grid_4 animated fadeInRight">
             <h5>Stock Transfers</h5>
-            <a href="{% url 'add_stock_transfer' %}" class="btn btn-primary btn-sm rounded mb-2">
-                Add New Product
+            <a href="{% url 'add_stock_transfer' %}" class="btn btn-primary btn-md rounded mb-2">
+                Create New Stock Transfer
             </a>
             <div class="row">
                 <div class="col-xl-4 col-lg-6 col-xs-6">
@@ -71,7 +71,7 @@
         </div>
         <hr />
         <div class="table-responsive">
-            <table id="productstable" class="display" cellspacing="0" width="100%">
+            <table id="stockTransfer" class="display" cellspacing="0" width="100%">
                 <thead>
                     <tr>
                         <th>Stock Transfer ID</th>
@@ -79,6 +79,8 @@
                         <th>Ship To</th>
                         <th>Status</th>
                         <th>User</th>
+                        <th>Created Date</th>
+                        <th>Settings</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -90,6 +92,8 @@
                         <th>Ship To</th>
                         <th>Status</th>
                         <th>User</th>
+                        <th>Created Date</th>
+                        <th>Settings</th>
                     </tr>
                 </tfoot>
             </table>
@@ -131,47 +135,32 @@
     $(document).ready(function () {
         //datatables
 
-        table = $("#productstable").DataTable({
+        table = $("#stockTransfer").DataTable({
             serverSide: false,
             processing: true,
             searching: true,
 
             ajax: {
                 type: "GET",
-                url: "/formulary/api/products/?format=datatables",
-                complete: function (data, status, error) {
-                    // console.log(data.responseJSON.recordsTotal);
-                },
+                url: "/outbound/api/stock_transfers/?format=datatables",
+                // complete: function (data, status, error) {
+                //     console.log(data.responseJSON.recordsTotal);
+                // },
             },
 
             columns: [
-                { data: "product_id" },
-                { data: "product_name" },
-                {
-                    data: "product_uom",
-                    render: function (data, type, full, meta) {
-                        var form = full.product_form
-                        if (data == null) {
-                            return "Not Defined"
-                        }
-                        else {
-                            return `${data.pack} ${form}(s) per pack`
-                        }
+                { data: "stock_transfer_id" },
+                { data: "ship_from_location" },
+                { data: "ship_to_location" },
+                { data: "status" },
+                { data: "user" },
+                { data: "created_date" },
 
-                    }
-                },
-                { data: "product_form" },
-                { data: "category" },
-                { data: "manufacturer" },
                 {
                     sortable: false,
                     render: function (data, type, full, meta) {
-                        var product_id = full.product_id;
-                        var id = product_id.substr(
-                            product_id.indexOf("-") + 1,
-                            product_id.length
-                        );
-                        return `<a href='/formulary/product_detail/${id}'> <button type='button' class='btn btn-info'> Edit </button> </a>`;
+                        var id = full.id;
+                        return `<a href='/outbound/edit_stock_transfer/${id}'> <button type='button' class='btn btn-info'> Edit </button> </a>`;
                     },
                 },
             ],

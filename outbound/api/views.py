@@ -42,6 +42,17 @@ class UpdateListRetrieveViewSet(
     pass
 
 
-class StockTransferApiViewSet(CreateListRetrieveViewSet):
-    serializer_class = StockTransferSerializer #serializer_class of Viewset to serialize json requests
-    queryset = StockTransfer.objects.all() #queryset for defining which model the Viewset will query
+class StockTransferAPIViewSet(CreateListRetrieveViewSet):
+    serializer_class = StockTransferSerializer  # serializer_class of Viewset to serialize json requests
+    queryset = (
+        StockTransfer.objects.all()
+    )  # queryset for defining which model the Viewset will query
+
+
+class StockTransferProductAPIViewSet(CreateListRetrieveViewSet):
+    serializer_class = (
+        StockTransferProductSerializer  # serializer_class of Viewset
+    )
+    queryset = (
+        StockTransferProduct.objects.all()
+    )  # queryset for defining which model the Viewset will query

@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+{%include 'includes navbar.html'%}
+
+{% block content %}
+
+<article class="content">
+    <div class="card card-block">
+        <div id="notify" class="alert alert-success" style="display: none">
+            <a href="#" class="close" data-dismiss="alert">&times;</a>
+
+            <div class="message"></div>
+        </div>
+        <div class="grid_3 grid_4 animated fadeInRight">
+            <h5>Stock Transfers</h5>
+            <a href="{% url 'add_stock_transfer' %}" class="btn btn-primary btn-sm rounded mb-2">
+                Add New Product
+            </a>
+            <div class="row">
+                <div class="col-xl-4 col-lg-6 col-xs-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-block">
+                                <div class="media">
+                                    <div class="media-body text-xs-left">
+                                        <h3 class="green"><span id="dash_0"></span></h3>
+                                        <span>Released</span>
+                                    </div>
+                                    <div class="media-right media-middle">
+                                        <i class="icon-rocket green font-large-2 float-xs-right"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-6 col-xs-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-block">
+                                <div class="media">
+                                    <div class="media-body text-xs-left">
+                                        <h3 class="red"><span id="dash_1"></span></h3>
+                                        <span>Cancelled</span>
+                                    </div>
+                                    <div class="media-right media-middle">
+                                        <i class="icon-blocked red font-large-2 float-xs-right"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-6 col-xs-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-block">
+                                <div class="media">
+                                    <div class="media-body text-xs-left">
+                                        <h3 class="cyan" id="dash_2"></h3>
+                                        <span>All Transfers</span>
+                                    </div>
+                                    <div class="media-right media-middle">
+                                        <i class="icon-stats-bars22 cyan font-large-2 float-xs-right"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="table-responsive">
+            <table id="productstable" class="display" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>Stock Transfer ID</th>
+                        <th>Ship From</th>
+                        <th>Ship To</th>
+                        <th>Status</th>
+                        <th>User</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+
+                <tfoot>
+                    <tr>
+                        <th>Stock Transfer ID</th>
+                        <th>Ship From</th>
+                        <th>Ship To</th>
+                        <th>Status</th>
+                        <th>User</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+    <input type="hidden" id="dashurl" value="products/prd_stats" />
+</article>
+
+
+<div id="delete_model" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Delete</h4>
+            </div>
+            <div class="modal-body">
+                <p>delete this product</p>
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" id="object-id" value="" />
+                <input type="hidden" id="action-url" value="products/delete_i" />
+                <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete-confirm">
+                    Delete
+                </button>
+                <button type="button" data-dismiss="modal" class="btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block js%}
+
+<script type="text/javascript">
+    var table;
+
+    $(document).ready(function () {
+        //datatables
+
+        table = $("#productstable").DataTable({
+            serverSide: false,
+            processing: true,
+            searching: true,
+
+            ajax: {
+                type: "GET",
+                url: "/formulary/api/products/?format=datatables",
+                complete: function (data, status, error) {
+                    // console.log(data.responseJSON.recordsTotal);
+                },
+            },
+
+            columns: [
+                { data: "product_id" },
+                { data: "product_name" },
+                {
+                    data: "product_uom",
+                    render: function (data, type, full, meta) {
+                        var form = full.product_form
+                        if (data == null) {
+                            return "Not Defined"
+                        }
+                        else {
+                            return `${data.pack} ${form}(s) per pack`
+                        }
+
+                    }
+                },
+                { data: "product_form" },
+                { data: "category" },
+                { data: "manufacturer" },
+                {
+                    sortable: false,
+                    render: function (data, type, full, meta) {
+                        var product_id = full.product_id;
+                        var id = product_id.substr(
+                            product_id.indexOf("-") + 1,
+                            product_id.length
+                        );
+                        return `<a href='/formulary/product_detail/${id}'> <button type='button' class='btn btn-info'> Edit </button> </a>`;
+                    },
+                },
+            ],
+
+            //Set column definition initialisation properties.
+        });
+
+        table.on("xhr", function () {
+            var json = table.ajax.json();
+            $("#dash_2").html(json.recordsTotal);
+        });
+
+        miniDash();
+    });
+</script>
+{% endblock js %}
+
+
+{% endblock%}
+{%include 'includes/footer.html' %}

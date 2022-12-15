@@ -13,7 +13,7 @@ urlpatterns = [
         name="add_stock_transfer",
     ),
     path(
-        "edit_stock_transfer/",
+        "edit_stock_transfer/<int:pk>",
         TemplateView.as_view(
             template_name="outbound/edit_stock_transfer.html"
         ),

@@ -47,6 +47,7 @@ class StockTransfer(models.Model):
         on_delete=models.SET_NULL,
         related_name="user_transfers",
     )
+    stock_transfer_id = models.CharField(max_length=200, blank=True, null=True)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 
@@ -54,6 +55,11 @@ class StockTransfer(models.Model):
 
     def __str__(self):
         return f"ST-{self.id}"
+
+    def save(self, *args, **kwargs):
+        if not self.stock_transfer_id:
+            self.stock_transfer_id = f"ST-{self.id}"
+        super(StockTransfer, self).save(*args, **kwargs)
 
 
 class StockTransferProduct(models.Model):
